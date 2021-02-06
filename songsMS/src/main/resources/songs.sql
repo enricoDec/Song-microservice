@@ -1,3 +1,31 @@
+CREATE TABLE users
+(
+    userid    varchar(50) not null,
+    password  varchar(50) not null,
+    firstname varchar(50) not null,
+    lastname  varchar(50) not null,
+
+    PRIMARY KEY (userid)
+);
+
+TRUNCATE TABLE users CASCADE;
+
+insert into users(userid, password, firstname, lastname)
+values ('mmuster', 'pass1234', 'Maxime', 'Muster'),
+       ('eschuler', 'pass1234', 'Elena', 'Schuler');
+
+CREATE TABLE songs
+(
+    id    serial not null,
+    title  varchar(100) not null,
+    artist varchar(100),
+    label  varchar(100),
+    released int,
+
+    PRIMARY KEY (id)
+);
+
+
 TRUNCATE TABLE songs CASCADE;
 ALTER SEQUENCE songs_id_seq RESTART WITH 1;
 
@@ -23,12 +51,7 @@ create table playlists
     is_private boolean     not null,
     owner      varchar(50) not null,
 
-    PRIMARY KEY (id),
-    CONSTRAINT fk_users
-        FOREIGN KEY (owner)
-            REFERENCES users (userid)
-            ON DELETE CASCADE
-            ON UPDATE CASCADE
+    PRIMARY KEY (id)
 );
 create table playlists_songs
 (

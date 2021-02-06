@@ -5,24 +5,42 @@
 		 http://maven.apache.org/xsd/maven-4.0.0.xsd">
     <modelVersion>4.0.0</modelVersion>
 
-	<!-- parent pom -->
-    <!-- TeamName in allen poms, Verzeichnisse, .java-Files anpassen -->
+    <parent>
+        <groupId>org.springframework.boot</groupId>
+        <artifactId>spring-boot-starter-parent</artifactId>
+        <version>2.4.1</version>
+        <relativePath/>
+    </parent>
+
+    <!-- parent pom -->
     <groupId>htwb.ai.MarvEn</groupId>
-    <artifactId>modules</artifactId>
+    <artifactId>Parent-Pom</artifactId>
     <packaging>pom</packaging>
-	<version>1.0</version>
+    <version>1.0</version>
 
     <properties>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
+        <project.reporting.outputEncoding>UTF-8</project.reporting.outputEncoding>
+        <java.version>11</java.version>
+
+        <spring.version>2.4.1</spring.version> <!-- ${spring.version} -->
+        <spring-cloud.version>2020.0.0</spring-cloud.version> <!-- ${spring.cloud} -->
     </properties>
 
-	<!-- sub modules -->
-	<modules>
+    <!-- sub modules -->
+    <modules>
         <module>songsMS</module>
+        <module>eureka-service</module>
+        <module>eureka-client</module>
     </modules>
 
     <!-- deps, die alle sub modules brauchen -->
-	<dependencies>
+    <dependencies>
+        <dependency>
+            <groupId>org.springframework.boot</groupId>
+            <artifactId>spring-boot-starter-web</artifactId>
+        </dependency>
+
         <dependency>
             <groupId>org.junit.jupiter</groupId>
             <artifactId>junit-jupiter-api</artifactId>
@@ -48,7 +66,7 @@
             <plugin>
                 <groupId>org.apache.maven.plugins</groupId>
                 <artifactId>maven-compiler-plugin</artifactId>
-                <version> 3.8.0</version>
+                <version>3.8.0</version>
                 <configuration>
                     <source>11</source>
                     <target>11</target>

@@ -3,16 +3,15 @@
          xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
 
     <parent>
-        <groupId>org.springframework.boot</groupId>
-        <artifactId>spring-boot-starter-parent</artifactId>
-        <version>2.3.0.RELEASE</version>
-        <relativePath/>
+        <artifactId>Parent-Pom</artifactId>
+        <groupId>htwb.ai.MarvEn</groupId>
+        <version>1.0</version>
     </parent>
 
     <modelVersion>4.0.0</modelVersion>
     <groupId>htwb.ai.MarvEn</groupId>
-    <artifactId>songsMS</artifactId>
-    <name>A Songs Web Microservice</name>
+    <artifactId>songsWS</artifactId>
+    <name>A Songs Web Service</name>
     <packaging>jar</packaging>
     <version>0.0.1-SNAPSHOT</version>
 
@@ -21,12 +20,27 @@
         <project.reporting.outputEncoding>UTF-8</project.reporting.outputEncoding>
         <java.version>11</java.version>
 
-        <spring.version>5.2.0.RELEASE</spring.version> <!-- ${spring.version} -->
         <jackson.version>2.9.2</jackson.version> <!-- ${jackson.version} -->
         <junit.version>5.6.0</junit.version> <!-- ${junit.version} -->
     </properties>
 
+    <dependencyManagement>
+        <dependencies>
+            <dependency>
+                <groupId>org.springframework.cloud</groupId>
+                <artifactId>spring-cloud-dependencies</artifactId>
+                <version>${spring-cloud.version}</version>
+                <type>pom</type>
+                <scope>import</scope>
+            </dependency>
+        </dependencies>
+    </dependencyManagement>
+
     <dependencies>
+        <dependency>
+            <groupId>org.springframework.cloud</groupId>
+            <artifactId>spring-cloud-starter-netflix-eureka-client</artifactId>
+        </dependency>
         <dependency>
             <groupId>org.springframework.boot</groupId>
             <artifactId>spring-boot-starter-web</artifactId>
@@ -109,6 +123,12 @@
             <artifactId>system-stubs-jupiter</artifactId>
             <version>1.2.0</version>
         </dependency>
+        <!--        <dependency>-->
+        <!--            <groupId>org.powermock</groupId>-->
+        <!--            <artifactId>powermock-api-mockito2</artifactId>-->
+        <!--            <version>2.0.9</version>-->
+        <!--            <scope>test</scope>-->
+        <!--        </dependency>-->
     </dependencies>
     <build>
         <plugins>
