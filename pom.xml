@@ -29,9 +29,11 @@
 
     <!-- sub modules -->
     <modules>
-        <module>songsMS</module>
+        <module>songs</module>
+        <module>authorization</module>
         <module>eureka-service</module>
         <module>eureka-client</module>
+        <module>cloudGateway</module>
     </modules>
 
     <!-- deps, die alle sub modules brauchen -->

@@ -1,0 +1,12 @@
+htwb/ai/utils/JwtUtils.class
+htwb/ai/MySpringBootApplication.class
+htwb/ai/model/Playlist.class
+htwb/ai/controller/SongController.class
+htwb/ai/model/User.class
+htwb/ai/repo/SongRepository.class
+htwb/ai/repo/UserRepository.class
+htwb/ai/controller/AuthController.class
+htwb/ai/repo/PlaylistRepository.class
+htwb/ai/model/Song.class
+htwb/ai/controller/GitVersionController.class
+htwb/ai/controller/PlaylistController.class

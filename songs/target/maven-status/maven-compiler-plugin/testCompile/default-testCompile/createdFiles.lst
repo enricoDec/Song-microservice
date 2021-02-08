@@ -1,0 +1,9 @@
+htwb/ai/controller/integration/GitVersionControllerTest.class
+htwb/ai/controller/unit/PlaylistUnitTest.class
+htwb/ai/controller/unit/SongControllerUnitTest.class
+htwb/ai/controller/integration/PlaylistTest.class
+htwb/ai/controller/integration/JwtUtilsTest.class
+htwb/ai/controller/integration/AuthTest.class
+htwb/ai/controller/unit/AuthControllerUnitTest.class
+htwb/ai/controller/unit/JwtUtilsUnitTest.class
+htwb/ai/controller/integration/SongTest.class
