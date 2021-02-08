@@ -13,8 +13,8 @@
     </parent>
 
     <!-- parent pom -->
-    <groupId>htwb.ai.MarvEn</groupId>
-    <artifactId>Parent-Pom</artifactId>
+    <groupId>htwb.ai.EnKBE</groupId>
+    <artifactId>parent</artifactId>
     <packaging>pom</packaging>
     <version>1.0</version>
 

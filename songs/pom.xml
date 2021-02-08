@@ -3,15 +3,14 @@
          xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
 
     <parent>
-        <artifactId>Parent-Pom</artifactId>
-        <groupId>htwb.ai.MarvEn</groupId>
+        <artifactId>parent</artifactId>
+        <groupId>htwb.ai.EnKBE</groupId>
         <version>1.0</version>
     </parent>
 
     <modelVersion>4.0.0</modelVersion>
-    <groupId>htwb.ai.MarvEn</groupId>
-    <artifactId>songs</artifactId>
-    <name>A Songs Web Service</name>
+    <artifactId>songs-microservice</artifactId>
+    <name>Songs-Microservice</name>
     <packaging>jar</packaging>
     <version>0.0.1-SNAPSHOT</version>
 
@@ -40,10 +39,6 @@
         <dependency>
             <groupId>org.springframework.cloud</groupId>
             <artifactId>spring-cloud-starter-netflix-eureka-client</artifactId>
-        </dependency>
-        <dependency>
-            <groupId>org.springframework.boot</groupId>
-            <artifactId>spring-boot-starter-web</artifactId>
         </dependency>
         <dependency>
             <groupId>org.springframework.boot</groupId>
@@ -102,12 +97,6 @@
         </dependency>
         <dependency>
             <groupId>org.mockito</groupId>
-            <artifactId>mockito-core</artifactId>
-            <version>3.5.13</version>
-            <scope>test</scope>
-        </dependency>
-        <dependency>
-            <groupId>org.mockito</groupId>
             <artifactId>mockito-inline</artifactId>
             <version>3.5.13</version>
             <scope>test</scope>
@@ -123,46 +112,5 @@
             <artifactId>system-stubs-jupiter</artifactId>
             <version>1.2.0</version>
         </dependency>
-        <!--        <dependency>-->
-        <!--            <groupId>org.powermock</groupId>-->
-        <!--            <artifactId>powermock-api-mockito2</artifactId>-->
-        <!--            <version>2.0.9</version>-->
-        <!--            <scope>test</scope>-->
-        <!--        </dependency>-->
     </dependencies>
-    <build>
-        <plugins>
-            <plugin> <!-- git-info plugin -->
-                <groupId>pl.project13.maven</groupId>
-                <artifactId>git-commit-id-plugin</artifactId>
-                <version>4.0.3</version>
-                <executions>
-                    <execution>
-                        <id>get-the-git-infos</id>
-                        <goals>
-                            <goal>revision</goal>
-                        </goals>
-                    </execution>
-                </executions>
-                <configuration>
-                    <dotGitDirectory>${project.basedir}/.git</dotGitDirectory>
-                    <prefix>git</prefix>
-                    <verbose>false</verbose>
-                    <generateGitPropertiesFile>true</generateGitPropertiesFile>
-                    <generateGitPropertiesFilename>${project.build.outputDirectory}/git.properties
-                    </generateGitPropertiesFilename>
-                    <format>json</format>
-                    <gitDescribe>
-                        <skip>false</skip>
-                        <always>false</always>
-                        <dirty>-dirty</dirty>
-                    </gitDescribe>
-                </configuration>
-            </plugin>
-            <plugin>
-                <groupId>org.springframework.boot</groupId>
-                <artifactId>spring-boot-maven-plugin</artifactId>
-            </plugin>
-        </plugins>
-    </build>
 </project>
