@@ -1,0 +1,22 @@
+server:
+  port: 8080
+
+eureka:
+  client:
+    serviceUrl:
+      defaultZone: http://localhost:8083/eureka
+
+spring:
+  application:
+    name: gateway-service
+  cloud:
+    gateway:
+      routes:
+        - id: authorization
+          uri: lb://authorization
+          predicates:
+            - Path=/songsWS-MarvEn/rest/auth/**
+        - id: song-service
+          uri: lb://song-service
+          predicates:
+            - Path=/songsWS-MarvEn/rest/songs/**

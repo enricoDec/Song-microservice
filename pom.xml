@@ -32,17 +32,12 @@
         <module>songs</module>
         <module>authorization</module>
         <module>eureka-service</module>
-        <module>eureka-client</module>
         <module>cloudGateway</module>
+        <module>integration-test</module>
     </modules>
 
     <!-- deps, die alle sub modules brauchen -->
     <dependencies>
-        <dependency>
-            <groupId>org.springframework.boot</groupId>
-            <artifactId>spring-boot-starter-web</artifactId>
-        </dependency>
-
         <dependency>
             <groupId>org.junit.jupiter</groupId>
             <artifactId>junit-jupiter-api</artifactId>
