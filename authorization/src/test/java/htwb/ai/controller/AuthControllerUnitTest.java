@@ -74,7 +74,6 @@ public class AuthControllerUnitTest {
                 .andExpect(status().isOk());
         Assertions.assertTrue(result.andReturn().getResponse().getContentAsString().length() > 10);
         Assertions.assertTrue(Objects.requireNonNull(result.andReturn().getResponse().getContentType()).contains(MediaType.TEXT_PLAIN_VALUE));
-        // check whether token has expected length
     }
 
     /**
