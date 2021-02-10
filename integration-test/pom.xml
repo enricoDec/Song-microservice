@@ -30,6 +30,16 @@
 
     <dependencies>
         <dependency>
+            <groupId>htwb.ai.EnKBE</groupId>
+            <artifactId>songs-microservice</artifactId>
+            <version>0.0.1-SNAPSHOT</version>
+        </dependency>
+        <dependency>
+            <groupId>htwb.ai.EnKBE</groupId>
+            <artifactId>authorization-microservice</artifactId>
+            <version>0.0.1-SNAPSHOT</version>
+        </dependency>
+        <dependency>
             <groupId>org.springframework.boot</groupId>
             <artifactId>spring-boot-starter-web</artifactId>
         </dependency>
@@ -108,18 +118,6 @@
             <groupId>uk.org.webcompere</groupId>
             <artifactId>system-stubs-jupiter</artifactId>
             <version>1.2.0</version>
-        </dependency>
-        <dependency>
-            <groupId>htwb.ai.EnKBE</groupId>
-            <artifactId>authorization-microservice</artifactId>
-            <version>0.0.1-SNAPSHOT</version>
-            <scope>test</scope>
-        </dependency>
-        <dependency>
-            <groupId>htwb.ai.EnKBE</groupId>
-            <artifactId>songs-microservice</artifactId>
-            <version>0.0.1-SNAPSHOT</version>
-            <scope>test</scope>
         </dependency>
     </dependencies>
 </project>

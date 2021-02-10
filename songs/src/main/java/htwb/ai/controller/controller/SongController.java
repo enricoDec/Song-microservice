@@ -1,7 +1,7 @@
 package htwb.ai.controller.controller;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
-import htwb.ai.controller.utils.JwtUtils;
+import htwb.ai.controller.utils.JwtDecode;
 import htwb.ai.controller.model.Song;
 import htwb.ai.controller.repo.SongRepository;
 import org.springframework.dao.EmptyResultDataAccessException;
@@ -39,12 +39,13 @@ public class SongController {
      * GET http://localhost:8080/rest/songs/{songId}
      * Get a user from id
      *
+     * @param jwt JWT Token
      * @param id user id
      * @return response
      */
     @GetMapping(value = "/{id}", produces = {MediaType.APPLICATION_JSON_VALUE, MediaType.APPLICATION_XML_VALUE})
     public ResponseEntity<Song> getSong(@RequestHeader("Authorization") String jwt, @PathVariable(value = "id") Integer id) {
-        if (!JwtUtils.verifyJWT(jwt))
+        if (!JwtDecode.verifyJWT(jwt))
             return new ResponseEntity<>(HttpStatus.UNAUTHORIZED);
         if (id < 1) {
             return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
@@ -60,11 +61,12 @@ public class SongController {
      * GET http://localhost:8080/rest/songs/
      * Get all users
      *
+     * @param jwt JWT Token
      * @return response
      */
     @GetMapping(produces = {MediaType.APPLICATION_JSON_VALUE, MediaType.APPLICATION_XML_VALUE})
     public ResponseEntity<List<Song>> getAllSongs(@RequestHeader("Authorization") String jwt) {
-        if (!JwtUtils.verifyJWT(jwt))
+        if (!JwtDecode.verifyJWT(jwt))
             return new ResponseEntity<>(HttpStatus.UNAUTHORIZED);
         List<Song> songs = repo.getAllSongs();
         return new ResponseEntity<>(songs, HttpStatus.OK);
@@ -75,13 +77,14 @@ public class SongController {
      * Add a song
      * Accepts JSON
      *
+     * @param jwt JWT Token
      * @param song Song
      * @return response
      * @throws URISyntaxException URISyntaxException
      */
     @PostMapping(consumes = MediaType.APPLICATION_JSON_VALUE)
     public ResponseEntity<String> addSong(@RequestHeader("Authorization") String jwt, @RequestBody Song song) throws URISyntaxException {
-        if (!JwtUtils.verifyJWT(jwt))
+        if (!JwtDecode.verifyJWT(jwt))
             return new ResponseEntity<>(HttpStatus.UNAUTHORIZED);
         if (song.getTitle() == null || song.getId() != null) {
             return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
@@ -126,6 +129,7 @@ public class SongController {
      * Update an existing song
      * Accepts JSON
      *
+     * @param jwt JWT Token
      * @param song Song
      * @param id   id
      * @return response
@@ -133,7 +137,7 @@ public class SongController {
     @PutMapping(value = "/{id}", consumes = MediaType.APPLICATION_JSON_VALUE)
     public ResponseEntity<String> editSong(@RequestHeader("Authorization") String jwt,
                                            @RequestBody Song song, @PathVariable(value = "id") Integer id) {
-        if (!JwtUtils.verifyJWT(jwt))
+        if (!JwtDecode.verifyJWT(jwt))
             return new ResponseEntity<>(HttpStatus.UNAUTHORIZED);
         try {
             if (song.getTitle() == null || !id.equals(song.getId())) {
@@ -164,12 +168,13 @@ public class SongController {
      * DELETE http://localhost:8080/rest/songs/{songId}
      * Delete a song
      *
+     * @param jwt JWT Token
      * @param id id
      * @return response
      */
     @DeleteMapping(value = "/{id}")
     public ResponseEntity<String> deleteSong(@RequestHeader("Authorization") String jwt, @PathVariable(value = "id") Integer id) {
-        if (!JwtUtils.verifyJWT(jwt))
+        if (!JwtDecode.verifyJWT(jwt))
             return new ResponseEntity<>(HttpStatus.UNAUTHORIZED);
         if (id < 1) {
             return new ResponseEntity<>(HttpStatus.BAD_REQUEST);

@@ -1,12 +1,13 @@
 package integration;
 
-import htwb.ai.controller.AuthController;
-import htwb.ai.controller.PlaylistController;
-import htwb.ai.model.Playlist;
-import htwb.ai.model.Song;
-import htwb.ai.repo.PlaylistRepository;
-import htwb.ai.repo.SongRepository;
-import htwb.ai.repo.UserRepository;
+
+import htwb.ai.controller.controller.AuthController;
+import htwb.ai.controller.controller.PlaylistController;
+import htwb.ai.controller.model.Playlist;
+import htwb.ai.controller.model.Song;
+import htwb.ai.controller.repo.PlaylistRepository;
+import htwb.ai.controller.repo.SongRepository;
+import htwb.ai.controller.repo.UserRepository;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
@@ -86,7 +87,7 @@ public class PlaylistTest {
         playlistMvc.perform(MockMvcRequestBuilders
                 .post("/songLists")
                 .contentType(MediaType.APPLICATION_JSON)
-                .header(java.net.http.HttpHeaders.AUTHORIZATION, mmusterToken).content("{\"isPrivate\": true,\"name\": \"mmusterTest\",\"songList\": [{\"id\": " + defaultSong.getId() + ",\"title\": \"My humps\",\"artist\": \"Black Eyed Peas\",\"label\": \"anyLabel\",\"released\": 2019}]}"))
+                .header(HttpHeaders.AUTHORIZATION, mmusterToken).content("{\"isPrivate\": true,\"name\": \"mmusterTest\",\"songList\": [{\"id\": " + defaultSong.getId() + ",\"title\": \"My humps\",\"artist\": \"Black Eyed Peas\",\"label\": \"anyLabel\",\"released\": 2019}]}"))
                 .andExpect(status().isCreated());
     }
 
@@ -95,7 +96,7 @@ public class PlaylistTest {
         ResultActions resultActions = playlistMvc.perform(MockMvcRequestBuilders
                 .post("/songLists")
                 .contentType(MediaType.APPLICATION_JSON)
-                .header(java.net.http.HttpHeaders.AUTHORIZATION, mmusterToken).content("{\"isPrivate\": true,\"name\": \"mmusterTest\",\"songList\": [{\"id\": " + defaultSong.getId() + ",\"title\": \"My humps\",\"artist\": \"Black Eyed Peas\",\"label\": \"anyLabel\",\"released\": 2019}]}"))
+                .header(HttpHeaders.AUTHORIZATION, mmusterToken).content("{\"isPrivate\": true,\"name\": \"mmusterTest\",\"songList\": [{\"id\": " + defaultSong.getId() + ",\"title\": \"My humps\",\"artist\": \"Black Eyed Peas\",\"label\": \"anyLabel\",\"released\": 2019}]}"))
                 .andExpect(status().isCreated());
 
         Playlist playlist = playlistRepository.getPlaylistById(getSongListId(resultActions));

@@ -1,7 +1,7 @@
 package htwb.ai.controller;
 
 import htwb.ai.controller.controller.PlaylistController;
-import htwb.ai.controller.utils.JwtUtils;
+import htwb.ai.controller.utils.JwtDecode;
 import htwb.ai.controller.model.Playlist;
 import htwb.ai.controller.model.Song;
 import htwb.ai.controller.repo.PlaylistRepository;
@@ -89,9 +89,9 @@ public class PlaylistUnitTest {
 
     @Test
     void getPlaylistByIdGoodTest() throws Exception {
-        try (MockedStatic<JwtUtils> jwtUtilsMockedStatic = mockStatic(JwtUtils.class)) {
+        try (MockedStatic<JwtDecode> jwtUtilsMockedStatic = mockStatic(JwtDecode.class)) {
             Claims claim = mock(Claims.class);
-            when(JwtUtils.decodeJWT("BLOB")).thenReturn(claim);
+            when(JwtDecode.decodeJWT("BLOB")).thenReturn(claim);
             when(claim.getId()).thenReturn("otherOwner");
 
             when(playlistRepository.getPlaylistById(defaultPublicPlaylist.getId())).thenReturn(defaultPublicPlaylist);
@@ -110,10 +110,10 @@ public class PlaylistUnitTest {
 
     @Test
     void getPlaylistByIdPlaylistDoesNotExistBadTest() throws Exception {
-        try (MockedStatic<JwtUtils> jwtUtilsMockedStatic = mockStatic(JwtUtils.class)) {
+        try (MockedStatic<JwtDecode> jwtUtilsMockedStatic = mockStatic(JwtDecode.class)) {
             int notExisitingPlaylistId = 9999;
             Claims claim = mock(Claims.class);
-            when(JwtUtils.decodeJWT("BLOB")).thenReturn(claim);
+            when(JwtDecode.decodeJWT("BLOB")).thenReturn(claim);
             when(claim.getId()).thenReturn("mmuster");
 
             when(playlistRepository.getPlaylistById(notExisitingPlaylistId)).thenReturn(null);
@@ -126,9 +126,9 @@ public class PlaylistUnitTest {
 
     @Test
     void getPrivatePlaylistByIdNotOwnerBadTest() throws Exception {
-        try (MockedStatic<JwtUtils> jwtUtilsMockedStatic = mockStatic(JwtUtils.class)) {
+        try (MockedStatic<JwtDecode> jwtUtilsMockedStatic = mockStatic(JwtDecode.class)) {
             Claims claim = mock(Claims.class);
-            when(JwtUtils.decodeJWT("BLOB")).thenReturn(claim);
+            when(JwtDecode.decodeJWT("BLOB")).thenReturn(claim);
             when(claim.getId()).thenReturn("echuler");
 
             when(playlistRepository.getPlaylistById(defaultPrivatePlaylist.getId())).thenReturn(defaultPrivatePlaylist);
@@ -141,8 +141,8 @@ public class PlaylistUnitTest {
 
     @Test
     void getPlaylistBadJWTBadTest() throws Exception {
-        try (MockedStatic<JwtUtils> jwtUtilsMockedStatic = mockStatic(JwtUtils.class)) {
-            when(JwtUtils.decodeJWT("BLOB")).thenThrow(IllegalArgumentException.class);
+        try (MockedStatic<JwtDecode> jwtUtilsMockedStatic = mockStatic(JwtDecode.class)) {
+            when(JwtDecode.decodeJWT("BLOB")).thenThrow(IllegalArgumentException.class);
 
             when(playlistRepository.getPlaylistById(defaultPrivatePlaylist.getId())).thenReturn(defaultPrivatePlaylist);
             playlistMvc.perform(MockMvcRequestBuilders
@@ -154,10 +154,10 @@ public class PlaylistUnitTest {
 
     @Test
     void getPlaylistByOwnerGoodTest() throws Exception {
-        try (MockedStatic<JwtUtils> jwtUtilsMockedStatic = mockStatic(JwtUtils.class)) {
-            when(JwtUtils.verifyJWT("BLOB")).thenReturn(true);
+        try (MockedStatic<JwtDecode> jwtUtilsMockedStatic = mockStatic(JwtDecode.class)) {
+            when(JwtDecode.verifyJWT("BLOB")).thenReturn(true);
             Claims claim = mock(Claims.class);
-            when(JwtUtils.decodeJWT(anyString())).thenReturn(claim);
+            when(JwtDecode.decodeJWT(anyString())).thenReturn(claim);
             when(claim.getId()).thenReturn("mmuster");
 
             when(playlistRepository.getAllByOwnerId("mmuster")).thenReturn(Arrays.asList(defaultPublicPlaylist, defaultPrivatePlaylist));
@@ -181,10 +181,10 @@ public class PlaylistUnitTest {
 
     @Test
     void getPlaylistByNotOwnerGoodTest() throws Exception {
-        try (MockedStatic<JwtUtils> jwtUtilsMockedStatic = mockStatic(JwtUtils.class)) {
-            when(JwtUtils.verifyJWT("BLOB")).thenReturn(true);
+        try (MockedStatic<JwtDecode> jwtUtilsMockedStatic = mockStatic(JwtDecode.class)) {
+            when(JwtDecode.verifyJWT("BLOB")).thenReturn(true);
             Claims claim = mock(Claims.class);
-            when(JwtUtils.decodeJWT(anyString())).thenReturn(claim);
+            when(JwtDecode.decodeJWT(anyString())).thenReturn(claim);
             when(claim.getId()).thenReturn("eschuler");
 
             when(playlistRepository.getAllPublicByOwnerId("mmuster")).thenReturn(Arrays.asList(defaultPublicPlaylist));
@@ -204,10 +204,10 @@ public class PlaylistUnitTest {
 
     @Test
     void getPlaylistNoPlaylistsBadTest() throws Exception {
-        try (MockedStatic<JwtUtils> jwtUtilsMockedStatic = mockStatic(JwtUtils.class)) {
-            when(JwtUtils.verifyJWT("BLOB")).thenReturn(true);
+        try (MockedStatic<JwtDecode> jwtUtilsMockedStatic = mockStatic(JwtDecode.class)) {
+            when(JwtDecode.verifyJWT("BLOB")).thenReturn(true);
             Claims claim = mock(Claims.class);
-            when(JwtUtils.decodeJWT(anyString())).thenReturn(claim);
+            when(JwtDecode.decodeJWT(anyString())).thenReturn(claim);
             when(claim.getId()).thenReturn("eschuler");
 
             when(playlistRepository.getAllPublicByOwnerId("mmuster")).thenReturn(new ArrayList<>(0));
@@ -221,8 +221,8 @@ public class PlaylistUnitTest {
 
     @Test
     void getPlaylistByOwnerIdBadJWTBadTest() throws Exception {
-        try (MockedStatic<JwtUtils> jwtUtilsMockedStatic = mockStatic(JwtUtils.class)) {
-            when(JwtUtils.decodeJWT("BLOB")).thenThrow(IllegalArgumentException.class);
+        try (MockedStatic<JwtDecode> jwtUtilsMockedStatic = mockStatic(JwtDecode.class)) {
+            when(JwtDecode.decodeJWT("BLOB")).thenThrow(IllegalArgumentException.class);
 
             when(playlistRepository.getPlaylistById(defaultPrivatePlaylist.getId())).thenReturn(defaultPrivatePlaylist);
             playlistMvc.perform(MockMvcRequestBuilders
@@ -234,10 +234,10 @@ public class PlaylistUnitTest {
 
     @Test
     void deletePlaylistGoodTest() throws Exception {
-        try (MockedStatic<JwtUtils> jwtUtilsMockedStatic = mockStatic(JwtUtils.class)) {
-            when(JwtUtils.verifyJWT("BLOB")).thenReturn(true);
+        try (MockedStatic<JwtDecode> jwtUtilsMockedStatic = mockStatic(JwtDecode.class)) {
+            when(JwtDecode.verifyJWT("BLOB")).thenReturn(true);
             Claims claim = mock(Claims.class);
-            when(JwtUtils.decodeJWT(anyString())).thenReturn(claim);
+            when(JwtDecode.decodeJWT(anyString())).thenReturn(claim);
             when(claim.getId()).thenReturn("mmuster");
 
             when(playlistRepository.getPlaylistById(defaultPrivatePlaylist.getId())).thenReturn(defaultPrivatePlaylist);
@@ -252,10 +252,10 @@ public class PlaylistUnitTest {
 
     @Test
     void deletePlaylistBadTest() throws Exception {
-        try (MockedStatic<JwtUtils> jwtUtilsMockedStatic = mockStatic(JwtUtils.class)) {
-            when(JwtUtils.verifyJWT("BLOB")).thenReturn(true);
+        try (MockedStatic<JwtDecode> jwtUtilsMockedStatic = mockStatic(JwtDecode.class)) {
+            when(JwtDecode.verifyJWT("BLOB")).thenReturn(true);
             Claims claim = mock(Claims.class);
-            when(JwtUtils.decodeJWT(anyString())).thenReturn(claim);
+            when(JwtDecode.decodeJWT(anyString())).thenReturn(claim);
             when(claim.getId()).thenReturn("otherUser");
 
             when(playlistRepository.getPlaylistById(defaultPrivatePlaylist.getId())).thenReturn(defaultPrivatePlaylist);
@@ -270,10 +270,10 @@ public class PlaylistUnitTest {
 
     @Test
     void deletePlaylistRandTest() throws Exception {
-        try (MockedStatic<JwtUtils> jwtUtilsMockedStatic = mockStatic(JwtUtils.class)) {
-            when(JwtUtils.verifyJWT("BLOB")).thenReturn(true);
+        try (MockedStatic<JwtDecode> jwtUtilsMockedStatic = mockStatic(JwtDecode.class)) {
+            when(JwtDecode.verifyJWT("BLOB")).thenReturn(true);
             Claims claim = mock(Claims.class);
-            when(JwtUtils.decodeJWT(anyString())).thenReturn(claim);
+            when(JwtDecode.decodeJWT(anyString())).thenReturn(claim);
             when(claim.getId()).thenReturn("mmuster");
 
             when(playlistRepository.getPlaylistById(defaultPublicPlaylist.getId())).thenReturn(defaultPublicPlaylist);
@@ -288,10 +288,10 @@ public class PlaylistUnitTest {
     @Test
     @DisplayName("POST Playlist Good")
     void postPlaylistGoodTest() throws Exception {
-        try (MockedStatic<JwtUtils> jwtUtilsMockedStatic = mockStatic(JwtUtils.class)) {
-            when(JwtUtils.verifyJWT(anyString())).thenReturn(true);
+        try (MockedStatic<JwtDecode> jwtUtilsMockedStatic = mockStatic(JwtDecode.class)) {
+            when(JwtDecode.verifyJWT(anyString())).thenReturn(true);
             Claims claim = mock(Claims.class);
-            when(JwtUtils.decodeJWT(anyString())).thenReturn(claim);
+            when(JwtDecode.decodeJWT(anyString())).thenReturn(claim);
             when(claim.getId()).thenReturn("mmuster");
 
             when(songRepository.findById(defaultSong1.getId())).thenReturn(java.util.Optional.ofNullable(defaultSong1));

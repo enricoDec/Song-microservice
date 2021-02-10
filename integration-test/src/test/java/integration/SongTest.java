@@ -1,10 +1,11 @@
 package integration;
 
-import htwb.ai.controller.AuthController;
-import htwb.ai.controller.SongController;
-import htwb.ai.model.Song;
-import htwb.ai.repo.SongRepository;
-import htwb.ai.repo.UserRepository;
+
+import htwb.ai.controller.controller.AuthController;
+import htwb.ai.controller.controller.SongController;
+import htwb.ai.controller.model.Song;
+import htwb.ai.controller.repo.SongRepository;
+import htwb.ai.controller.repo.UserRepository;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -174,7 +175,7 @@ public class SongTest {
         Song testSong2 = songRepository.save(new Song("Titel2", "Artist2", "Label2", 2021));
 
         ResultActions res = mockMvc.perform(get("/songs")
-                .accept(MediaType.APPLICATION_JSON).header(java.net.http.HttpHeaders.AUTHORIZATION, mmusterToken))
+                .accept(MediaType.APPLICATION_JSON).header(HttpHeaders.AUTHORIZATION, mmusterToken))
                 .andExpect(status().isOk());
 
         Assertions.assertEquals(
@@ -190,7 +191,7 @@ public class SongTest {
         Song testSong2 = songRepository.save(new Song("Titel2", "Artist2", "Label2", 2021));
 
         ResultActions res = mockMvc.perform(get("/songs")
-                .accept(MediaType.APPLICATION_XML).header(java.net.http.HttpHeaders.AUTHORIZATION, mmusterToken))
+                .accept(MediaType.APPLICATION_XML).header(HttpHeaders.AUTHORIZATION, mmusterToken))
                 .andExpect(status().isOk())
                 .andExpect(content().contentType("application/xml"));
 
@@ -206,7 +207,7 @@ public class SongTest {
     @Test
     void getAllSongsEdgeAcceptAll() throws Exception {
         mockMvc.perform(get("/songs")
-                .accept(MediaType.ALL).header(java.net.http.HttpHeaders.AUTHORIZATION, mmusterToken))
+                .accept(MediaType.ALL).header(HttpHeaders.AUTHORIZATION, mmusterToken))
                 .andExpect(status().isOk());
     }
 
@@ -215,7 +216,7 @@ public class SongTest {
         songRepository.deleteAll();
 
         mockMvc.perform(get("/songs")
-                .accept(MediaType.APPLICATION_JSON).header(java.net.http.HttpHeaders.AUTHORIZATION, mmusterToken))
+                .accept(MediaType.APPLICATION_JSON).header(HttpHeaders.AUTHORIZATION, mmusterToken))
                 .andExpect(status().isOk())
                 .andExpect(content().contentType(MediaType.APPLICATION_JSON))
                 .andExpect(jsonPath("$").isEmpty());
@@ -226,7 +227,7 @@ public class SongTest {
         songRepository.deleteAll();
 
         mockMvc.perform(get("/songs")
-                .accept(MediaType.APPLICATION_XML).header(java.net.http.HttpHeaders.AUTHORIZATION, mmusterToken))
+                .accept(MediaType.APPLICATION_XML).header(HttpHeaders.AUTHORIZATION, mmusterToken))
                 .andExpect(status().isOk())
                 .andExpect(content().contentType(MediaType.APPLICATION_XML))
                 .andExpect(xpath("List/item").nodeCount(0));
@@ -235,7 +236,7 @@ public class SongTest {
     @Test
     void getAllSongsBadAcceptHeader() throws Exception {
         mockMvc.perform(get("/songs")
-                .accept(MediaType.TEXT_HTML).header(java.net.http.HttpHeaders.AUTHORIZATION, mmusterToken))
+                .accept(MediaType.TEXT_HTML).header(HttpHeaders.AUTHORIZATION, mmusterToken))
                 .andExpect(status().isNotAcceptable());
     }
 
@@ -243,7 +244,7 @@ public class SongTest {
     void addSongGood() throws Exception {
         ResultActions res = mockMvc.perform(
                 post("/songs")
-                        .header(java.net.http.HttpHeaders.AUTHORIZATION, mmusterToken)
+                        .header(HttpHeaders.AUTHORIZATION, mmusterToken)
                         .contentType(MediaType.APPLICATION_JSON).content("{\n" +
                         "\t\t\"title\": \"Ghostbusters (I'm not a fraid)\",\n" +
                         "\t\t\"artist\": \"Fall Out Boy, Missy Elliott\",\n" +
@@ -253,7 +254,7 @@ public class SongTest {
                 .andExpect(status().isCreated());
 
         //get id of new song from location header
-        int location = Integer.parseInt(Objects.requireNonNull(res.andReturn().getResponse().getHeader(java.net.http.HttpHeaders.LOCATION)).replace("/rest/songs/", ""));
+        int location = Integer.parseInt(Objects.requireNonNull(res.andReturn().getResponse().getHeader(HttpHeaders.LOCATION)).replace("/rest/songs/", ""));
         Assertions.assertEquals("Ghostbusters (I'm not a fraid)", songRepository.findSongBySongId(location).getTitle());
         Assertions.assertEquals("Fall Out Boy, Missy Elliott", songRepository.findSongBySongId(location).getArtist());
         Assertions.assertEquals("Virgin", songRepository.findSongBySongId(location).getLabel());
@@ -267,7 +268,7 @@ public class SongTest {
                 "Trainor\",\"label\": \"Thank You\",\"released\": 2016}").getBytes());
         MockHttpServletRequestBuilder builder =
                 MockMvcRequestBuilders.multipart("/songs")
-                        .file(jsonFile).header(java.net.http.HttpHeaders.AUTHORIZATION, mmusterToken);
+                        .file(jsonFile).header(HttpHeaders.AUTHORIZATION, mmusterToken);
         mockMvc.perform(builder).andExpect(status().isCreated());
     }
 
@@ -278,7 +279,7 @@ public class SongTest {
                 "Trainor\",\"label\": \"Thank You\",\"released\": 2016}").getBytes());
         MockHttpServletRequestBuilder builder =
                 MockMvcRequestBuilders.multipart("/songs")
-                        .file(jsonFile).header(java.net.http.HttpHeaders.AUTHORIZATION, mmusterToken);
+                        .file(jsonFile).header(HttpHeaders.AUTHORIZATION, mmusterToken);
         mockMvc.perform(builder).andExpect(status().isBadRequest());
     }
 
@@ -288,7 +289,7 @@ public class SongTest {
                 "application/json", ("").getBytes());
         MockHttpServletRequestBuilder builder =
                 MockMvcRequestBuilders.multipart("/songs")
-                        .file(jsonFile).header(java.net.http.HttpHeaders.AUTHORIZATION, mmusterToken);
+                        .file(jsonFile).header(HttpHeaders.AUTHORIZATION, mmusterToken);
         mockMvc.perform(builder).andExpect(status().isBadRequest());
     }
 
@@ -299,14 +300,14 @@ public class SongTest {
                 "Trainor\",\"label\": \"Thank You\",\"released\": 2016}").getBytes());
         MockHttpServletRequestBuilder builder =
                 MockMvcRequestBuilders.multipart("/songs")
-                        .file(jsonFile).header(java.net.http.HttpHeaders.AUTHORIZATION, "wrong_token");
+                        .file(jsonFile).header(HttpHeaders.AUTHORIZATION, "wrong_token");
         mockMvc.perform(builder).andExpect(status().isUnauthorized());
     }
 
     @Test
     void addSongGoodVerifyLocation() throws Exception {
         mockMvc.perform(post("/songs")
-                .header(java.net.http.HttpHeaders.AUTHORIZATION, mmusterToken)
+                .header(HttpHeaders.AUTHORIZATION, mmusterToken)
                 .contentType(MediaType.APPLICATION_JSON).content("{\n" +
                         "\t\t\"title\": \"Ghostbusters (I'm not a fraid)\",\n" +
                         "\t\t\"artist\": \"Fall Out Boy, Missy Elliott\",\n" +
@@ -314,20 +315,20 @@ public class SongTest {
                         "\t\t\"released\": 2020\n" +
                         "\t}"))
                 .andExpect(status().isCreated())
-                .andReturn().getResponse().getHeader(java.net.http.HttpHeaders.LOCATION).contains("/rest/songs/");
+                .andReturn().getResponse().getHeader(HttpHeaders.LOCATION).contains("/rest/songs/");
     }
 
     @Test
     void addSongGoodEdgeOnlyNecessaryValues() throws Exception {
         ResultActions res = mockMvc.perform(
                 post("/songs")
-                        .header(java.net.http.HttpHeaders.AUTHORIZATION, mmusterToken)
+                        .header(HttpHeaders.AUTHORIZATION, mmusterToken)
                         .contentType(MediaType.APPLICATION_JSON).content("{\n" +
                         "\t\t\"title\": \"Ghostbusters (I'm not a fraid)\"}"))
                 .andExpect(status().isCreated());
 
         //get id of new song from location header
-        int location = Integer.parseInt(Objects.requireNonNull(res.andReturn().getResponse().getHeader(java.net.http.HttpHeaders.LOCATION)).replace("/rest/songs/", ""));
+        int location = Integer.parseInt(Objects.requireNonNull(res.andReturn().getResponse().getHeader(HttpHeaders.LOCATION)).replace("/rest/songs/", ""));
         Assertions.assertEquals("Ghostbusters (I'm not a fraid)", songRepository.findSongBySongId(location).getTitle());
         Assertions.assertNull(songRepository.findSongBySongId(location).getArtist());
         Assertions.assertNull(songRepository.findSongBySongId(location).getLabel());
@@ -337,13 +338,13 @@ public class SongTest {
     @Test
     void addSongGoodEdgeJSONWithAdditionalKeys() throws Exception {
         ResultActions res = mockMvc.perform(post("/songs")
-                .header(java.net.http.HttpHeaders.AUTHORIZATION, mmusterToken)
+                .header(HttpHeaders.AUTHORIZATION, mmusterToken)
                 .contentType(MediaType.APPLICATION_JSON).content("{\n" +
                         "\t\t\"title\": \"Ghostbusters (I'm not a fraid)\", \"key\": \"value\"}"))
                 .andExpect(status().isCreated());
 
         //get id of new song from location header
-        int location = Integer.parseInt(Objects.requireNonNull(res.andReturn().getResponse().getHeader(java.net.http.HttpHeaders.LOCATION)).replace("/rest/songs/", ""));
+        int location = Integer.parseInt(Objects.requireNonNull(res.andReturn().getResponse().getHeader(HttpHeaders.LOCATION)).replace("/rest/songs/", ""));
         Assertions.assertEquals("Ghostbusters (I'm not a fraid)", songRepository.findSongBySongId(location).getTitle());
         Assertions.assertNull(songRepository.findSongBySongId(location).getArtist());
         Assertions.assertNull(songRepository.findSongBySongId(location).getLabel());
@@ -353,7 +354,7 @@ public class SongTest {
     @Test
     void addSongBadJSONWithWrongKeys() throws Exception {
         mockMvc.perform(post("/songs")
-                .header(java.net.http.HttpHeaders.AUTHORIZATION, mmusterToken)
+                .header(HttpHeaders.AUTHORIZATION, mmusterToken)
                 .contentType(MediaType.APPLICATION_JSON).content("{\n" +
                         "\t\t\"key\": \"value\"}"))
                 .andExpect(status().isBadRequest());
@@ -362,7 +363,7 @@ public class SongTest {
     @Test
     void addSongBadJSONBadFormatted() throws Exception {
         mockMvc.perform(post("/songs")
-                .header(java.net.http.HttpHeaders.AUTHORIZATION, mmusterToken)
+                .header(HttpHeaders.AUTHORIZATION, mmusterToken)
                 .contentType(MediaType.APPLICATION_JSON).content("{\n" +
                         "\t\t\"title\": \"Ghostbusters (I'm not a fraid)\""))
                 .andExpect(status().isBadRequest());
@@ -371,7 +372,7 @@ public class SongTest {
     @Test
     void addSongBadUnsupportedMediaType() throws Exception {
         mockMvc.perform(post("/songs")
-                .header(java.net.http.HttpHeaders.AUTHORIZATION, mmusterToken)
+                .header(HttpHeaders.AUTHORIZATION, mmusterToken)
                 .contentType(MediaType.TEXT_HTML).content("test message"))
                 .andExpect(status().isUnsupportedMediaType());
     }
@@ -379,7 +380,7 @@ public class SongTest {
     @Test
     void deleteSongGoodVerifyStatusCode() throws Exception {
         mockMvc.perform(delete("/songs/" + defaultSong.getId())
-                .header(java.net.http.HttpHeaders.AUTHORIZATION, mmusterToken))
+                .header(HttpHeaders.AUTHORIZATION, mmusterToken))
                 .andExpect(status().isNoContent());
 
         Assertions.assertNull(songRepository.findSongBySongId(defaultSong.getId()));
@@ -388,7 +389,7 @@ public class SongTest {
     @Test
     void deleteSongGood() throws Exception {
         mockMvc.perform(delete("/songs/" + defaultSong.getId())
-                .header(java.net.http.HttpHeaders.AUTHORIZATION, mmusterToken));
+                .header(HttpHeaders.AUTHORIZATION, mmusterToken));
 
         Assertions.assertNull(songRepository.findSongBySongId(defaultSong.getId()));
     }
@@ -396,14 +397,14 @@ public class SongTest {
     @Test
     void deleteSongBadIdOutOfRange() throws Exception {
         mockMvc.perform(delete("/songs/0")
-                .header(java.net.http.HttpHeaders.AUTHORIZATION, mmusterToken))
+                .header(HttpHeaders.AUTHORIZATION, mmusterToken))
                 .andExpect(status().isBadRequest());
     }
 
     @Test
     void deleteSongBadStringInsteadOfId() throws Exception {
         mockMvc.perform(delete("/songs/abc")
-                .header(java.net.http.HttpHeaders.AUTHORIZATION, mmusterToken))
+                .header(HttpHeaders.AUTHORIZATION, mmusterToken))
                 .andExpect(status().isBadRequest());
     }
 
@@ -412,14 +413,14 @@ public class SongTest {
         songRepository.deleteAll();
 
         mockMvc.perform(delete("/songs/" + defaultSong.getId())
-                .header(java.net.http.HttpHeaders.AUTHORIZATION, mmusterToken))
+                .header(HttpHeaders.AUTHORIZATION, mmusterToken))
                 .andExpect(status().isNotFound());
     }
 
     @Test
     void putSongGoodVerifyStatusCode() throws Exception {
         mockMvc.perform(put("/songs/" + defaultSong.getId())
-                .header(java.net.http.HttpHeaders.AUTHORIZATION, mmusterToken)
+                .header(HttpHeaders.AUTHORIZATION, mmusterToken)
                 .contentType(MediaType.APPLICATION_JSON)
                 .content("{\"id\": " + defaultSong.getId() + ", \"title\": \"SONG_TITLE_EDIT\", \"artist\": \"COOL Artitst_EDIT\", \"label\": \"SONY_EDIT\", \"released\": 2021}"))
                 .andExpect(status().isNoContent());
@@ -436,7 +437,7 @@ public class SongTest {
     @Test
     void putSongDoesNotExist() throws Exception {
         mockMvc.perform(put("/songs/200")
-                .header(java.net.http.HttpHeaders.AUTHORIZATION, mmusterToken)
+                .header(HttpHeaders.AUTHORIZATION, mmusterToken)
                 .contentType(MediaType.APPLICATION_JSON)
                 .content("{\"id\": 200, \"title\": \"SONG_TITLE_EDIT\", \"artist\": \"COOL Artitst_EDIT\", \"label\": \"SONY_EDIT\", \"released\": 2021}"))
                 .andExpect(status().isNotFound());
@@ -447,7 +448,7 @@ public class SongTest {
     @Test
     void putDifferentIdInUrlAndPayload() throws Exception {
         mockMvc.perform(put("/songs/1")
-                .header(java.net.http.HttpHeaders.AUTHORIZATION, mmusterToken)
+                .header(HttpHeaders.AUTHORIZATION, mmusterToken)
                 .contentType(MediaType.APPLICATION_JSON)
                 .content("{\"id\": 2, \"title\": \"SONG_TITLE_EDIT\", \"artist\": \"COOL Artitst_EDIT\", \"label\": \"SONY_EDIT\", \"released\": 2021}"))
                 .andExpect(status().isBadRequest());
@@ -456,7 +457,7 @@ public class SongTest {
     @Test
     void putEdgeCaseIdNotValid() throws Exception {
         mockMvc.perform(put("/songs/0")
-                .header(java.net.http.HttpHeaders.AUTHORIZATION, mmusterToken)
+                .header(HttpHeaders.AUTHORIZATION, mmusterToken)
                 .contentType(MediaType.APPLICATION_JSON)
                 .content("{\"id\": 0, \"title\": \"SONG_TITLE_EDIT\", \"artist\": \"COOL Artitst_EDIT\", \"label\": \"SONY_EDIT\", \"released\": 2021}"))
                 .andExpect(status().isNotFound());
@@ -465,7 +466,7 @@ public class SongTest {
     @Test
     void putEmptyPayload() throws Exception {
         mockMvc.perform(put("/songs/0")
-                .header(java.net.http.HttpHeaders.AUTHORIZATION, mmusterToken)
+                .header(HttpHeaders.AUTHORIZATION, mmusterToken)
                 .contentType(MediaType.APPLICATION_JSON)
                 .content(""))
                 .andExpect(status().isBadRequest());

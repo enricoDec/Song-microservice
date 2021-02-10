@@ -7,7 +7,7 @@ import java.security.Key;
 import java.util.Date;
 
 
-public class JwtUtils {
+public class JwtCompile {
     private static final SignatureAlgorithm signatureAlgorithm = SignatureAlgorithm.HS256;
     private static final byte[] secret_key = System.getenv("SECRET_KEY_KBE").getBytes();
     private static final Key key = new SecretKeySpec(secret_key, signatureAlgorithm.getJcaName());

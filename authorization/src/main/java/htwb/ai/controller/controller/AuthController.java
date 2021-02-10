@@ -3,7 +3,7 @@ package htwb.ai.controller.controller;
 
 import htwb.ai.controller.model.User;
 import htwb.ai.controller.repo.UserRepository;
-import htwb.ai.controller.utils.JwtUtils;
+import htwb.ai.controller.utils.JwtCompile;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
@@ -64,7 +64,7 @@ public class AuthController {
         HttpHeaders header = new HttpHeaders();
         //Last name is not required for auth, so we get it by id
 
-        return ResponseEntity.ok().headers(header).body(JwtUtils.createJWT(user.getUserId(),
+        return ResponseEntity.ok().headers(header).body(JwtCompile.createJWT(user.getUserId(),
                 repo.findUserByUserId(user.getUserId()).getLastName()));
     }
 

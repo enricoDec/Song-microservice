@@ -2,7 +2,7 @@ package htwb.ai.controller;
 
 import htwb.ai.controller.controller.SongController;
 import htwb.ai.controller.repo.SongRepository;
-import htwb.ai.controller.utils.JwtUtils;
+import htwb.ai.controller.utils.JwtDecode;
 import htwb.ai.controller.model.Song;
 import org.junit.jupiter.api.*;
 import org.junit.jupiter.api.extension.ExtendWith;
@@ -51,8 +51,8 @@ class SongControllerUnitTest {
 
     @Test
     void getSongShouldReturnOKAndSongForExistingIdJSON() throws Exception {
-        try (MockedStatic<JwtUtils> jwtUtilsMockedStatic = mockStatic(JwtUtils.class)) {
-            when(JwtUtils.verifyJWT(anyString())).thenReturn(true);
+        try (MockedStatic<JwtDecode> jwtUtilsMockedStatic = mockStatic(JwtDecode.class)) {
+            when(JwtDecode.verifyJWT(anyString())).thenReturn(true);
 
             when(songRepository.findSongBySongId(1)).thenReturn(fullSong);
             mockMvc.perform(get("/songs/1")
@@ -70,8 +70,8 @@ class SongControllerUnitTest {
 
     @Test
     void getSongShouldReturnOKAndSongForExistingIdXML() throws Exception {
-        try (MockedStatic<JwtUtils> jwtUtilsMockedStatic = mockStatic(JwtUtils.class)) {
-            when(JwtUtils.verifyJWT(anyString())).thenReturn(true);
+        try (MockedStatic<JwtDecode> jwtUtilsMockedStatic = mockStatic(JwtDecode.class)) {
+            when(JwtDecode.verifyJWT(anyString())).thenReturn(true);
 
             when(songRepository.findSongBySongId(1)).thenReturn(fullSong);
             mockMvc.perform(get("/songs/1")
@@ -90,8 +90,8 @@ class SongControllerUnitTest {
 
     @Test
     void getSongBadIdNotExistingXML() throws Exception {
-        try (MockedStatic<JwtUtils> jwtUtilsMockedStatic = mockStatic(JwtUtils.class)) {
-            when(JwtUtils.verifyJWT(anyString())).thenReturn(true);
+        try (MockedStatic<JwtDecode> jwtUtilsMockedStatic = mockStatic(JwtDecode.class)) {
+            when(JwtDecode.verifyJWT(anyString())).thenReturn(true);
 
             when(songRepository.findSongBySongId(2)).thenReturn(null);
             mockMvc.perform(get("/songs/2")
@@ -102,8 +102,8 @@ class SongControllerUnitTest {
 
     @Test
     void getSongBadIdNotExistingJSON() throws Exception {
-        try (MockedStatic<JwtUtils> jwtUtilsMockedStatic = mockStatic(JwtUtils.class)) {
-            when(JwtUtils.verifyJWT(anyString())).thenReturn(true);
+        try (MockedStatic<JwtDecode> jwtUtilsMockedStatic = mockStatic(JwtDecode.class)) {
+            when(JwtDecode.verifyJWT(anyString())).thenReturn(true);
 
             when(songRepository.findSongBySongId(2)).thenReturn(null);
             mockMvc.perform(get("/songs/2")
@@ -114,8 +114,8 @@ class SongControllerUnitTest {
 
     @Test
     void getSongBadInvalidIdJSON() throws Exception {
-        try (MockedStatic<JwtUtils> jwtUtilsMockedStatic = mockStatic(JwtUtils.class)) {
-            when(JwtUtils.verifyJWT(anyString())).thenReturn(true);
+        try (MockedStatic<JwtDecode> jwtUtilsMockedStatic = mockStatic(JwtDecode.class)) {
+            when(JwtDecode.verifyJWT(anyString())).thenReturn(true);
 
             when(songRepository.findSongBySongId(0)).thenReturn(null); // id is out of defined range
             mockMvc.perform(get("/songs/0")
@@ -126,8 +126,8 @@ class SongControllerUnitTest {
 
     @Test
     void getSongBadInvalidIdXML() throws Exception {
-        try (MockedStatic<JwtUtils> jwtUtilsMockedStatic = mockStatic(JwtUtils.class)) {
-            when(JwtUtils.verifyJWT(anyString())).thenReturn(true);
+        try (MockedStatic<JwtDecode> jwtUtilsMockedStatic = mockStatic(JwtDecode.class)) {
+            when(JwtDecode.verifyJWT(anyString())).thenReturn(true);
 
             when(songRepository.findSongBySongId(0)).thenReturn(null);
             mockMvc.perform(get("/songs/0")
@@ -138,8 +138,8 @@ class SongControllerUnitTest {
 
     @Test
     void getSongEdgeAcceptAllFormats() throws Exception {
-        try (MockedStatic<JwtUtils> jwtUtilsMockedStatic = mockStatic(JwtUtils.class)) {
-            when(JwtUtils.verifyJWT(anyString())).thenReturn(true);
+        try (MockedStatic<JwtDecode> jwtUtilsMockedStatic = mockStatic(JwtDecode.class)) {
+            when(JwtDecode.verifyJWT(anyString())).thenReturn(true);
 
             when(songRepository.findSongBySongId(1)).thenReturn(fullSong);
             mockMvc.perform(get("/songs/1")
@@ -150,8 +150,8 @@ class SongControllerUnitTest {
 
     @Test
     void getSongBadAcceptHeader() throws Exception {
-        try (MockedStatic<JwtUtils> jwtUtilsMockedStatic = mockStatic(JwtUtils.class)) {
-            when(JwtUtils.verifyJWT(anyString())).thenReturn(true);
+        try (MockedStatic<JwtDecode> jwtUtilsMockedStatic = mockStatic(JwtDecode.class)) {
+            when(JwtDecode.verifyJWT(anyString())).thenReturn(true);
 
             when(songRepository.findSongBySongId(1)).thenReturn(fullSong);
             mockMvc.perform(get("/songs/1")
@@ -162,8 +162,8 @@ class SongControllerUnitTest {
 
     @Test
     void getSongBadInvalidIdStringXML() throws Exception {
-        try (MockedStatic<JwtUtils> jwtUtilsMockedStatic = mockStatic(JwtUtils.class)) {
-            when(JwtUtils.verifyJWT(anyString())).thenReturn(true);
+        try (MockedStatic<JwtDecode> jwtUtilsMockedStatic = mockStatic(JwtDecode.class)) {
+            when(JwtDecode.verifyJWT(anyString())).thenReturn(true);
 
             mockMvc.perform(get("/songs/abc")
                     .accept(MediaType.APPLICATION_XML).header(HttpHeaders.AUTHORIZATION, "BLOB"))
@@ -173,8 +173,8 @@ class SongControllerUnitTest {
 
     @Test
     void getSongBadInvalidIdStringJSON() throws Exception {
-        try (MockedStatic<JwtUtils> jwtUtilsMockedStatic = mockStatic(JwtUtils.class)) {
-            when(JwtUtils.verifyJWT(anyString())).thenReturn(true);
+        try (MockedStatic<JwtDecode> jwtUtilsMockedStatic = mockStatic(JwtDecode.class)) {
+            when(JwtDecode.verifyJWT(anyString())).thenReturn(true);
 
             mockMvc.perform(get("/songs/abc")
                     .accept(MediaType.APPLICATION_JSON).header(HttpHeaders.AUTHORIZATION, "BLOB"))
@@ -184,8 +184,8 @@ class SongControllerUnitTest {
 
     @Test
     void getAllSongsShouldReturnOKSongArrayJSON() throws Exception {
-        try (MockedStatic<JwtUtils> jwtUtilsMockedStatic = mockStatic(JwtUtils.class)) {
-            when(JwtUtils.verifyJWT(anyString())).thenReturn(true);
+        try (MockedStatic<JwtDecode> jwtUtilsMockedStatic = mockStatic(JwtDecode.class)) {
+            when(JwtDecode.verifyJWT(anyString())).thenReturn(true);
 
 
             when(songRepository.getAllSongs()).thenReturn(Arrays.asList(new Song[]{fullSong}));
@@ -203,8 +203,8 @@ class SongControllerUnitTest {
 
     @Test
     void getAllSongsShouldReturnOKSongArrayXML() throws Exception {
-        try (MockedStatic<JwtUtils> jwtUtilsMockedStatic = mockStatic(JwtUtils.class)) {
-            when(JwtUtils.verifyJWT(anyString())).thenReturn(true);
+        try (MockedStatic<JwtDecode> jwtUtilsMockedStatic = mockStatic(JwtDecode.class)) {
+            when(JwtDecode.verifyJWT(anyString())).thenReturn(true);
             when(mockSong.getId()).thenReturn(1);
 
             when(songRepository.getAllSongs()).thenReturn(Arrays.asList(new Song[]{fullSong}));
@@ -222,8 +222,8 @@ class SongControllerUnitTest {
 
     @Test
     void getAllSongsEdgeAcceptAll() throws Exception {
-        try (MockedStatic<JwtUtils> jwtUtilsMockedStatic = mockStatic(JwtUtils.class)) {
-            when(JwtUtils.verifyJWT(anyString())).thenReturn(true);
+        try (MockedStatic<JwtDecode> jwtUtilsMockedStatic = mockStatic(JwtDecode.class)) {
+            when(JwtDecode.verifyJWT(anyString())).thenReturn(true);
 
             when(songRepository.findAll()).thenReturn(Arrays.asList(new Song[]{fullSong}));
             mockMvc.perform(get("/songs")
@@ -234,8 +234,8 @@ class SongControllerUnitTest {
 
     @Test
     void getAllSongsEdgeEmptyArrayJSON() throws Exception {
-        try (MockedStatic<JwtUtils> jwtUtilsMockedStatic = mockStatic(JwtUtils.class)) {
-            when(JwtUtils.verifyJWT(anyString())).thenReturn(true);
+        try (MockedStatic<JwtDecode> jwtUtilsMockedStatic = mockStatic(JwtDecode.class)) {
+            when(JwtDecode.verifyJWT(anyString())).thenReturn(true);
 
             when(songRepository.findAll()).thenReturn(Arrays.asList(new Song[]{}));
             mockMvc.perform(get("/songs")
@@ -248,8 +248,8 @@ class SongControllerUnitTest {
 
     @Test
     void getAllSongsEdgeEmptyListXML() throws Exception {
-        try (MockedStatic<JwtUtils> jwtUtilsMockedStatic = mockStatic(JwtUtils.class)) {
-            when(JwtUtils.verifyJWT(anyString())).thenReturn(true);
+        try (MockedStatic<JwtDecode> jwtUtilsMockedStatic = mockStatic(JwtDecode.class)) {
+            when(JwtDecode.verifyJWT(anyString())).thenReturn(true);
 
             when(songRepository.findAll()).thenReturn(Arrays.asList(new Song[]{}));
             mockMvc.perform(get("/songs")
@@ -262,8 +262,8 @@ class SongControllerUnitTest {
 
     @Test
     void getAllSongsBadAcceptHeader() throws Exception {
-        try (MockedStatic<JwtUtils> jwtUtilsMockedStatic = mockStatic(JwtUtils.class)) {
-            when(JwtUtils.verifyJWT(anyString())).thenReturn(true);
+        try (MockedStatic<JwtDecode> jwtUtilsMockedStatic = mockStatic(JwtDecode.class)) {
+            when(JwtDecode.verifyJWT(anyString())).thenReturn(true);
 
             when(songRepository.findAll()).thenReturn(Arrays.asList(new Song[]{}));
             mockMvc.perform(get("/songs")
@@ -274,8 +274,8 @@ class SongControllerUnitTest {
 
     @Test
     void addSongGood() throws Exception {
-        try (MockedStatic<JwtUtils> jwtUtilsMockedStatic = mockStatic(JwtUtils.class)) {
-            when(JwtUtils.verifyJWT(anyString())).thenReturn(true);
+        try (MockedStatic<JwtDecode> jwtUtilsMockedStatic = mockStatic(JwtDecode.class)) {
+            when(JwtDecode.verifyJWT(anyString())).thenReturn(true);
 
             ArgumentCaptor<Song> argument = ArgumentCaptor.forClass(Song.class);
             mockMvc.perform(post("/songs")
@@ -298,8 +298,8 @@ class SongControllerUnitTest {
 
     @Test
     void addSongGoodVerifyLocation() throws Exception {
-        try (MockedStatic<JwtUtils> jwtUtilsMockedStatic = mockStatic(JwtUtils.class)) {
-            when(JwtUtils.verifyJWT(anyString())).thenReturn(true);
+        try (MockedStatic<JwtDecode> jwtUtilsMockedStatic = mockStatic(JwtDecode.class)) {
+            when(JwtDecode.verifyJWT(anyString())).thenReturn(true);
             when(mockSong.getId()).thenReturn(1);
 
             mockMvc.perform(post("/songs")
@@ -317,8 +317,8 @@ class SongControllerUnitTest {
 
     @Test
     void addSongGoodEdgeOnlyNecessaryValues() throws Exception {
-        try (MockedStatic<JwtUtils> jwtUtilsMockedStatic = mockStatic(JwtUtils.class)) {
-            when(JwtUtils.verifyJWT(anyString())).thenReturn(true);
+        try (MockedStatic<JwtDecode> jwtUtilsMockedStatic = mockStatic(JwtDecode.class)) {
+            when(JwtDecode.verifyJWT(anyString())).thenReturn(true);
             when(mockSong.getId()).thenReturn(1);
 
             ArgumentCaptor<Song> argument = ArgumentCaptor.forClass(Song.class);
@@ -340,8 +340,8 @@ class SongControllerUnitTest {
 
     @Test
     void addSongGoodEdgeJSONWithAdditionalKeys() throws Exception {
-        try (MockedStatic<JwtUtils> jwtUtilsMockedStatic = mockStatic(JwtUtils.class)) {
-            when(JwtUtils.verifyJWT(anyString())).thenReturn(true);
+        try (MockedStatic<JwtDecode> jwtUtilsMockedStatic = mockStatic(JwtDecode.class)) {
+            when(JwtDecode.verifyJWT(anyString())).thenReturn(true);
             when(mockSong.getId()).thenReturn(1);
 
             ArgumentCaptor<Song> argument = ArgumentCaptor.forClass(Song.class);
@@ -363,8 +363,8 @@ class SongControllerUnitTest {
 
     @Test
     void addSongBadJSONWithWrongKeys() throws Exception {
-        try (MockedStatic<JwtUtils> jwtUtilsMockedStatic = mockStatic(JwtUtils.class)) {
-            when(JwtUtils.verifyJWT(anyString())).thenReturn(true);
+        try (MockedStatic<JwtDecode> jwtUtilsMockedStatic = mockStatic(JwtDecode.class)) {
+            when(JwtDecode.verifyJWT(anyString())).thenReturn(true);
 
             mockMvc.perform(post("/songs")
                     .header(HttpHeaders.AUTHORIZATION, "BLOB")
@@ -376,8 +376,8 @@ class SongControllerUnitTest {
 
     @Test
     void addSongBadJSONBadFormatted() throws Exception {
-        try (MockedStatic<JwtUtils> jwtUtilsMockedStatic = mockStatic(JwtUtils.class)) {
-            when(JwtUtils.verifyJWT(anyString())).thenReturn(true);
+        try (MockedStatic<JwtDecode> jwtUtilsMockedStatic = mockStatic(JwtDecode.class)) {
+            when(JwtDecode.verifyJWT(anyString())).thenReturn(true);
 
             mockMvc.perform(post("/songs")
                     .header(HttpHeaders.AUTHORIZATION, "BLOB")
@@ -389,8 +389,8 @@ class SongControllerUnitTest {
 
     @Test
     void addSongBadUnsupportedMediaType() throws Exception {
-        try (MockedStatic<JwtUtils> jwtUtilsMockedStatic = mockStatic(JwtUtils.class)) {
-            when(JwtUtils.verifyJWT(anyString())).thenReturn(true);
+        try (MockedStatic<JwtDecode> jwtUtilsMockedStatic = mockStatic(JwtDecode.class)) {
+            when(JwtDecode.verifyJWT(anyString())).thenReturn(true);
 
             mockMvc.perform(post("/songs")
                     .header(HttpHeaders.AUTHORIZATION, "BLOB")
@@ -401,8 +401,8 @@ class SongControllerUnitTest {
 
     @Test
     void deleteSongGoodVerifyStatusCode() throws Exception {
-        try (MockedStatic<JwtUtils> jwtUtilsMockedStatic = mockStatic(JwtUtils.class)) {
-            when(JwtUtils.verifyJWT(anyString())).thenReturn(true);
+        try (MockedStatic<JwtDecode> jwtUtilsMockedStatic = mockStatic(JwtDecode.class)) {
+            when(JwtDecode.verifyJWT(anyString())).thenReturn(true);
 
             mockMvc.perform(delete("/songs/1")
                     .header(HttpHeaders.AUTHORIZATION, "BLOB"))
@@ -412,8 +412,8 @@ class SongControllerUnitTest {
 
     @Test
     void deleteSongGoodSpyMethodCall() throws Exception {
-        try (MockedStatic<JwtUtils> jwtUtilsMockedStatic = mockStatic(JwtUtils.class)) {
-            when(JwtUtils.verifyJWT(anyString())).thenReturn(true);
+        try (MockedStatic<JwtDecode> jwtUtilsMockedStatic = mockStatic(JwtDecode.class)) {
+            when(JwtDecode.verifyJWT(anyString())).thenReturn(true);
 
             mockMvc.perform(delete("/songs/1")
                     .header(HttpHeaders.AUTHORIZATION, "BLOB"))
@@ -424,8 +424,8 @@ class SongControllerUnitTest {
 
     @Test
     void deleteSongBadIdOutOfRange() throws Exception {
-        try (MockedStatic<JwtUtils> jwtUtilsMockedStatic = mockStatic(JwtUtils.class)) {
-            when(JwtUtils.verifyJWT(anyString())).thenReturn(true);
+        try (MockedStatic<JwtDecode> jwtUtilsMockedStatic = mockStatic(JwtDecode.class)) {
+            when(JwtDecode.verifyJWT(anyString())).thenReturn(true);
 
             mockMvc.perform(delete("/songs/0")
                     .header(HttpHeaders.AUTHORIZATION, "BLOB"))
@@ -435,8 +435,8 @@ class SongControllerUnitTest {
 
     @Test
     void deleteSongBadStringInsteadOfId() throws Exception {
-        try (MockedStatic<JwtUtils> jwtUtilsMockedStatic = mockStatic(JwtUtils.class)) {
-            when(JwtUtils.verifyJWT(anyString())).thenReturn(true);
+        try (MockedStatic<JwtDecode> jwtUtilsMockedStatic = mockStatic(JwtDecode.class)) {
+            when(JwtDecode.verifyJWT(anyString())).thenReturn(true);
             mockMvc.perform(delete("/songs/abc")
                     .header(HttpHeaders.AUTHORIZATION, "BLOB"))
                     .andExpect(status().isBadRequest());
@@ -445,8 +445,8 @@ class SongControllerUnitTest {
 
     @Test
     void deleteSongBadSongNotExisting() throws Exception {
-        try (MockedStatic<JwtUtils> jwtUtilsMockedStatic = mockStatic(JwtUtils.class)) {
-            when(JwtUtils.verifyJWT(anyString())).thenReturn(true);
+        try (MockedStatic<JwtDecode> jwtUtilsMockedStatic = mockStatic(JwtDecode.class)) {
+            when(JwtDecode.verifyJWT(anyString())).thenReturn(true);
             when(mockSong.getId()).thenReturn(1);
 
             doThrow(EmptyResultDataAccessException.class).when(songRepository).deleteById(1);
@@ -458,8 +458,8 @@ class SongControllerUnitTest {
 
     @Test
     void putSongGoodVerifyStatusCode() throws Exception {
-        try (MockedStatic<JwtUtils> jwtUtilsMockedStatic = mockStatic(JwtUtils.class)) {
-            when(JwtUtils.verifyJWT(anyString())).thenReturn(true);
+        try (MockedStatic<JwtDecode> jwtUtilsMockedStatic = mockStatic(JwtDecode.class)) {
+            when(JwtDecode.verifyJWT(anyString())).thenReturn(true);
             when(mockSong.getId()).thenReturn(1);
             when(songRepository.existsById(1)).thenReturn(true);
             when(songRepository.findSongBySongId(1)).thenReturn(mockSong);
@@ -475,8 +475,8 @@ class SongControllerUnitTest {
 
     @Test
     void putSongDoesNotExist() throws Exception {
-        try (MockedStatic<JwtUtils> jwtUtilsMockedStatic = mockStatic(JwtUtils.class)) {
-            when(JwtUtils.verifyJWT(anyString())).thenReturn(true);
+        try (MockedStatic<JwtDecode> jwtUtilsMockedStatic = mockStatic(JwtDecode.class)) {
+            when(JwtDecode.verifyJWT(anyString())).thenReturn(true);
             when(mockSong.getId()).thenReturn(1);
             when(songRepository.existsById(1)).thenReturn(true);
             when(songRepository.findSongBySongId(1)).thenReturn(mockSong);
@@ -492,8 +492,8 @@ class SongControllerUnitTest {
 
     @Test
     void putDifferentIdInUrlAndPayload() throws Exception {
-        try (MockedStatic<JwtUtils> jwtUtilsMockedStatic = mockStatic(JwtUtils.class)) {
-            when(JwtUtils.verifyJWT(anyString())).thenReturn(true);
+        try (MockedStatic<JwtDecode> jwtUtilsMockedStatic = mockStatic(JwtDecode.class)) {
+            when(JwtDecode.verifyJWT(anyString())).thenReturn(true);
             when(mockSong.getId()).thenReturn(1);
             when(songRepository.existsById(1)).thenReturn(true);
             when(songRepository.findSongBySongId(1)).thenReturn(mockSong);
@@ -509,8 +509,8 @@ class SongControllerUnitTest {
 
     @Test
     void putEdgeCaseIdNotValid() throws Exception {
-        try (MockedStatic<JwtUtils> jwtUtilsMockedStatic = mockStatic(JwtUtils.class)) {
-            when(JwtUtils.verifyJWT(anyString())).thenReturn(true);
+        try (MockedStatic<JwtDecode> jwtUtilsMockedStatic = mockStatic(JwtDecode.class)) {
+            when(JwtDecode.verifyJWT(anyString())).thenReturn(true);
             when(mockSong.getId()).thenReturn(1);
             when(songRepository.existsById(1)).thenReturn(true);
             when(songRepository.findSongBySongId(1)).thenReturn(mockSong);
@@ -526,8 +526,8 @@ class SongControllerUnitTest {
 
     @Test
     void putEmptyPayload() throws Exception {
-        try (MockedStatic<JwtUtils> jwtUtilsMockedStatic = mockStatic(JwtUtils.class)) {
-            when(JwtUtils.verifyJWT(anyString())).thenReturn(true);
+        try (MockedStatic<JwtDecode> jwtUtilsMockedStatic = mockStatic(JwtDecode.class)) {
+            when(JwtDecode.verifyJWT(anyString())).thenReturn(true);
 
             mockMvc.perform(put("/songs/0")
                     .header(HttpHeaders.AUTHORIZATION, "BLOB")

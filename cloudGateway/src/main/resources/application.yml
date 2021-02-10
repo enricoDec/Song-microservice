@@ -20,3 +20,7 @@ spring:
           uri: lb://song-service
           predicates:
             - Path=/songsWS-MarvEn/rest/songs/**
+        - id: song-service
+          uri: lb://song-service
+          predicates:
+            - Path=/songsWS-MarvEn/rest/songLists/**

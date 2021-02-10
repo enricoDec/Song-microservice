@@ -87,6 +87,10 @@ public class Playlist {
         return songList;
     }
 
+    public void setSongList(List<Song> songList) {
+        this.songList = songList;
+    }
+
     @Override
     public String toString() {
         return "Playlist{" +

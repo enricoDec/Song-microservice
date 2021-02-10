@@ -1,6 +1,6 @@
 package htwb.ai.controller;
 
-import htwb.ai.controller.utils.JwtUtils;
+import htwb.ai.controller.utils.JwtCompile;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
@@ -16,28 +16,28 @@ import uk.org.webcompere.systemstubs.jupiter.SystemStubsExtension;
  * @since : 18.01.21
  **/
 @ExtendWith(SystemStubsExtension.class)
-public class JwtUtilsUnitTest {
+public class JwtCompileUnitTest {
     @SystemStub
     private EnvironmentVariables environment = new EnvironmentVariables("SECRET_KEY_KBE", "test_secret_key");
     @Test
     void createJWTGood() {
-        Assertions.assertTrue(JwtUtils.createJWT("Test", "MrTest").length() > 0);
+        Assertions.assertTrue(JwtCompile.createJWT("Test", "MrTest").length() > 0);
     }
 
     @Test
     void createJWTsameParams() {
-        Assertions.assertNotEquals(JwtUtils.createJWT("Test", "MtTest1"), JwtUtils.createJWT("Test", "MtTest2"));
+        Assertions.assertNotEquals(JwtCompile.createJWT("Test", "MtTest1"), JwtCompile.createJWT("Test", "MtTest2"));
     }
 
     @Test
     void createJWTsameParams2() {
-        Assertions.assertNotEquals(JwtUtils.createJWT("Test1", "MtTest"), JwtUtils.createJWT("Test2", "MtTest"));
+        Assertions.assertNotEquals(JwtCompile.createJWT("Test1", "MtTest"), JwtCompile.createJWT("Test2", "MtTest"));
     }
 
     @Test
     void createJWTIdEmpty() {
         try {
-            JwtUtils.createJWT("", "MtTest");
+            JwtCompile.createJWT("", "MtTest");
             Assertions.fail("Id can't be blank");
         } catch (IllegalArgumentException e) {
             //ok
@@ -47,7 +47,7 @@ public class JwtUtilsUnitTest {
     @Test
     void createJWTSubjectEmpty() {
         try {
-            JwtUtils.createJWT("Id", "");
+            JwtCompile.createJWT("Id", "");
             Assertions.fail("Subject can't be blank");
         } catch (IllegalArgumentException e) {
             //ok

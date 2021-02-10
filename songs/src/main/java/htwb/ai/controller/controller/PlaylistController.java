@@ -1,6 +1,6 @@
 package htwb.ai.controller.controller;
 
-import htwb.ai.controller.utils.JwtUtils;
+import htwb.ai.controller.utils.JwtDecode;
 import htwb.ai.controller.model.Playlist;
 import htwb.ai.controller.model.Song;
 import htwb.ai.controller.repo.PlaylistRepository;
@@ -59,7 +59,7 @@ public class PlaylistController {
         //JWT
         Claims claims;
         try {
-            claims = JwtUtils.decodeJWT(jwt);
+            claims = JwtDecode.decodeJWT(jwt);
         } catch (ExpiredJwtException | UnsupportedJwtException |
                 MalformedJwtException | SignatureException | IllegalArgumentException e) {
             return new ResponseEntity<>(HttpStatus.UNAUTHORIZED);
@@ -101,7 +101,7 @@ public class PlaylistController {
             return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
         Claims claims;
         try {
-            claims = JwtUtils.decodeJWT(jwt);
+            claims = JwtDecode.decodeJWT(jwt);
         } catch (ExpiredJwtException | UnsupportedJwtException |
                 MalformedJwtException | SignatureException | IllegalArgumentException e) {
             return new ResponseEntity<>(HttpStatus.UNAUTHORIZED);
@@ -119,12 +119,11 @@ public class PlaylistController {
     }
 
     /**
-     * Post a new playlist, owner of the playlist will be the authenticated user sending the post request
+     * Post a new playlist, owner of the playlist will be set to the authenticated user sending the post request
      * <p>
      * Content-Type: application/json
      * Headers
      * Authorization: token
-     * Content-Type: application/json
      * <p>
      * Example:
      * POST ../rest/songLists
@@ -138,7 +137,7 @@ public class PlaylistController {
     public ResponseEntity<String> addPlaylist(@RequestHeader("Authorization") String jwt, @RequestBody Playlist playlist) throws URISyntaxException {
         Claims claims;
         try {
-            claims = JwtUtils.decodeJWT(jwt);
+            claims = JwtDecode.decodeJWT(jwt);
         } catch (ExpiredJwtException | UnsupportedJwtException | MalformedJwtException | SignatureException | IllegalArgumentException e) {
             return new ResponseEntity<>(HttpStatus.UNAUTHORIZED);
         }
@@ -172,6 +171,69 @@ public class PlaylistController {
         return ResponseEntity.created(locationURI).headers(responseHeaders).body(null);
     }
 
+    /**
+     * Put a Playlist
+     * <p>
+     * Content-Type: application/json
+     * Headers
+     * Authorization: token
+     * <p>
+     * Example:
+     * POST ../rest/songLists/{id}
+     *
+     * @param jwt JWT Token
+     * @param playlist updated playlist
+     * @param id if of the playlist to update
+     * @return HTTP NOT_FOUND if successful
+     * @throws URISyntaxException URISyntaxException
+     */
+    @PutMapping(value = {"/{id}"}, consumes = MediaType.APPLICATION_JSON_VALUE)
+    public ResponseEntity<String> updatePlaylist(@RequestHeader("Authorization") String jwt,
+                                                 @RequestBody Playlist playlist,
+                                                 @PathVariable(value = "id") Integer id) throws URISyntaxException {
+        Claims claims;
+        try {
+            claims = JwtDecode.decodeJWT(jwt);
+        } catch (ExpiredJwtException | UnsupportedJwtException | MalformedJwtException | SignatureException | IllegalArgumentException e) {
+            return new ResponseEntity<>(HttpStatus.UNAUTHORIZED);
+        }
+        //Validate "new" playlist
+        if (playlist.getOwnerId() != null || playlist.getId() == null || playlist.getName() == null
+                || playlist.getIsPrivate() == null || playlist.getSongList().isEmpty()
+                || !playlist.getId().equals(id))
+            return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
+
+
+        Playlist playlistToBeUpdated;
+        try {
+            // Check if playlist exists and he is the owner
+            playlistToBeUpdated = playlistRepository.getPlaylistById(playlist.getId());
+            if (playlistToBeUpdated == null || !playlistToBeUpdated.getOwnerId().equals(claims.getId()))
+                return new ResponseEntity<>(HttpStatus.NOT_FOUND);
+
+            // Make sure new playlist has valid songs
+            for (Song song : playlist.getSongList()) {
+                Song compareSong = songRepository.findById(song.getId()).get();
+                if (!compareSong.getArtist().equals(song.getArtist())
+                        || !compareSong.getTitle().equals(song.getTitle())
+                        || !compareSong.getReleased().equals(song.getReleased())
+                        || !compareSong.getLabel().equals(song.getLabel())) {
+                    return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
+                }
+            }
+        } catch (PersistenceException | NoSuchElementException e) {
+            return new ResponseEntity<>(HttpStatus.NOT_FOUND);
+        }
+
+        //Update playlist
+        playlistToBeUpdated.setIsPrivate(playlist.getIsPrivate());
+        playlistToBeUpdated.setName(playlist.getName());
+        playlistToBeUpdated.setSongList(playlist.getSongList());
+        playlistRepository.save(playlistToBeUpdated);
+
+        return new ResponseEntity<>(HttpStatus.NO_CONTENT);
+    }
+
 
     /**
      * Delete a specific Playlist
@@ -191,7 +253,7 @@ public class PlaylistController {
             return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
         Claims claims;
         try {
-            claims = JwtUtils.decodeJWT(jwt);
+            claims = JwtDecode.decodeJWT(jwt);
         } catch (ExpiredJwtException | UnsupportedJwtException |
                 MalformedJwtException | SignatureException | IllegalArgumentException e) {
             return new ResponseEntity<>(HttpStatus.UNAUTHORIZED);
