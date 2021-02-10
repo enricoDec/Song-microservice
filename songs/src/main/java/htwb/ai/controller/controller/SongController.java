@@ -40,12 +40,12 @@ public class SongController {
      * Get a user from id
      *
      * @param jwt JWT Token
-     * @param id user id
+     * @param id  user id
      * @return response
      */
     @GetMapping(value = "/{id}", produces = {MediaType.APPLICATION_JSON_VALUE, MediaType.APPLICATION_XML_VALUE})
     public ResponseEntity<Song> getSong(@RequestHeader("Authorization") String jwt, @PathVariable(value = "id") Integer id) {
-        if (!JwtDecode.verifyJWT(jwt))
+        if (!JwtDecode.isJwtValid(jwt))
             return new ResponseEntity<>(HttpStatus.UNAUTHORIZED);
         if (id < 1) {
             return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
@@ -66,7 +66,7 @@ public class SongController {
      */
     @GetMapping(produces = {MediaType.APPLICATION_JSON_VALUE, MediaType.APPLICATION_XML_VALUE})
     public ResponseEntity<List<Song>> getAllSongs(@RequestHeader("Authorization") String jwt) {
-        if (!JwtDecode.verifyJWT(jwt))
+        if (!JwtDecode.isJwtValid(jwt))
             return new ResponseEntity<>(HttpStatus.UNAUTHORIZED);
         List<Song> songs = repo.getAllSongs();
         return new ResponseEntity<>(songs, HttpStatus.OK);
@@ -77,14 +77,14 @@ public class SongController {
      * Add a song
      * Accepts JSON
      *
-     * @param jwt JWT Token
+     * @param jwt  JWT Token
      * @param song Song
      * @return response
      * @throws URISyntaxException URISyntaxException
      */
     @PostMapping(consumes = MediaType.APPLICATION_JSON_VALUE)
     public ResponseEntity<String> addSong(@RequestHeader("Authorization") String jwt, @RequestBody Song song) throws URISyntaxException {
-        if (!JwtDecode.verifyJWT(jwt))
+        if (!JwtDecode.isJwtValid(jwt))
             return new ResponseEntity<>(HttpStatus.UNAUTHORIZED);
         if (song.getTitle() == null || song.getId() != null) {
             return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
@@ -113,14 +113,14 @@ public class SongController {
      * @return song Song
      */
     @PostMapping(consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
-    public ResponseEntity<?> addSongFile(@RequestHeader("Authorization") String jwt, @RequestParam("file") MultipartFile jsonFile) {
+    public ResponseEntity<String> addSongFile(@RequestHeader("Authorization") String jwt, @RequestParam("file") MultipartFile jsonFile) {
         ObjectMapper objectMapper = new ObjectMapper();
         try (InputStreamReader inputStreamReader = new InputStreamReader(jsonFile.getInputStream())) {
             Song song = objectMapper.readValue(inputStreamReader, Song.class);
 
             return addSong(jwt, song);
         } catch (IOException | URISyntaxException e) {
-            return ResponseEntity.badRequest().build();
+            return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
         }
     }
 
@@ -129,7 +129,7 @@ public class SongController {
      * Update an existing song
      * Accepts JSON
      *
-     * @param jwt JWT Token
+     * @param jwt  JWT Token
      * @param song Song
      * @param id   id
      * @return response
@@ -137,13 +137,10 @@ public class SongController {
     @PutMapping(value = "/{id}", consumes = MediaType.APPLICATION_JSON_VALUE)
     public ResponseEntity<String> editSong(@RequestHeader("Authorization") String jwt,
                                            @RequestBody Song song, @PathVariable(value = "id") Integer id) {
-        if (!JwtDecode.verifyJWT(jwt))
+        if (!JwtDecode.isJwtValid(jwt))
             return new ResponseEntity<>(HttpStatus.UNAUTHORIZED);
-        try {
-            if (song.getTitle() == null || !id.equals(song.getId())) {
-                return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
-            }
-        } catch (NullPointerException e) {
+
+        if (song.getTitle() == null || !id.equals(song.getId())) {
             return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
         }
 
@@ -169,12 +166,12 @@ public class SongController {
      * Delete a song
      *
      * @param jwt JWT Token
-     * @param id id
+     * @param id  id
      * @return response
      */
     @DeleteMapping(value = "/{id}")
     public ResponseEntity<String> deleteSong(@RequestHeader("Authorization") String jwt, @PathVariable(value = "id") Integer id) {
-        if (!JwtDecode.verifyJWT(jwt))
+        if (!JwtDecode.isJwtValid(jwt))
             return new ResponseEntity<>(HttpStatus.UNAUTHORIZED);
         if (id < 1) {
             return new ResponseEntity<>(HttpStatus.BAD_REQUEST);

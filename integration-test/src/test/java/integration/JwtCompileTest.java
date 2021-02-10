@@ -34,7 +34,6 @@ public class JwtCompileTest {
         long creationTime = System.currentTimeMillis();
         String token = JwtCompile.createJWT(user.getUserId(), user.getLastName());
         Assertions.assertFalse(token.isBlank());
-        Assertions.assertTrue(JwtDecode.verifyJWT(token));
 
         Claims claim = JwtDecode.decodeJWT(token);
         Assertions.assertEquals(claim.getId(), user.getUserId());

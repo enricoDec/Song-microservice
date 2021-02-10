@@ -53,9 +53,6 @@ public class PlaylistController {
     @GetMapping(produces = {MediaType.APPLICATION_JSON_VALUE, MediaType.APPLICATION_XML_VALUE})
     public ResponseEntity<List<Playlist>> getAllAuthorizedPlaylist(@RequestHeader("Authorization") String jwt,
                                                                    @RequestParam(value = "userId") String user) {
-        if (user.isBlank()) {
-            return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
-        }
         //JWT
         Claims claims;
         try {
@@ -68,7 +65,7 @@ public class PlaylistController {
         if (claims.getId().equals(user)) {
             List<Playlist> playlists = playlistRepository.getAllByOwnerId(user);
             //if no playlist
-            if (playlists.size() == 0)
+            if (playlists.isEmpty())
                 return new ResponseEntity<>(HttpStatus.NOT_FOUND);
             return new ResponseEntity<>(playlists, HttpStatus.OK);
         } else {
@@ -181,9 +178,9 @@ public class PlaylistController {
      * Example:
      * POST ../rest/songLists/{id}
      *
-     * @param jwt JWT Token
+     * @param jwt      JWT Token
      * @param playlist updated playlist
-     * @param id if of the playlist to update
+     * @param id       if of the playlist to update
      * @return HTTP NOT_FOUND if successful
      * @throws URISyntaxException URISyntaxException
      */
@@ -221,15 +218,15 @@ public class PlaylistController {
                     return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
                 }
             }
+
+            //Update playlist
+            playlistToBeUpdated.setIsPrivate(playlist.getIsPrivate());
+            playlistToBeUpdated.setName(playlist.getName());
+            playlistToBeUpdated.setSongList(playlist.getSongList());
+            playlistRepository.save(playlistToBeUpdated);
         } catch (PersistenceException | NoSuchElementException e) {
             return new ResponseEntity<>(HttpStatus.NOT_FOUND);
         }
-
-        //Update playlist
-        playlistToBeUpdated.setIsPrivate(playlist.getIsPrivate());
-        playlistToBeUpdated.setName(playlist.getName());
-        playlistToBeUpdated.setSongList(playlist.getSongList());
-        playlistRepository.save(playlistToBeUpdated);
 
         return new ResponseEntity<>(HttpStatus.NO_CONTENT);
     }

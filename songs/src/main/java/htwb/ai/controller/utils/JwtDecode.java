@@ -15,11 +15,11 @@ public class JwtDecode {
 
     /**
      * Check if JWT is valid
-     *
+     * If JWT valid returns true, else false
      * @param jwt JWT to check
      * @return true if JWT valid, else false
      */
-    public static boolean verifyJWT(String jwt) {
+    public static boolean isJwtValid(String jwt) {
         try {
             decodeJWT(jwt);
         } catch (ExpiredJwtException | UnsupportedJwtException |
