@@ -18,6 +18,8 @@ import uk.org.webcompere.systemstubs.jupiter.SystemStubsExtension;
 
 import javax.persistence.NoResultException;
 
+import java.util.Objects;
+
 import static org.mockito.Mockito.*;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
@@ -71,7 +73,7 @@ public class AuthControllerUnitTest {
                         .content("{\"userId\": \"mmuster\" , \"password\": \"pass1234\"}"))
                 .andExpect(status().isOk());
         Assertions.assertTrue(result.andReturn().getResponse().getContentAsString().length() > 10);
-        Assertions.assertTrue(result.andReturn().getResponse().getContentType().contains(MediaType.TEXT_PLAIN_VALUE));
+        Assertions.assertTrue(Objects.requireNonNull(result.andReturn().getResponse().getContentType()).contains(MediaType.TEXT_PLAIN_VALUE));
         // check whether token has expected length
     }
 
@@ -147,6 +149,17 @@ public class AuthControllerUnitTest {
     @Test
     void wrongUserTest() throws Exception {
         when(userRepository.findUserByUserId(anyString())).thenThrow(NoResultException.class);
+        mockMvc.perform(post("/auth").contentType(MediaType.APPLICATION_JSON).content(
+                "{\"userId\": \"IM_A_USER\" , \"password\": \"pass1234\"}"))
+                .andExpect(status().isUnauthorized());
+    }
+
+    /**
+     * Wrong User
+     */
+    @Test
+    void userFoundButNull() throws Exception {
+        when(userRepository.findUserByUserId(anyString())).thenReturn(null);
         mockMvc.perform(post("/auth").contentType(MediaType.APPLICATION_JSON).content(
                 "{\"userId\": \"IM_A_USER\" , \"password\": \"pass1234\"}"))
                 .andExpect(status().isUnauthorized());

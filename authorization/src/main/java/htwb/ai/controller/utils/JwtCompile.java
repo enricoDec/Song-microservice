@@ -33,38 +33,4 @@ public class JwtCompile {
                 .signWith(signatureAlgorithm, secret_key);
         return builder.compact();
     }
-
-    /**
-     * Check if JWT is valid
-     *
-     * @param jwt JWT to check
-     * @return true if JWT valid, else false
-     */
-    public static boolean verifyJWT(String jwt) {
-        try {
-            decodeJWT(jwt);
-        } catch (ExpiredJwtException | UnsupportedJwtException |
-                MalformedJwtException | SignatureException | IllegalArgumentException e) {
-            return false;
-        }
-        return true;
-    }
-
-    /**
-     * Check if JWT is valid, returns Claims if valid else throws Exception
-     *
-     * @param jwt JWT to validate
-     * @return Claims
-     * @throws ExpiredJwtException      ExpiredJwtException
-     * @throws UnsupportedJwtException  UnsupportedJwtException
-     * @throws MalformedJwtException    MalformedJwtException
-     * @throws SignatureException       SignatureException
-     * @throws IllegalArgumentException IllegalArgumentException
-     */
-    public static Claims decodeJWT(String jwt) throws ExpiredJwtException, UnsupportedJwtException,
-            MalformedJwtException, SignatureException, IllegalArgumentException {
-        return Jwts.parser()
-                .setSigningKey(key)
-                .parseClaimsJws(jwt).getBody();
-    }
 }
