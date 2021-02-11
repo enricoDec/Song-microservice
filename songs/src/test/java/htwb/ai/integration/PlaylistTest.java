@@ -1,6 +1,7 @@
-package integration;
+package htwb.ai.integration;
 
 
+import htwb.ai.controller.PlaylistApplicationEureka;
 import htwb.ai.controller.controller.AuthController;
 import htwb.ai.controller.controller.PlaylistController;
 import htwb.ai.controller.model.Playlist;
@@ -17,7 +18,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.MediaType;
-import org.springframework.test.context.TestPropertySource;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.ResultActions;
 import org.springframework.test.web.servlet.request.MockMvcRequestBuilders;
@@ -37,8 +37,7 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
  * @since : 19.01.21
  **/
 
-@SpringBootTest
-@TestPropertySource(locations = "/test.properties")
+@SpringBootTest(classes = PlaylistApplicationEureka.class)
 @ExtendWith(SystemStubsExtension.class)
 public class PlaylistTest {
     private MockMvc playlistMvc;
@@ -46,7 +45,7 @@ public class PlaylistTest {
     private String user2Token;
     private Song defaultSong;
     @SystemStub
-    private EnvironmentVariables environment = new EnvironmentVariables("SECRET_KEY_KBE", "test_secret_key");
+    private final EnvironmentVariables environment = new EnvironmentVariables("SECRET_KEY_KBE", "test_secret_key");
     @Autowired
     private PlaylistRepository playlistRepository;
     @Autowired

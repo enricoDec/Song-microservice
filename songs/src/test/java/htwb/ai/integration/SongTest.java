@@ -1,4 +1,4 @@
-package integration;
+package htwb.ai.integration;
 
 
 import htwb.ai.controller.controller.AuthController;
@@ -15,7 +15,6 @@ import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.MediaType;
 import org.springframework.mock.web.MockMultipartFile;
-import org.springframework.test.context.TestPropertySource;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.ResultActions;
 import org.springframework.test.web.servlet.request.MockHttpServletRequestBuilder;
@@ -29,9 +28,7 @@ import java.util.NoSuchElementException;
 import java.util.Objects;
 
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
-import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.put;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
-import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.xpath;
 
 /**
  * @author : Enrico Gamil Toros
@@ -41,7 +38,6 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
  **/
 
 @SpringBootTest
-@TestPropertySource(locations = "/test.properties")
 @ExtendWith(SystemStubsExtension.class)
 public class SongTest {
     private MockMvc mockMvc;
@@ -49,7 +45,7 @@ public class SongTest {
     private String mmusterToken;
 
     @SystemStub
-    private EnvironmentVariables environment = new EnvironmentVariables("SECRET_KEY_KBE", "test_secret_key");
+    private final EnvironmentVariables environment = new EnvironmentVariables("SECRET_KEY_KBE", "test_secret_key");
 
     @Autowired
     private SongRepository songRepository;

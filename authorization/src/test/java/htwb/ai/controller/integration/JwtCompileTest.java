@@ -1,9 +1,7 @@
-package integration;
+package htwb.ai.controller.integration;
 
 import htwb.ai.controller.model.User;
 import htwb.ai.controller.utils.JwtCompile;
-import htwb.ai.controller.utils.JwtDecode;
-import io.jsonwebtoken.Claims;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -23,21 +21,15 @@ import uk.org.webcompere.systemstubs.jupiter.SystemStubsExtension;
 public class JwtCompileTest {
     private User user;
     @SystemStub
-    private EnvironmentVariables environment = new EnvironmentVariables("SECRET_KEY_KBE", "test_secret_key");
+    private final EnvironmentVariables environment = new EnvironmentVariables("SECRET_KEY_KBE", "test_secret_key");
     @BeforeEach
     void setUp() {
         user = new User("mmuser", "pass1234", "Test", "Tester");
     }
 
     @Test
-    void createAndValidateJWT() {
-        long creationTime = System.currentTimeMillis();
+    void createJWT() {
         String token = JwtCompile.createJWT(user.getUserId(), user.getLastName());
         Assertions.assertFalse(token.isBlank());
-
-        Claims claim = JwtDecode.decodeJWT(token);
-        Assertions.assertEquals(claim.getId(), user.getUserId());
-        Assertions.assertEquals(claim.getSubject(), user.getLastName());
-        Assertions.assertTrue(claim.getExpiration().getTime() > creationTime);
     }
 }
