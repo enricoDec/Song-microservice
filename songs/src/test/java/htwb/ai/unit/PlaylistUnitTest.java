@@ -1,11 +1,11 @@
-package htwb.ai.controller;
+package htwb.ai.unit;
 
 import htwb.ai.controller.controller.PlaylistController;
-import htwb.ai.controller.utils.JwtDecode;
 import htwb.ai.controller.model.Playlist;
 import htwb.ai.controller.model.Song;
 import htwb.ai.controller.repo.PlaylistRepository;
 import htwb.ai.controller.repo.SongRepository;
+import htwb.ai.controller.utils.JwtDecode;
 import io.jsonwebtoken.Claims;
 import io.jsonwebtoken.ExpiredJwtException;
 import io.jsonwebtoken.UnsupportedJwtException;
@@ -15,7 +15,6 @@ import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.MockedStatic;
-
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.MediaType;
 import org.springframework.test.web.servlet.MockMvc;
@@ -26,7 +25,6 @@ import uk.org.webcompere.systemstubs.environment.EnvironmentVariables;
 import uk.org.webcompere.systemstubs.jupiter.SystemStub;
 import uk.org.webcompere.systemstubs.jupiter.SystemStubsExtension;
 
-import java.lang.reflect.Array;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collections;
@@ -45,7 +43,7 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 @ExtendWith(SystemStubsExtension.class)
 public class PlaylistUnitTest {
     @SystemStub
-    private EnvironmentVariables environment = new EnvironmentVariables("SECRET_KEY_KBE", "test_secret_key");
+    private final EnvironmentVariables environment = new EnvironmentVariables("SECRET_KEY_KBE", "test_secret_key");
     private MockMvc playlistMvc;
     private SongRepository songRepository;
     private PlaylistRepository playlistRepository;
@@ -231,7 +229,7 @@ public class PlaylistUnitTest {
             when(JwtDecode.decodeJWT(anyString())).thenReturn(claim);
             when(claim.getId()).thenReturn("eschuler");
 
-            when(playlistRepository.getAllPublicByOwnerId("mmuster")).thenReturn(Arrays.asList(defaultPublicPlaylist));
+            when(playlistRepository.getAllPublicByOwnerId("mmuster")).thenReturn(Collections.singletonList(defaultPublicPlaylist));
             ResultActions res = playlistMvc.perform(MockMvcRequestBuilders
                     .get("/songLists?userId=mmuster")
                     .contentType(MediaType.APPLICATION_JSON)

@@ -1,4 +1,4 @@
-package htwb.ai.controller;
+package htwb.ai.controller.unit;
 
 import htwb.ai.controller.utils.JwtCompile;
 import org.junit.jupiter.api.Assertions;
@@ -18,7 +18,7 @@ import uk.org.webcompere.systemstubs.jupiter.SystemStubsExtension;
 @ExtendWith(SystemStubsExtension.class)
 public class JwtCompileUnitTest {
     @SystemStub
-    private EnvironmentVariables environment = new EnvironmentVariables("SECRET_KEY_KBE", "test_secret_key");
+    private final EnvironmentVariables environment = new EnvironmentVariables("SECRET_KEY_KBE", "test_secret_key");
     @Test
     void createJWTGood() {
         Assertions.assertTrue(JwtCompile.createJWT("Test", "MrTest").length() > 0);

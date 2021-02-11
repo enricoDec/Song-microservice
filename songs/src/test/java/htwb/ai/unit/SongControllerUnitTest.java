@@ -1,46 +1,35 @@
-package htwb.ai.controller;
+package htwb.ai.unit;
 
 import htwb.ai.controller.controller.SongController;
+import htwb.ai.controller.model.Song;
 import htwb.ai.controller.repo.SongRepository;
 import htwb.ai.controller.utils.JwtDecode;
-import htwb.ai.controller.model.Song;
 import org.apache.commons.io.IOUtils;
-import org.apache.tomcat.util.http.fileupload.FileItem;
-import org.junit.jupiter.api.*;
+import org.junit.jupiter.api.Assertions;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.ArgumentCaptor;
 import org.mockito.MockedStatic;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.core.io.ClassPathResource;
-import org.springframework.core.io.Resource;
 import org.springframework.dao.EmptyResultDataAccessException;
 import org.springframework.http.HttpHeaders;
+import org.springframework.http.MediaType;
 import org.springframework.mock.web.MockMultipartFile;
 import org.springframework.test.web.servlet.MockMvc;
-import org.springframework.test.web.servlet.request.MockMvcRequestBuilders;
 import org.springframework.test.web.servlet.setup.MockMvcBuilders;
-
-import static org.mockito.ArgumentMatchers.any;
-import static org.mockito.Mockito.*;
-import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
-import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
-
-import org.junit.jupiter.api.BeforeEach;
-import org.junit.jupiter.api.Test;
-import org.springframework.http.MediaType;
-import org.springframework.web.context.WebApplicationContext;
-import org.springframework.web.multipart.MultipartFile;
-import org.springframework.web.multipart.commons.CommonsMultipartFile;
 import uk.org.webcompere.systemstubs.environment.EnvironmentVariables;
 import uk.org.webcompere.systemstubs.jupiter.SystemStub;
 import uk.org.webcompere.systemstubs.jupiter.SystemStubsExtension;
 
 import javax.persistence.PersistenceException;
-import java.io.File;
-import java.io.FileInputStream;
-import java.io.IOException;
 import java.util.Arrays;
+import java.util.Collections;
 import java.util.Objects;
+
+import static org.mockito.ArgumentMatchers.any;
+import static org.mockito.Mockito.*;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
+import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
 
 @ExtendWith(SystemStubsExtension.class)
 class SongControllerUnitTest {
@@ -49,7 +38,7 @@ class SongControllerUnitTest {
     private Song fullSong;
     private Song mockSong;
     @SystemStub
-    private EnvironmentVariables environment = new EnvironmentVariables("SECRET_KEY_KBE", "test_secret_key");
+    private final EnvironmentVariables environment = new EnvironmentVariables("SECRET_KEY_KBE", "test_secret_key");
 
     @BeforeEach
     public void setup() {
@@ -215,7 +204,7 @@ class SongControllerUnitTest {
             when(JwtDecode.isJwtValid(anyString())).thenReturn(true);
 
 
-            when(songRepository.getAllSongs()).thenReturn(Arrays.asList(new Song[]{fullSong}));
+            when(songRepository.getAllSongs()).thenReturn(Collections.singletonList(fullSong));
             mockMvc.perform(get("/songs")
                     .accept(MediaType.APPLICATION_JSON).header(HttpHeaders.AUTHORIZATION, "BLOB"))
                     .andExpect(status().isOk())
@@ -234,7 +223,7 @@ class SongControllerUnitTest {
             when(JwtDecode.isJwtValid(anyString())).thenReturn(true);
             when(mockSong.getId()).thenReturn(1);
 
-            when(songRepository.getAllSongs()).thenReturn(Arrays.asList(new Song[]{fullSong}));
+            when(songRepository.getAllSongs()).thenReturn(Collections.singletonList(fullSong));
             mockMvc.perform(get("/songs")
                     .accept(MediaType.APPLICATION_XML).header(HttpHeaders.AUTHORIZATION, "BLOB"))
                     .andExpect(status().isOk())
@@ -263,7 +252,7 @@ class SongControllerUnitTest {
         try (MockedStatic<JwtDecode> jwtUtilsMockedStatic = mockStatic(JwtDecode.class)) {
             when(JwtDecode.isJwtValid(anyString())).thenReturn(true);
 
-            when(songRepository.findAll()).thenReturn(Arrays.asList(new Song[]{fullSong}));
+            when(songRepository.findAll()).thenReturn(Collections.singletonList(fullSong));
             mockMvc.perform(get("/songs")
                     .accept(MediaType.ALL).header(HttpHeaders.AUTHORIZATION, "BLOB"))
                     .andExpect(status().isOk());
@@ -275,7 +264,7 @@ class SongControllerUnitTest {
         try (MockedStatic<JwtDecode> jwtUtilsMockedStatic = mockStatic(JwtDecode.class)) {
             when(JwtDecode.isJwtValid(anyString())).thenReturn(true);
 
-            when(songRepository.findAll()).thenReturn(Arrays.asList(new Song[]{}));
+            when(songRepository.findAll()).thenReturn(Collections.emptyList());
             mockMvc.perform(get("/songs")
                     .accept(MediaType.APPLICATION_JSON).header(HttpHeaders.AUTHORIZATION, "BLOB"))
                     .andExpect(status().isOk())
@@ -289,7 +278,7 @@ class SongControllerUnitTest {
         try (MockedStatic<JwtDecode> jwtUtilsMockedStatic = mockStatic(JwtDecode.class)) {
             when(JwtDecode.isJwtValid(anyString())).thenReturn(true);
 
-            when(songRepository.findAll()).thenReturn(Arrays.asList(new Song[]{}));
+            when(songRepository.findAll()).thenReturn(Collections.emptyList());
             mockMvc.perform(get("/songs")
                     .accept(MediaType.APPLICATION_XML).header(HttpHeaders.AUTHORIZATION, "BLOB"))
                     .andExpect(status().isOk())
@@ -303,7 +292,7 @@ class SongControllerUnitTest {
         try (MockedStatic<JwtDecode> jwtUtilsMockedStatic = mockStatic(JwtDecode.class)) {
             when(JwtDecode.isJwtValid(anyString())).thenReturn(true);
 
-            when(songRepository.findAll()).thenReturn(Arrays.asList(new Song[]{}));
+            when(songRepository.findAll()).thenReturn(Collections.emptyList());
             mockMvc.perform(get("/songs")
                     .accept(MediaType.TEXT_HTML).header(HttpHeaders.AUTHORIZATION, "BLOB"))
                     .andExpect(status().isNotAcceptable());

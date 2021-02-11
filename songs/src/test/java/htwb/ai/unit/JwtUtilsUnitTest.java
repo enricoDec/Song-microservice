@@ -1,4 +1,4 @@
-package htwb.ai.controller;
+package htwb.ai.unit;
 
 import htwb.ai.controller.utils.JwtDecode;
 import io.jsonwebtoken.*;
@@ -24,7 +24,7 @@ import java.util.Date;
 @ExtendWith(SystemStubsExtension.class)
 public class JwtUtilsUnitTest {
     @SystemStub
-    private EnvironmentVariables environment = new EnvironmentVariables("SECRET_KEY_KBE", "test_secret_key");
+    private final EnvironmentVariables environment = new EnvironmentVariables("SECRET_KEY_KBE", "test_secret_key");
     private static final Key key = new SecretKeySpec(System.getenv("SECRET_KEY_KBE").getBytes(), SignatureAlgorithm.HS256.getJcaName());
 
     @Test

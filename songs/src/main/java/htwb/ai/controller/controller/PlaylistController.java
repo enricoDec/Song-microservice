@@ -1,10 +1,10 @@
 package htwb.ai.controller.controller;
 
-import htwb.ai.controller.utils.JwtDecode;
 import htwb.ai.controller.model.Playlist;
 import htwb.ai.controller.model.Song;
 import htwb.ai.controller.repo.PlaylistRepository;
 import htwb.ai.controller.repo.SongRepository;
+import htwb.ai.controller.utils.JwtDecode;
 import io.jsonwebtoken.*;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
@@ -187,7 +187,7 @@ public class PlaylistController {
     @PutMapping(value = {"/{id}"}, consumes = MediaType.APPLICATION_JSON_VALUE)
     public ResponseEntity<String> updatePlaylist(@RequestHeader("Authorization") String jwt,
                                                  @RequestBody Playlist playlist,
-                                                 @PathVariable(value = "id") Integer id) throws URISyntaxException {
+                                                 @PathVariable(value = "id") Integer id) {
         Claims claims;
         try {
             claims = JwtDecode.decodeJWT(jwt);

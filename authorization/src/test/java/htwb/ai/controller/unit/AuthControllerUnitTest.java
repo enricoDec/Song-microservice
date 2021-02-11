@@ -1,4 +1,4 @@
-package htwb.ai.controller;
+package htwb.ai.controller.unit;
 
 import htwb.ai.controller.controller.AuthController;
 import htwb.ai.controller.model.User;
@@ -33,7 +33,7 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 @ExtendWith(SystemStubsExtension.class)
 public class AuthControllerUnitTest {
     @SystemStub
-    private EnvironmentVariables environment = new EnvironmentVariables("SECRET_KEY_KBE", "test_secret_key");
+    private final EnvironmentVariables environment = new EnvironmentVariables("SECRET_KEY_KBE", "test_secret_key");
     private MockMvc mockMvc;
     private User validUser;
     private UserRepository userRepository;

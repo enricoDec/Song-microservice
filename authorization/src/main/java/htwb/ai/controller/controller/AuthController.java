@@ -62,10 +62,9 @@ public class AuthController {
 
         //Create Token and add token to header
         HttpHeaders header = new HttpHeaders();
-        //Last name is not required for auth, so we get it by id
 
-        return ResponseEntity.ok().headers(header).body(JwtCompile.createJWT(user.getUserId(),
-                repo.findUserByUserId(user.getUserId()).getLastName()));
+        return ResponseEntity.ok().headers(header).body(JwtCompile.createJWT(comparisonUser.getUserId(),
+                comparisonUser.getLastName()));
     }
 
 }

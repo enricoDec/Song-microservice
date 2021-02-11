@@ -116,5 +116,11 @@
             <artifactId>system-stubs-jupiter</artifactId>
             <version>1.2.0</version>
         </dependency>
+        <dependency>
+            <groupId>htwb.ai.EnKBE</groupId>
+            <artifactId>authorization-microservice</artifactId>
+            <version>0.0.1-SNAPSHOT</version>
+            <scope>test</scope>
+        </dependency>
     </dependencies>
 </project>
