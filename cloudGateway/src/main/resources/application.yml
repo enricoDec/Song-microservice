@@ -12,8 +12,8 @@ spring:
   cloud:
     gateway:
       routes:
-        - id: authorization
-          uri: lb://authorization
+        - id: authorization-service
+          uri: lb://authorization-service
           predicates:
             - Path=/songsWS/rest/auth/**
         - id: song-service
