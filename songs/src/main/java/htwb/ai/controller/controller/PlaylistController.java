@@ -51,7 +51,7 @@ public class PlaylistController {
      * @return Playlist and http 200 if request successful
      */
     @GetMapping(produces = {MediaType.APPLICATION_JSON_VALUE, MediaType.APPLICATION_XML_VALUE})
-    public ResponseEntity<List<Playlist>> getAllAuthorizedPlaylist(@RequestHeader("Authorization") String jwt,
+    public ResponseEntity<List<Playlist>> getAllAuthorizedPlaylist(@RequestHeader(value = "Authorization", required = false) String jwt,
                                                                    @RequestParam(value = "userId") String user) {
         //JWT
         Claims claims;
@@ -92,7 +92,7 @@ public class PlaylistController {
      * @return requested playlist with corresponding songs
      */
     @GetMapping(value = "/{id}", produces = {MediaType.APPLICATION_JSON_VALUE, MediaType.APPLICATION_XML_VALUE})
-    public ResponseEntity<Playlist> getPlaylistById(@RequestHeader("Authorization") String jwt,
+    public ResponseEntity<Playlist> getPlaylistById(@RequestHeader(value = "Authorization", required = false) String jwt,
                                                     @PathVariable(value = "id") Integer playlistId) {
         if (playlistId == 0)
             return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
@@ -131,7 +131,7 @@ public class PlaylistController {
      * @throws URISyntaxException URISyntaxException
      */
     @PostMapping(consumes = {MediaType.APPLICATION_JSON_VALUE})
-    public ResponseEntity<String> addPlaylist(@RequestHeader("Authorization") String jwt, @RequestBody Playlist playlist) throws URISyntaxException {
+    public ResponseEntity<String> addPlaylist(@RequestHeader(value = "Authorization", required = false) String jwt, @RequestBody Playlist playlist) throws URISyntaxException {
         Claims claims;
         try {
             claims = JwtDecode.decodeJWT(jwt);
@@ -185,7 +185,7 @@ public class PlaylistController {
      * @throws URISyntaxException URISyntaxException
      */
     @PutMapping(value = {"/{id}"}, consumes = MediaType.APPLICATION_JSON_VALUE)
-    public ResponseEntity<String> updatePlaylist(@RequestHeader("Authorization") String jwt,
+    public ResponseEntity<String> updatePlaylist(@RequestHeader(value = "Authorization", required = false) String jwt,
                                                  @RequestBody Playlist playlist,
                                                  @PathVariable(value = "id") Integer id) {
         Claims claims;
@@ -244,7 +244,7 @@ public class PlaylistController {
      * FORBIDDEN if trying to delete playlist that belongs to another user or BAD REQUEST
      */
     @DeleteMapping(value = "/{id}")
-    public ResponseEntity<String> deletePlaylistById(@RequestHeader("Authorization") String jwt,
+    public ResponseEntity<String> deletePlaylistById(@RequestHeader(value = "Authorization", required = false) String jwt,
                                                      @PathVariable(value = "id") Integer playlistId) {
         if (playlistId == 0)
             return new ResponseEntity<>(HttpStatus.BAD_REQUEST);

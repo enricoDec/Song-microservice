@@ -1,3 +1,5 @@
+DROP TABLE IF EXISTS users CASCADE;
+
 CREATE TABLE users
 (
     userid    varchar(50) not null,
@@ -7,8 +9,6 @@ CREATE TABLE users
 
     PRIMARY KEY (userid)
 );
-
-TRUNCATE TABLE users CASCADE;
 
 insert into users(userid, password, firstname, lastname)
 values ('mmuster', 'pass1234', 'Maxime', 'Muster'),

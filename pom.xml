@@ -33,7 +33,7 @@
         <module>authorization</module>
         <module>eureka-service</module>
         <module>cloudGateway</module>
-        <module>integration-test</module>
+        <module>concerts</module>
     </modules>
 
     <!-- deps, die alle sub modules brauchen -->

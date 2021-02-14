@@ -4,7 +4,7 @@ server:
 eureka:
   client:
     serviceUrl:
-      defaultZone: http://localhost:8083/eureka
+      defaultZone: http://localhost:8081/eureka
 
 spring:
   application:
@@ -15,12 +15,20 @@ spring:
         - id: authorization
           uri: lb://authorization
           predicates:
-            - Path=/songsWS-MarvEn/rest/auth/**
+            - Path=/songsWS/rest/auth/**
         - id: song-service
           uri: lb://song-service
           predicates:
-            - Path=/songsWS-MarvEn/rest/songs/**
+            - Path=/songsWS/rest/songs/**
         - id: song-service
           uri: lb://song-service
           predicates:
-            - Path=/songsWS-MarvEn/rest/songLists/**
+            - Path=/songsWS/rest/songLists/**
+        - id: concert-service
+          uri: lb://concert-service
+          predicates:
+            - Path=/songsWS/rest/tickets/**
+        - id: concert-service
+          uri: lb://concert-service
+          predicates:
+            - Path=/songsWS/rest/concerts/**

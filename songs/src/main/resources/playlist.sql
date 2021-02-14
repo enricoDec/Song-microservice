@@ -1,3 +1,5 @@
+DROP TABLE IF EXISTS songs CASCADE;
+
 CREATE TABLE songs
 (
     id    serial not null,
@@ -8,10 +10,6 @@ CREATE TABLE songs
 
     PRIMARY KEY (id)
 );
-
-
-TRUNCATE TABLE songs CASCADE;
-ALTER SEQUENCE songs_id_seq RESTART WITH 1;
 
 INSERT INTO songs(title, artist, label, released)
 VALUES ('Can’t Stop the Feeling', 'Justin Timberlake', 'Trolls', 2016),
@@ -53,8 +51,6 @@ create table playlists_songs
             ON DELETE CASCADE
             ON UPDATE CASCADE
 );
-
-ALTER SEQUENCE playlists_id_seq RESTART WITH 1;
 
 INSERT INTO playlists(name, is_private, owner)
 VALUES ('Mmuster''s Private Playlist', true, 'mmuster'),
