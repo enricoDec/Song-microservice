@@ -237,6 +237,38 @@ class SongControllerUnitTest {
     }
 
     @Test
+    void getAllSongsByArtist() throws Exception {
+        try (MockedStatic<JwtDecode> jwtUtilsMockedStatic = mockStatic(JwtDecode.class)) {
+            when(JwtDecode.isJwtValid("BLOB")).thenReturn(true);
+
+
+            when(songRepository.findSongByArtist(fullSong.getArtist())).thenReturn(Collections.singletonList(fullSong));
+            mockMvc.perform(get("/songs?artist=" + fullSong.getArtist())
+                    .accept(MediaType.APPLICATION_JSON).header(HttpHeaders.AUTHORIZATION, "BLOB"))
+                    .andExpect(status().isOk())
+                    .andExpect(content().contentType(MediaType.APPLICATION_JSON))
+                    .andExpect(jsonPath("$[0].id").value(1))
+                    .andExpect(jsonPath("$[0].title").value("My humps"))
+                    .andExpect(jsonPath("$[0].artist").value("Black Eyed Peas"))
+                    .andExpect(jsonPath("$[0].label").value("anyLabel"))
+                    .andExpect(jsonPath("$[0].released").value(2020));
+        }
+    }
+
+    @Test
+    void getAllSongsByArtistNotExisting() throws Exception {
+        try (MockedStatic<JwtDecode> jwtUtilsMockedStatic = mockStatic(JwtDecode.class)) {
+            when(JwtDecode.isJwtValid("BLOB")).thenReturn(true);
+
+
+            when(songRepository.findSongByArtist("Enrico")).thenReturn(Collections.emptyList());
+            mockMvc.perform(get("/songs?artist=Enrico")
+                    .accept(MediaType.APPLICATION_JSON).header(HttpHeaders.AUTHORIZATION, "BLOB"))
+                    .andExpect(status().isNotFound());
+        }
+    }
+
+    @Test
     void getAllSongsIsUnauthorized() throws Exception {
         try (MockedStatic<JwtDecode> jwtUtilsMockedStatic = mockStatic(JwtDecode.class)) {
             when(JwtDecode.isJwtValid(anyString())).thenReturn(false);
@@ -252,7 +284,7 @@ class SongControllerUnitTest {
         try (MockedStatic<JwtDecode> jwtUtilsMockedStatic = mockStatic(JwtDecode.class)) {
             when(JwtDecode.isJwtValid(anyString())).thenReturn(true);
 
-            when(songRepository.findAll()).thenReturn(Collections.singletonList(fullSong));
+            when(songRepository.getAllSongs()).thenReturn(Collections.singletonList(fullSong));
             mockMvc.perform(get("/songs")
                     .accept(MediaType.ALL).header(HttpHeaders.AUTHORIZATION, "BLOB"))
                     .andExpect(status().isOk());
@@ -262,28 +294,24 @@ class SongControllerUnitTest {
     @Test
     void getAllSongsEdgeEmptyArrayJSON() throws Exception {
         try (MockedStatic<JwtDecode> jwtUtilsMockedStatic = mockStatic(JwtDecode.class)) {
-            when(JwtDecode.isJwtValid(anyString())).thenReturn(true);
+            when(JwtDecode.isJwtValid("BLOB")).thenReturn(true);
 
-            when(songRepository.findAll()).thenReturn(Collections.emptyList());
+            when(songRepository.getAllSongs()).thenReturn(Collections.emptyList());
             mockMvc.perform(get("/songs")
                     .accept(MediaType.APPLICATION_JSON).header(HttpHeaders.AUTHORIZATION, "BLOB"))
-                    .andExpect(status().isOk())
-                    .andExpect(content().contentType(MediaType.APPLICATION_JSON))
-                    .andExpect(jsonPath("$").isEmpty());
+                    .andExpect(status().isNotFound());
         }
     }
 
     @Test
     void getAllSongsEdgeEmptyListXML() throws Exception {
         try (MockedStatic<JwtDecode> jwtUtilsMockedStatic = mockStatic(JwtDecode.class)) {
-            when(JwtDecode.isJwtValid(anyString())).thenReturn(true);
+            when(JwtDecode.isJwtValid("BLOB")).thenReturn(true);
 
-            when(songRepository.findAll()).thenReturn(Collections.emptyList());
+            when(songRepository.getAllSongs()).thenReturn(Collections.emptyList());
             mockMvc.perform(get("/songs")
                     .accept(MediaType.APPLICATION_XML).header(HttpHeaders.AUTHORIZATION, "BLOB"))
-                    .andExpect(status().isOk())
-                    .andExpect(content().contentType(MediaType.APPLICATION_XML))
-                    .andExpect(xpath("List/item").nodeCount(0));
+                    .andExpect(status().isNotFound());
         }
     }
 
@@ -292,7 +320,7 @@ class SongControllerUnitTest {
         try (MockedStatic<JwtDecode> jwtUtilsMockedStatic = mockStatic(JwtDecode.class)) {
             when(JwtDecode.isJwtValid(anyString())).thenReturn(true);
 
-            when(songRepository.findAll()).thenReturn(Collections.emptyList());
+            when(songRepository.getAllSongs()).thenReturn(Collections.emptyList());
             mockMvc.perform(get("/songs")
                     .accept(MediaType.TEXT_HTML).header(HttpHeaders.AUTHORIZATION, "BLOB"))
                     .andExpect(status().isNotAcceptable());

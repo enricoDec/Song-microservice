@@ -5,7 +5,6 @@ import htwb.ai.controller.model.Concert;
 import htwb.ai.controller.model.Song;
 import htwb.ai.controller.repo.ConcertsRepository;
 import htwb.ai.controller.utils.JwtDecode;
-import org.apache.http.HttpException;
 import org.springframework.http.*;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.client.RestTemplate;
@@ -32,6 +31,14 @@ public class ConcertsController {
         this.repo = repo;
     }
 
+    /**
+     * Get all concerts with songs played by artist
+     * Example:
+     * Get ../songWS/rest/concerts
+     *
+     * @param jwt Jwt Token
+     * @return list of all concerts
+     */
     @GetMapping(produces = {MediaType.APPLICATION_JSON_VALUE, MediaType.APPLICATION_XML_VALUE})
     public ResponseEntity<List<Concert>> getConcerts(@RequestHeader(value = "Authorization", required = false) String jwt) {
         if (!JwtDecode.isJwtValid(jwt))
@@ -47,6 +54,15 @@ public class ConcertsController {
             return new ResponseEntity<>(HttpStatus.NOT_FOUND);
     }
 
+    /**
+     * Get specific concert by id with songs played by artist
+     * Example:
+     * Get ../songWS/rest/concerts/{id}
+     *
+     * @param jwt Jwt Token
+     * @param id id of concert to get
+     * @return Requested concert or 404 if not found
+     */
     @GetMapping(value = "/{id}", produces = {MediaType.APPLICATION_JSON_VALUE, MediaType.APPLICATION_XML_VALUE})
     public ResponseEntity<Concert> getConcert(@RequestHeader(value = "Authorization", required = false) String jwt,
                                               @PathVariable(value = "id") Long id) {
