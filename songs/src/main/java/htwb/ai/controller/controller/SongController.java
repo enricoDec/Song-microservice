@@ -37,10 +37,10 @@ public class SongController {
 
     /**
      * GET http://localhost:8080/rest/songs/{songId}
-     * Get a user from id
+     * Get a song from id
      *
      * @param jwt JWT Token
-     * @param id  user id
+     * @param id  song id
      * @return response
      */
     @GetMapping(value = "/{id}", produces = {MediaType.APPLICATION_JSON_VALUE, MediaType.APPLICATION_XML_VALUE})
@@ -57,19 +57,34 @@ public class SongController {
             return new ResponseEntity<>(HttpStatus.NOT_FOUND);
     }
 
+
     /**
      * GET http://localhost:8080/rest/songs/
-     * Get all users
+     * Get all songs
      *
-     * @param jwt JWT Token
-     * @return response
+     * GET http://localhost:8080/rest/songs?artist={artist}
+     * Get all songs from artist
+     *
+     * @param jwt    JWT Token
+     * @param artist artist to search
+     * @return list of all songs from artist or all songs
      */
     @GetMapping(produces = {MediaType.APPLICATION_JSON_VALUE, MediaType.APPLICATION_XML_VALUE})
-    public ResponseEntity<List<Song>> getAllSongs(@RequestHeader(value = "Authorization", required = false) String jwt) {
+    public ResponseEntity<List<Song>> getSongs(@RequestHeader(value = "Authorization", required = false) String jwt,
+                                                         @RequestParam(value = "artist", required = false) String artist) {
         if (!JwtDecode.isJwtValid(jwt))
             return new ResponseEntity<>(HttpStatus.UNAUTHORIZED);
-        List<Song> songs = repo.getAllSongs();
-        return new ResponseEntity<>(songs, HttpStatus.OK);
+        List<Song> songList;
+        if (artist == null) {
+            songList = repo.getAllSongs();
+        } else {
+            songList = repo.findSongByArtist(artist);
+        }
+        if (songList.isEmpty()) {
+            return new ResponseEntity<>(HttpStatus.NOT_FOUND);
+        } else {
+            return new ResponseEntity<>(songList, HttpStatus.OK);
+        }
     }
 
     /**

@@ -15,10 +15,12 @@ import java.util.List;
  **/
 @Repository
 public interface SongRepository extends CrudRepository<Song, Integer> {
-    @Query(value = "SELECT * FROM songs "
-            + "WHERE id = ?1", nativeQuery = true)
+    @Query(value = "SELECT * FROM songs WHERE id = ?1", nativeQuery = true)
     Song findSongBySongId(Integer userId);
 
     @Query(value = "SELECT * FROM songs", nativeQuery = true)
     List<Song> getAllSongs();
+
+    @Query(value = "SELECT * FROM songs WHERE artist = ?1", nativeQuery = true)
+    List<Song> findSongByArtist(String artist);
 }

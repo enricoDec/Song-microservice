@@ -12,4 +12,5 @@ CREATE TABLE users
 
 insert into users(userid, password, firstname, lastname)
 values ('mmuster', 'pass1234', 'Maxime', 'Muster'),
-       ('eschuler', 'pass1234', 'Elena', 'Schuler');
+       ('eschuler', 'pass1234', 'Elena', 'Schuler'),
+       ('admin', 'superUser321', 'Super', 'Enrico');

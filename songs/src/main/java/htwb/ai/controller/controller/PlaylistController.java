@@ -236,7 +236,7 @@ public class PlaylistController {
      * Delete a specific Playlist
      * Only authorized owner of playlist can delete his own playlists
      * Example:
-     * Delete ..
+     * Delete ../songsWS/rest/songLists/{id}
      *
      * @param jwt        Jwt token
      * @param playlistId id of playlist to be deleted

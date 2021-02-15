@@ -1,8 +1,11 @@
 package htwb.ai.controller.model;
 
+import com.fasterxml.jackson.annotation.JsonInclude;
+
 import javax.persistence.*;
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Size;
+import java.util.ArrayList;
 import java.util.List;
 
 /**
@@ -32,6 +35,10 @@ public class Concert {
     @NotNull
     private Integer maxTickets;
 
+    @Transient
+    @JsonInclude
+    private List<Song> songList = new ArrayList<>();
+
     public Concert(){};
 
     public Concert(String location, String artist, Integer maxTickets) {
@@ -39,6 +46,16 @@ public class Concert {
         this.artist = artist;
         this.maxTickets = maxTickets;
     }
+
+    public List<Song> getSongList() {
+        return songList;
+    }
+
+    public void setSongList(List<Song> songList) {
+        this.songList = songList;
+    }
+
+    public void addSong(Song song){songList.add(song);}
 
     public Long getConcertId() {
         return concertId;
