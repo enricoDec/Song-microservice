@@ -37,7 +37,7 @@ public class ConcertsController {
         if (!JwtDecode.isJwtValid(jwt))
             return new ResponseEntity<>(HttpStatus.UNAUTHORIZED);
 
-        List<Concert> concertList = repo.getAll();
+        List<Concert> concertList = repo.getAllConcerts();
         if (concertList != null) {
             for (Concert concert : concertList) {
                 concert.setSongList(getSongsFromArtist(concert.getArtist(), jwt));

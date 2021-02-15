@@ -15,15 +15,6 @@ public class Song {
     private String label;
     private Integer released;
 
-    public Song() {
-    }
-
-    public Song(String title, String artist, String label, Integer released) {
-        this.title = title;
-        this.artist = artist;
-        this.label = label;
-        this.released = released;
-    }
 
     public Integer getId() {
         return id;

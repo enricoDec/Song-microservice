@@ -1,11 +1,16 @@
 package htwb.ai.controller.model;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.fasterxml.jackson.annotation.JsonInclude;
+import com.fasterxml.jackson.annotation.JsonManagedReference;
+import com.fasterxml.jackson.annotation.JsonProperty;
 import org.hibernate.annotations.OnDelete;
 import org.hibernate.annotations.OnDeleteAction;
 
 import javax.persistence.*;
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Size;
+import java.util.List;
 
 /**
  * @author : Enrico Gamil Toros
@@ -26,16 +31,22 @@ public class Ticket {
     @Size(max = 50)
     private String owner;
 
-    @ManyToOne(fetch = FetchType.LAZY, optional = false)
-    @JoinColumn(name = "concert_id", nullable = false)
-    @OnDelete(action = OnDeleteAction.CASCADE) //TODO: Check Cascade
+    @ManyToOne(fetch = FetchType.EAGER, optional = false)
+    @JoinColumn(name = "concert_id")
+    @JsonManagedReference
     private Concert concert;
 
-    public Ticket(){}
+    @OneToOne(cascade = CascadeType.ALL)
+    @JoinColumn(name = "transaction_id", nullable = false)
+    private TicketTransaction ticketTransaction;
 
-    public Ticket(@NotNull @Size(max = 50) String owner, Concert concert) {
+    public Ticket() {
+    }
+
+    public Ticket(@NotNull @Size(max = 50) String owner, Concert concert, TicketTransaction ticketTransaction) {
         this.owner = owner;
         this.concert = concert;
+        this.ticketTransaction = ticketTransaction;
     }
 
     public Long getTicketId() {
@@ -62,12 +73,21 @@ public class Ticket {
         this.concert = concert;
     }
 
+    public TicketTransaction getTicketTransaction() {
+        return ticketTransaction;
+    }
+
+    public void setTicketTransaction(TicketTransaction ticketTransaction) {
+        this.ticketTransaction = ticketTransaction;
+    }
+
     @Override
     public String toString() {
         return "Ticket{" +
                 "ticketId=" + ticketId +
                 ", owner='" + owner + '\'' +
                 ", concert=" + concert +
+                ", ticketTransaction=" + ticketTransaction +
                 '}';
     }
 }
