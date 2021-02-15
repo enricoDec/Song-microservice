@@ -2,14 +2,19 @@ package htwb.ai.controller.controller;
 
 
 import htwb.ai.controller.model.Concert;
+import htwb.ai.controller.model.ConcertMinimal;
 import htwb.ai.controller.model.Song;
 import htwb.ai.controller.repo.ConcertsRepository;
 import htwb.ai.controller.utils.JwtDecode;
+import io.jsonwebtoken.*;
 import org.springframework.http.*;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.client.RestTemplate;
 
+import javax.persistence.PersistenceException;
 import java.net.InetAddress;
+import java.net.URI;
+import java.net.URISyntaxException;
 import java.net.UnknownHostException;
 import java.util.Arrays;
 import java.util.List;
@@ -106,5 +111,45 @@ public class ConcertsController {
             e.printStackTrace();
         }
         return Arrays.asList(songs.clone());
+    }
+
+    /**
+     * Post a new concert
+     * <p>
+     * Content-Type: application/json
+     * Headers:
+     * Authorization: token
+     * <p>
+     * Example:
+     * POST ../rest/concerts/
+     *
+     * @param jwt      Jwt
+     * @param concert concert to add
+     * @return Location Header with Id of the new Playlist
+     * @throws URISyntaxException URISyntaxException
+     */
+    @PostMapping(consumes = {MediaType.APPLICATION_JSON_VALUE})
+    public ResponseEntity<String> addConcert(@RequestHeader(value = "Authorization", required = false) String jwt,
+                                              @RequestBody ConcertMinimal concert) throws URISyntaxException {
+        Claims claims;
+        try {
+            claims = JwtDecode.decodeJWT(jwt);
+        } catch (ExpiredJwtException | UnsupportedJwtException | MalformedJwtException | SignatureException | IllegalArgumentException e) {
+            return new ResponseEntity<>(HttpStatus.UNAUTHORIZED);
+        }
+        //Validate concert
+        if (concert.getLocation() == null)
+            return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
+        Long newId;
+        try {
+            Concert newPlaylist = new Concert(concert.getLocation(), concert.getArtist(), concert.getMaxTickets());
+            newId = repo.save(newPlaylist).getConcertId();
+        } catch (PersistenceException | NoSuchElementException e) {
+            return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
+        }
+        // Location Header
+        HttpHeaders responseHeaders = new HttpHeaders();
+        URI locationURI = new URI(String.format("/rest/concerts/%d", newId));
+        return ResponseEntity.created(locationURI).headers(responseHeaders).body(null);
     }
 }

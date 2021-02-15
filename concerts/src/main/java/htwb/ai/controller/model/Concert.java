@@ -1,9 +1,6 @@
 package htwb.ai.controller.model;
 
-import com.fasterxml.jackson.annotation.JsonBackReference;
-import com.fasterxml.jackson.annotation.JsonIgnore;
-import com.fasterxml.jackson.annotation.JsonInclude;
-import com.fasterxml.jackson.annotation.JsonManagedReference;
+import com.fasterxml.jackson.annotation.*;
 
 import javax.persistence.*;
 import javax.validation.constraints.NotNull;
@@ -46,6 +43,14 @@ public class Concert {
     @JsonBackReference
     private List<Ticket> tickets = new ArrayList<>();
 
+    public Concert() {
+    }
+
+    public Concert(@NotNull @Size(max = 50) String location, @NotNull @Size(max = 50) String artist, @NotNull Integer maxTickets) {
+        this.location = location;
+        this.artist = artist;
+        this.maxTickets = maxTickets;
+    }
 
     public List<Song> getSongList() {
         return songList;
