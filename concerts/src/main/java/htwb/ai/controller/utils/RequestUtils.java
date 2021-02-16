@@ -20,6 +20,7 @@ import java.util.NoSuchElementException;
  * @version : 1.0
  * @since : 15.02.21
  **/
+@Service
 public class RequestUtils {
 
     private RestTemplate restTemplate;

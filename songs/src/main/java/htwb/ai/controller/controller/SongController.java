@@ -104,7 +104,7 @@ public class SongController {
                                           @RequestBody @Valid Song song) throws URISyntaxException {
         if (!JwtDecode.isJwtValid(jwt))
             return new ResponseEntity<>(HttpStatus.UNAUTHORIZED);
-        if (song.getTitle() == null || song.getId() != null) {
+        if (song.getId() != null) {
             return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
         }
         int newId;
