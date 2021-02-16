@@ -7,7 +7,7 @@ package htwb.ai.controller.model;
  * @version : 1.0
  * @since : 31-10-2020
  **/
-public class Song {
+public class SongData {
 
     private Integer id;
     private String title;
@@ -15,6 +15,16 @@ public class Song {
     private String label;
     private Integer released;
 
+    public SongData() {
+    }
+
+    public SongData(Integer id, String title, String artist, String label, Integer released) {
+        this.id = id;
+        this.title = title;
+        this.artist = artist;
+        this.label = label;
+        this.released = released;
+    }
 
     public Integer getId() {
         return id;

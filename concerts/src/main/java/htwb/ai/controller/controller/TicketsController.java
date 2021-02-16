@@ -61,12 +61,14 @@ public class TicketsController {
         //Get owner Tickets
         if (concertId == null) {
             List<Ticket> ticketList = ticketsRepository.getTicketsByOwner(claims.getId());
-            if (ticketList != null) {
+            if (ticketList != null && !ticketList.isEmpty()) {
                 return new ResponseEntity<>(ticketList, HttpStatus.OK);
             } else
                 return new ResponseEntity<>(HttpStatus.NOT_FOUND);
             //Buy ticket to concert
         } else {
+            if (concertId < 0)
+                return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
             Concert concert;
             try {
                 concert = concertsRepository.findById(concertId).get();
@@ -97,7 +99,7 @@ public class TicketsController {
     @DeleteMapping(value = "/{id}")
     public ResponseEntity<String> deleteTicket(@RequestHeader(value = "Authorization", required = false) String jwt,
                                                @PathVariable(value = "id") Long ticketId) {
-        if (ticketId == 0)
+        if (ticketId < 0)
             return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
         Claims claims;
         try {

@@ -2,21 +2,24 @@ package htwb.ai.controller.controller;
 
 
 import htwb.ai.controller.model.Concert;
-import htwb.ai.controller.model.ConcertMinimal;
-import htwb.ai.controller.model.Song;
+import htwb.ai.controller.model.ConcertData;
 import htwb.ai.controller.repo.ConcertsRepository;
 import htwb.ai.controller.utils.JwtDecode;
-import io.jsonwebtoken.*;
-import org.springframework.http.*;
+import htwb.ai.controller.utils.RequestUtils;
+import org.springframework.http.HttpHeaders;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.MediaType;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
-import org.springframework.web.client.RestTemplate;
+import org.springframework.web.client.HttpClientErrorException;
+import org.springframework.web.client.HttpServerErrorException;
 
 import javax.persistence.PersistenceException;
-import java.net.InetAddress;
+import javax.validation.Valid;
 import java.net.URI;
 import java.net.URISyntaxException;
 import java.net.UnknownHostException;
-import java.util.Arrays;
+import java.util.Collections;
 import java.util.List;
 import java.util.NoSuchElementException;
 
@@ -31,9 +34,11 @@ import java.util.NoSuchElementException;
 public class ConcertsController {
 
     private final ConcertsRepository repo;
+    private final RequestUtils requestUtils;
 
-    public ConcertsController(ConcertsRepository repo) {
+    public ConcertsController(ConcertsRepository repo, RequestUtils requestUtils) {
         this.repo = repo;
+        this.requestUtils = requestUtils;
     }
 
     /**
@@ -50,9 +55,13 @@ public class ConcertsController {
             return new ResponseEntity<>(HttpStatus.UNAUTHORIZED);
 
         List<Concert> concertList = repo.getAllConcerts();
-        if (concertList != null) {
+        if (!concertList.isEmpty()) {
             for (Concert concert : concertList) {
-                concert.setSongList(getSongsFromArtist(concert.getArtist(), jwt));
+                try {
+                    concert.setSongList(requestUtils.getSongsFromArtist(concert.getArtist(), jwt));
+                } catch (UnknownHostException | HttpClientErrorException | NoSuchElementException e) {
+                    concert.setSongList(Collections.emptyList());
+                }
             }
             return new ResponseEntity<>(concertList, HttpStatus.OK);
         } else
@@ -65,7 +74,7 @@ public class ConcertsController {
      * Get ../songWS/rest/concerts/{id}
      *
      * @param jwt Jwt Token
-     * @param id id of concert to get
+     * @param id  id of concert to get
      * @return Requested concert or 404 if not found
      */
     @GetMapping(value = "/{id}", produces = {MediaType.APPLICATION_JSON_VALUE, MediaType.APPLICATION_XML_VALUE})
@@ -82,35 +91,12 @@ public class ConcertsController {
         } catch (NoSuchElementException e) {
             return new ResponseEntity<>(HttpStatus.NOT_FOUND);
         }
-        concert.setSongList(getSongsFromArtist(concert.getArtist(), jwt));
-        return new ResponseEntity<>(concert, HttpStatus.OK);
-    }
-
-    /**
-     * Get all the songs made from the given artist.
-     * This will make a request to song service.
-     *
-     * @param artist Artist to be searched
-     * @return Songs made from given artist, will be empty if none found
-     */
-    private List<Song> getSongsFromArtist(String artist, String jwt) {
-        Song[] songs = new Song[0];
         try {
-            RestTemplate restTemplate = new RestTemplate();
-            HttpHeaders headers = new HttpHeaders();
-            headers.set(HttpHeaders.AUTHORIZATION, jwt);
-            headers.set(HttpHeaders.ACCEPT, MediaType.APPLICATION_JSON_VALUE);
-
-            HttpEntity<String> entity = new HttpEntity<>(null, headers);
-
-            ResponseEntity<Song[]> response = restTemplate.exchange(
-                    "http://" + InetAddress.getLocalHost().getHostAddress() + ":8080/songsWS/rest/songs?artist=" + artist,
-                    HttpMethod.GET, entity, Song[].class);
-            songs = response.getBody();
-        } catch (UnknownHostException e) {
-            e.printStackTrace();
+            concert.setSongList(requestUtils.getSongsFromArtist(concert.getArtist(), jwt));
+        } catch (UnknownHostException | HttpClientErrorException | NoSuchElementException e) {
+            concert.setSongList(Collections.emptyList());
         }
-        return Arrays.asList(songs.clone());
+        return new ResponseEntity<>(concert, HttpStatus.OK);
     }
 
     /**
@@ -123,27 +109,20 @@ public class ConcertsController {
      * Example:
      * POST ../rest/concerts/
      *
-     * @param jwt      Jwt
+     * @param jwt     Jwt
      * @param concert concert to add
      * @return Location Header with Id of the new Playlist
      * @throws URISyntaxException URISyntaxException
      */
     @PostMapping(consumes = {MediaType.APPLICATION_JSON_VALUE})
     public ResponseEntity<String> addConcert(@RequestHeader(value = "Authorization", required = false) String jwt,
-                                              @RequestBody ConcertMinimal concert) throws URISyntaxException {
-        Claims claims;
-        try {
-            claims = JwtDecode.decodeJWT(jwt);
-        } catch (ExpiredJwtException | UnsupportedJwtException | MalformedJwtException | SignatureException | IllegalArgumentException e) {
+                                             @RequestBody @Valid ConcertData concert) throws URISyntaxException {
+        if (!JwtDecode.isJwtValid(jwt))
             return new ResponseEntity<>(HttpStatus.UNAUTHORIZED);
-        }
-        //Validate concert
-        if (concert.getLocation() == null)
-            return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
         Long newId;
         try {
-            Concert newPlaylist = new Concert(concert.getLocation(), concert.getArtist(), concert.getMaxTickets());
-            newId = repo.save(newPlaylist).getConcertId();
+            Concert newConcert = new Concert(concert.getLocation(), concert.getArtist(), concert.getMaxTickets());
+            newId = repo.save(newConcert).getConcertId();
         } catch (PersistenceException | NoSuchElementException e) {
             return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
         }
