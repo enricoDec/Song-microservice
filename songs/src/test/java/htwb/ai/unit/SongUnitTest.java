@@ -22,7 +22,6 @@ import uk.org.webcompere.systemstubs.jupiter.SystemStub;
 import uk.org.webcompere.systemstubs.jupiter.SystemStubsExtension;
 
 import javax.persistence.PersistenceException;
-import java.util.Arrays;
 import java.util.Collections;
 import java.util.Objects;
 
@@ -486,6 +485,24 @@ class SongUnitTest {
                     .header(HttpHeaders.AUTHORIZATION, "BLOB")
                     .contentType(MediaType.TEXT_HTML).content("test message"))
                     .andExpect(status().isUnsupportedMediaType());
+        }
+    }
+
+    @Test
+    void addSongWithId() throws Exception {
+        try (MockedStatic<JwtDecode> jwtUtilsMockedStatic = mockStatic(JwtDecode.class)) {
+            when(JwtDecode.isJwtValid(anyString())).thenReturn(true);
+
+            mockMvc.perform(post("/songs")
+                    .header(HttpHeaders.AUTHORIZATION, "BLOB")
+                    .contentType(MediaType.APPLICATION_JSON).content("{\n" +
+                            "    \"id\": 9999,\n" +
+                            "    \"title\": \"Can’t Stop the Feeling\",\n" +
+                            "    \"artist\": \"Justin Timberlake\", \n" +
+                            "    \"label\": \"Trolls\",\n" +
+                            "    \"released\": 2016\n" +
+                            "}"))
+                    .andExpect(status().isBadRequest());
         }
     }
 
