@@ -70,7 +70,7 @@ class AuthTest {
         mockMvc.perform(MockMvcRequestBuilders.post("/auth")
                 .contentType(MediaType.APPLICATION_JSON)
                 .content(authorization))
-                .andExpect(status().isUnauthorized());
+                .andExpect(status().isBadRequest());
     }
 
     @Test
@@ -79,7 +79,7 @@ class AuthTest {
         mockMvc.perform(MockMvcRequestBuilders.post("/auth")
                 .contentType(MediaType.APPLICATION_JSON)
                 .content(authorization))
-                .andExpect(status().isUnauthorized());
+                .andExpect(status().isBadRequest());
     }
 
     @Test
@@ -88,6 +88,6 @@ class AuthTest {
         mockMvc.perform(MockMvcRequestBuilders.post("/auth")
                 .contentType(MediaType.APPLICATION_JSON)
                 .content(authorization))
-                .andExpect(status().isUnauthorized());
+                .andExpect(status().isBadRequest());
     }
 }

@@ -1,6 +1,7 @@
 package htwb.ai.controller.model;
 
-import com.fasterxml.jackson.annotation.*;
+import com.fasterxml.jackson.annotation.JsonBackReference;
+import com.fasterxml.jackson.annotation.JsonInclude;
 
 import javax.persistence.*;
 import javax.validation.constraints.NotNull;
@@ -37,7 +38,7 @@ public class Concert {
 
     @Transient
     @JsonInclude
-    private List<Song> songList = new ArrayList<>();
+    private List<SongData> songDataList = new ArrayList<>();
 
     @OneToMany(mappedBy = "concert", cascade = CascadeType.ALL)
     @JsonBackReference
@@ -52,16 +53,16 @@ public class Concert {
         this.maxTickets = maxTickets;
     }
 
-    public List<Song> getSongList() {
-        return songList;
+    public List<SongData> getSongList() {
+        return songDataList;
     }
 
-    public void setSongList(List<Song> songList) {
-        this.songList = songList;
+    public void setSongList(List<SongData> songDataList) {
+        this.songDataList = songDataList;
     }
 
-    public void addSong(Song song) {
-        songList.add(song);
+    public void addSong(SongData songData) {
+        songDataList.add(songData);
     }
 
     public Long getConcertId() {
@@ -111,7 +112,7 @@ public class Concert {
                 ", location='" + location + '\'' +
                 ", artist='" + artist + '\'' +
                 ", maxTickets=" + maxTickets +
-                ", songList=" + songList +
+                ", songList=" + songDataList +
                 ", tickets=" + tickets +
                 '}';
     }

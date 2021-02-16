@@ -1,6 +1,8 @@
 package htwb.ai.controller.model;
 
 import javax.persistence.*;
+import javax.validation.constraints.NotEmpty;
+import javax.validation.constraints.Size;
 
 /**
  * @author : Enrico de Chadarevian, Marvin Rausch
@@ -14,9 +16,18 @@ public class User {
 
     @Id
     @Column(name = "userid")
+    @NotEmpty
+    @Size(max = 50)
     private String userId;
+
+    @NotEmpty
+    @Size(max = 50)
     private String password;
+
+    @Size(max = 50)
     private String firstName;
+
+    @Size(max = 50)
     private String lastName;
 
     public User() {

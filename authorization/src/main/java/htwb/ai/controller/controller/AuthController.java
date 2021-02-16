@@ -11,6 +11,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import javax.persistence.NoResultException;
+import javax.validation.Valid;
 
 /**
  * @author : Enrico de Chadarevian, Marvin Rausch
@@ -38,11 +39,8 @@ public class AuthController {
      * @return Response
      */
     @PostMapping(consumes = MediaType.APPLICATION_JSON_VALUE)
-    public ResponseEntity<String> auth(@RequestBody User user) {
+    public ResponseEntity<String> auth(@RequestBody @Valid User user) {
         User comparisonUser;
-        if (user.getUserId() == null || user.getPassword() == null) {
-            return ResponseEntity.status(HttpStatus.BAD_REQUEST).build();
-        }
 
         try {
             //Check if User exists

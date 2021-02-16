@@ -32,7 +32,7 @@ import static org.springframework.test.web.servlet.request.MockMvcRequestBuilder
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
 
 @ExtendWith(SystemStubsExtension.class)
-class SongControllerUnitTest {
+class SongUnitTest {
     private MockMvc mockMvc;
     private SongRepository songRepository;
     private Song fullSong;

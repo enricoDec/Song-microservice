@@ -1,6 +1,9 @@
 package htwb.ai.controller.model;
 
 import javax.persistence.*;
+import javax.validation.constraints.Min;
+import javax.validation.constraints.NotEmpty;
+import javax.validation.constraints.Size;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -17,9 +20,18 @@ public class Song {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Integer id;
+
+    @NotEmpty
+    @Size(max = 100)
     private String title;
+
+    @Size(max = 100)
     private String artist;
+
+    @Size(max = 100)
     private String label;
+
+    @Min(0)
     private Integer released;
 
     @ManyToMany(mappedBy = "songList")

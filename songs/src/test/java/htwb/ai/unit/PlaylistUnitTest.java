@@ -330,7 +330,26 @@ public class PlaylistUnitTest {
             playlistMvc.perform(MockMvcRequestBuilders
                     .post("/songLists")
                     .contentType(MediaType.APPLICATION_JSON)
-                    .content("{}")
+                    .content("{\n" +
+                            "    \"name\": \"Mmuster's Private Playlist\",\n" +
+                            "    \"isPrivate\": true,\n" +
+                            "    \"songList\": [\n" +
+                            "        {\n" +
+                            "            \"id\": " + defaultSong1.getId() + ",\n" +
+                            "            \"title\": \"" + defaultSong1.getTitle() + "\",\n" +
+                            "            \"artist\": \"" + defaultSong1.getArtist() + "\",\n" +
+                            "            \"label\": \"" + defaultSong1.getLabel() + "\",\n" +
+                            "            \"released\": " + defaultSong1.getReleased() + "\n" +
+                            "        },\n" +
+                            "        {\n" +
+                            "            \"id\": " + defaultSong2.getId() + ",\n" +
+                            "            \"title\": \"" + defaultSong2.getTitle() + "\",\n" +
+                            "            \"artist\": \"" + defaultSong2.getArtist() + "\",\n" +
+                            "            \"label\": \"" + defaultSong2.getLabel() + "\",\n" +
+                            "            \"released\": " + defaultSong2.getReleased() + "\n" +
+                            "        }\n" +
+                            "    ]\n" +
+                            "}")
                     .accept(MediaType.APPLICATION_JSON)
                     .header(HttpHeaders.AUTHORIZATION, "EXPIRED_TOKEN"))
                     .andExpect(status().isUnauthorized());

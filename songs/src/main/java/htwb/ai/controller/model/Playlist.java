@@ -1,6 +1,7 @@
 package htwb.ai.controller.model;
 
 import javax.persistence.*;
+import javax.validation.constraints.*;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -17,10 +18,17 @@ public class Playlist {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Integer id;
+
+    @NotEmpty
+    @Size(max = 45)
     private String name;
+
     @Column(name = "is_private")
+    @NotNull
     private Boolean isPrivate;
+
     @Column(name = "owner")
+    @Size(max = 50)
     private String ownerId;
 
     @ManyToMany(fetch = FetchType.EAGER)
@@ -29,6 +37,8 @@ public class Playlist {
             joinColumns = @JoinColumn(name = "playlist"),
             inverseJoinColumns = @JoinColumn(name = "song")
     )
+
+    @NotEmpty
     private List<Song> songList = new ArrayList<>(0);
 
     public Playlist() {

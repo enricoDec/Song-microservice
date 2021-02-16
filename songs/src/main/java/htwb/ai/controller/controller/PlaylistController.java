@@ -13,6 +13,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import javax.persistence.PersistenceException;
+import javax.validation.Valid;
 import java.net.URI;
 import java.net.URISyntaxException;
 import java.util.List;
@@ -131,17 +132,14 @@ public class PlaylistController {
      * @throws URISyntaxException URISyntaxException
      */
     @PostMapping(consumes = {MediaType.APPLICATION_JSON_VALUE})
-    public ResponseEntity<String> addPlaylist(@RequestHeader(value = "Authorization", required = false) String jwt, @RequestBody Playlist playlist) throws URISyntaxException {
+    public ResponseEntity<String> addPlaylist(@RequestHeader(value = "Authorization", required = false) String jwt,
+                                              @RequestBody @Valid Playlist playlist) throws URISyntaxException {
         Claims claims;
         try {
             claims = JwtDecode.decodeJWT(jwt);
         } catch (ExpiredJwtException | UnsupportedJwtException | MalformedJwtException | SignatureException | IllegalArgumentException e) {
             return new ResponseEntity<>(HttpStatus.UNAUTHORIZED);
         }
-        //Validate playlist
-        if (playlist.getOwnerId() != null || playlist.getId() != null || playlist.getName() == null
-                || playlist.getIsPrivate() == null || playlist.getSongList().isEmpty())
-            return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
         int newId;
         try {
             Playlist newPlaylist = new Playlist(playlist.getName(), playlist.getIsPrivate(), claims.getId());
@@ -186,7 +184,7 @@ public class PlaylistController {
      */
     @PutMapping(value = {"/{id}"}, consumes = MediaType.APPLICATION_JSON_VALUE)
     public ResponseEntity<String> updatePlaylist(@RequestHeader(value = "Authorization", required = false) String jwt,
-                                                 @RequestBody Playlist playlist,
+                                                 @RequestBody @Valid Playlist playlist,
                                                  @PathVariable(value = "id") Integer id) {
         Claims claims;
         try {
@@ -195,9 +193,7 @@ public class PlaylistController {
             return new ResponseEntity<>(HttpStatus.UNAUTHORIZED);
         }
         //Validate "new" playlist
-        if (playlist.getOwnerId() != null || playlist.getId() == null || playlist.getName() == null
-                || playlist.getIsPrivate() == null || playlist.getSongList().isEmpty()
-                || !playlist.getId().equals(id))
+        if (!playlist.getId().equals(id))
             return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
 
 
