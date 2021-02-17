@@ -23,6 +23,14 @@ import java.util.UUID;
 public class QRUtils {
     private String savePath = "concerts/src/main/resources/TicketQr/";
 
+    /**
+     * Generate a qrCode containing the ticket as json
+     *
+     * @param ticket Ticket to be deserialized in the qrcode
+     * @return path to generated qr code
+     * @throws JsonProcessingException if ticket deserialization failed
+     * @throws FileExistsException     if file at same path already exists
+     */
     public String generateTicketQR(Ticket ticket) throws JsonProcessingException, FileExistsException {
         //Create Json from Ticket POJO
         ObjectMapper objectMapper = new ObjectMapper();
@@ -45,10 +53,6 @@ public class QRUtils {
             }
             return file.toPath().toString();
         }
-    }
-
-    public String getSavePath() {
-        return savePath;
     }
 
     public void setSavePath(String savePath) {
