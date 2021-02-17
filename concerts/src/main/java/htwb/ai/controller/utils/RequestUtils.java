@@ -1,8 +1,6 @@
 package htwb.ai.controller.utils;
 
 import htwb.ai.controller.model.SongData;
-import org.apache.http.HttpException;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.*;
 import org.springframework.stereotype.Service;
 import org.springframework.web.client.HttpClientErrorException;
@@ -25,8 +23,11 @@ public class RequestUtils {
 
     private RestTemplate restTemplate;
 
-    public void setRestTemplate(RestTemplate restTemplate) {
+    public RequestUtils(RestTemplate restTemplate) {
         this.restTemplate = restTemplate;
+    }
+
+    public RequestUtils() {
     }
 
     /**
@@ -55,38 +56,6 @@ public class RequestUtils {
             return Arrays.asList(response.getBody());
         } else {
             throw new NoSuchElementException("No song found for artist: " + artist);
-        }
-    }
-
-    /**
-     * Get admin auth Token
-     *
-     * @return jwt Token
-     * @throws HttpException            if Unauthorized or playlist service down
-     * @throws UnknownHostException     if host not resolved
-     * @throws HttpClientErrorException if reply has no body
-     */
-    private String getAuthToken() throws UnknownHostException, HttpClientErrorException, HttpException {
-        String adminId = System.getenv("KBE_SUPER_USER_ID");
-        String adminPassword = System.getenv("KBE_SUPER_USER_PASSWORD");
-        String body = "{\"userId\":\"" + adminId + "\",\"password\":\"" + adminPassword + "\"}";
-
-        ResponseEntity<String> response;
-
-        RestTemplate restTemplate = new RestTemplate();
-        HttpHeaders headers = new HttpHeaders();
-        headers.set(HttpHeaders.CONTENT_TYPE, MediaType.APPLICATION_JSON_VALUE);
-
-        HttpEntity<String> entity = new HttpEntity<>(body, headers);
-
-        response = restTemplate.exchange(
-                "http://" + InetAddress.getLocalHost().getHostAddress() + ":8080/songsWS/rest/auth",
-                HttpMethod.POST, entity, String.class);
-
-        if (response.hasBody()) {
-            return response.getBody();
-        } else {
-            throw new HttpException("Unauthorized");
         }
     }
 }

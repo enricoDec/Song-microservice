@@ -8,8 +8,10 @@ import htwb.ai.controller.model.TicketTransaction;
 import htwb.ai.controller.repo.ConcertsRepository;
 import htwb.ai.controller.repo.TicketsRepository;
 import htwb.ai.controller.utils.JwtDecode;
+import htwb.ai.controller.utils.QRUtils;
 import io.jsonwebtoken.Claims;
 import io.jsonwebtoken.MalformedJwtException;
+import org.apache.commons.io.FileExistsException;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
@@ -45,33 +47,37 @@ public class TicketUnitTest {
     private final EnvironmentVariables environment = new EnvironmentVariables("SECRET_KEY_KBE", "test_secret_key");
     private ConcertsRepository concertsRepositoryMock;
     private TicketsRepository ticketsRepositoryMock;
+    private QRUtils qrUtilsMock;
     private MockMvc ticketMvc;
 
     private Concert concert;
 
     private Ticket ticket;
-    private TicketTransaction ticketTransaction;
+    private Ticket ticketMock;
 
     private Ticket ticket2;
     private TicketTransaction ticketTransaction2;
+
 
     @BeforeEach
     void setup() {
         //Mock repositories
         concertsRepositoryMock = mock(ConcertsRepository.class);
         ticketsRepositoryMock = mock(TicketsRepository.class);
+        qrUtilsMock = mock(QRUtils.class);
 
         ticketMvc = MockMvcBuilders.standaloneSetup(
-                new TicketsController(ticketsRepositoryMock, concertsRepositoryMock)).build();
+                new TicketsController(ticketsRepositoryMock, concertsRepositoryMock, qrUtilsMock)).build();
 
 
         concert = new Concert("Rome", "Black Eyed Peas", 1);
         concert.setConcertId(1L);
 
-        ticketTransaction = new TicketTransaction(false);
+        TicketTransaction ticketTransaction = new TicketTransaction(false);
         ticketTransaction.setTransactionId(1L);
         ticket = new Ticket("mmuster", concert, ticketTransaction);
         ticket.setTicketId(1L);
+        ticketMock = mock(Ticket.class);
 
         ticketTransaction = new TicketTransaction(false);
         ticketTransaction.setTransactionId(2L);
@@ -203,15 +209,68 @@ public class TicketUnitTest {
             when(JwtDecode.decodeJWT(jwt)).thenReturn(claims);
             when(claims.getId()).thenReturn(user);
 
-
+            when(qrUtilsMock.generateTicketQR(any())).thenReturn("PATH");
             when(concertsRepositoryMock.findById(concert.getConcertId())).thenReturn(java.util.Optional.ofNullable(concert));
+            when(ticketsRepositoryMock.save(any())).thenReturn(ticketMock);
+            when(ticketsRepositoryMock.save(any()).getTicketId()).thenReturn(ticket.getTicketId());
+            ResultActions res = ticketMvc.perform(MockMvcRequestBuilders
+                    .get("/tickets?buyConcert=" + concert.getConcertId())
+                    .accept(MediaType.APPLICATION_JSON)
+                    .header(HttpHeaders.AUTHORIZATION, jwt))
+                    .andExpect(status().isCreated());
+
+            verify(ticketsRepositoryMock, atLeastOnce()).save(any());
+            Assertions.assertEquals("/rest/tickets/" + ticket.getTicketId(),
+                    res.andReturn().getResponse().getHeader(HttpHeaders.LOCATION));
+        }
+    }
+
+    @Test
+    @DisplayName("Get Ticket call qr generator")
+    void getTicketQrGenerator() throws Exception {
+        String user = "mmuser";
+        String jwt = "BLOB";
+        try (MockedStatic<JwtDecode> jwtUtilsMockedStatic = mockStatic(JwtDecode.class)) {
+            //Mock authorization
+            Claims claims = mock(Claims.class);
+            when(JwtDecode.decodeJWT(jwt)).thenReturn(claims);
+            when(claims.getId()).thenReturn(user);
+
+            when(qrUtilsMock.generateTicketQR(any())).thenReturn("PATH");
+            when(concertsRepositoryMock.findById(concert.getConcertId())).thenReturn(java.util.Optional.ofNullable(concert));
+            when(ticketsRepositoryMock.save(any())).thenReturn(ticketMock);
+            when(ticketsRepositoryMock.save(any()).getTicketId()).thenReturn(ticket.getTicketId());
             ticketMvc.perform(MockMvcRequestBuilders
                     .get("/tickets?buyConcert=" + concert.getConcertId())
                     .accept(MediaType.APPLICATION_JSON)
                     .header(HttpHeaders.AUTHORIZATION, jwt))
-                    .andExpect(status().isOk());
+                    .andExpect(status().isCreated());
 
-            verify(ticketsRepositoryMock, times(1)).save(any());
+            verify(qrUtilsMock, atLeastOnce()).generateTicketQR(any());
+        }
+    }
+
+    @Test
+    @DisplayName("Get Ticket Qr generator fails")
+    void getTicketQrGeneratorFails() throws Exception {
+        String user = "mmuser";
+        String jwt = "BLOB";
+        try (MockedStatic<JwtDecode> jwtUtilsMockedStatic = mockStatic(JwtDecode.class)) {
+            //Mock authorization
+            Claims claims = mock(Claims.class);
+            when(JwtDecode.decodeJWT(jwt)).thenReturn(claims);
+            when(claims.getId()).thenReturn(user);
+
+            when(qrUtilsMock.generateTicketQR(any())).thenReturn("PATH");
+            when(concertsRepositoryMock.findById(concert.getConcertId())).thenReturn(java.util.Optional.ofNullable(concert));
+            when(ticketsRepositoryMock.save(any())).thenReturn(ticketMock);
+            when(ticketsRepositoryMock.save(any()).getTicketId()).thenReturn(ticket.getTicketId());
+            when(qrUtilsMock.generateTicketQR(any())).thenThrow(FileExistsException.class);
+            ticketMvc.perform(MockMvcRequestBuilders
+                    .get("/tickets?buyConcert=" + concert.getConcertId())
+                    .accept(MediaType.APPLICATION_JSON)
+                    .header(HttpHeaders.AUTHORIZATION, jwt))
+                    .andExpect(status().isBadRequest());
         }
     }
 
@@ -306,14 +365,17 @@ public class TicketUnitTest {
             when(JwtDecode.decodeJWT(jwt)).thenReturn(claims);
             when(claims.getId()).thenReturn(user);
 
+            when(qrUtilsMock.generateTicketQR(any())).thenReturn("PATH");
             when(concertsRepositoryMock.findById(concert.getConcertId())).thenReturn(java.util.Optional.ofNullable(concert));
+            when(ticketsRepositoryMock.save(any())).thenReturn(ticketMock);
+            when(ticketsRepositoryMock.save(any()).getTicketId()).thenReturn(ticket.getTicketId());
             ticketMvc.perform(MockMvcRequestBuilders
                     .get("/tickets?buyConcert=" + concert.getConcertId())
                     .accept(MediaType.APPLICATION_JSON)
                     .header(HttpHeaders.AUTHORIZATION, jwt))
-                    .andExpect(status().isOk());
+                    .andExpect(status().isCreated());
 
-            verify(ticketsRepositoryMock, times(1)).save(any());
+            verify(ticketsRepositoryMock, atLeastOnce()).save(any());
             concert.setTickets(Collections.singletonList(new Ticket(user, concert, new TicketTransaction(false))));
 
             ticketMvc.perform(MockMvcRequestBuilders
@@ -324,6 +386,137 @@ public class TicketUnitTest {
 
         }
     }
+
+    // ----------------------------
+    // Get a ticket QrCode
+    // ----------------------------
+
+
+    @Test
+    @DisplayName("Get ticket Qr")
+    void getTicketQr() throws Exception {
+        String user = "mmuster";
+        String jwt = "BLOB";
+        try (MockedStatic<JwtDecode> jwtUtilsMockedStatic = mockStatic(JwtDecode.class)) {
+            //Mock authorization
+            Claims claims = mock(Claims.class);
+            when(JwtDecode.decodeJWT(jwt)).thenReturn(claims);
+            when(claims.getId()).thenReturn(user);
+
+            when(ticketsRepositoryMock.findById(ticket.getTicketId())).thenReturn(java.util.Optional.ofNullable(ticketMock));
+            // ABSOLUTE PATH BECAUSE INTELLIJ BUG USING PATH IN CONTEXT OF TEST EXECUTION
+            when(ticketMock.getQrCodePath()).thenReturn("/Users/enrico/Desktop/KBE-Beleg/concerts/src/test/resources/sample_qr.png");
+            when(ticketMock.getOwner()).thenReturn(user);
+            ResultActions res = ticketMvc.perform(MockMvcRequestBuilders
+                    .get("/tickets/" + ticket.getTicketId())
+                    .header(HttpHeaders.AUTHORIZATION, jwt))
+                    .andExpect(status().isOk());
+
+            Assertions.assertTrue(res.andReturn().getResponse().getContentAsString().length() > 0);
+        }
+    }
+
+    @Test
+    @DisplayName("Get ticket Qr not auth")
+    void getTicketQrNoAuth() throws Exception {
+        String jwt = "BLOB";
+        try (MockedStatic<JwtDecode> jwtUtilsMockedStatic = mockStatic(JwtDecode.class)) {
+            //Mock authorization
+            when(JwtDecode.decodeJWT(jwt)).thenThrow(MalformedJwtException.class);
+
+            ticketMvc.perform(MockMvcRequestBuilders
+                    .get("/tickets/" + ticket.getTicketId())
+                    .header(HttpHeaders.AUTHORIZATION, jwt))
+                    .andExpect(status().isUnauthorized());
+
+        }
+    }
+
+    @Test
+    @DisplayName("Get ticket Qr not owner of ticket")
+    void getTicketQrNotOwner() throws Exception {
+        String user = "mmuster";
+        String jwt = "BLOB";
+        try (MockedStatic<JwtDecode> jwtUtilsMockedStatic = mockStatic(JwtDecode.class)) {
+            //Mock authorization
+            Claims claims = mock(Claims.class);
+            when(JwtDecode.decodeJWT(jwt)).thenReturn(claims);
+            when(claims.getId()).thenReturn(user);
+
+            when(ticketsRepositoryMock.findById(ticket.getTicketId())).thenReturn(java.util.Optional.ofNullable(ticketMock));
+            when(ticketMock.getQrCodePath()).thenReturn("src/test/resources/sample_qr.png");
+            when(ticketMock.getOwner()).thenReturn("OTHER_USER");
+            ticketMvc.perform(MockMvcRequestBuilders
+                    .get("/tickets/" + ticket.getTicketId())
+                    .header(HttpHeaders.AUTHORIZATION, jwt))
+                    .andExpect(status().isForbidden());
+
+        }
+    }
+
+    @Test
+    @DisplayName("Get ticket Qr bad Id")
+    void getTicketQrBadId() throws Exception {
+        String user = "mmuster";
+        String jwt = "BLOB";
+        try (MockedStatic<JwtDecode> jwtUtilsMockedStatic = mockStatic(JwtDecode.class)) {
+            //Mock authorization
+            Claims claims = mock(Claims.class);
+            when(JwtDecode.decodeJWT(jwt)).thenReturn(claims);
+            when(claims.getId()).thenReturn(user);
+
+            ticketMvc.perform(MockMvcRequestBuilders
+                    .get("/tickets/-909")
+                    .header(HttpHeaders.AUTHORIZATION, jwt))
+                    .andExpect(status().isBadRequest());
+
+        }
+    }
+
+    @Test
+    @DisplayName("Get ticket Qr ticket not existing")
+    void getTicketQrTicketNotExisting() throws Exception {
+        String user = "mmuster";
+        String jwt = "BLOB";
+        try (MockedStatic<JwtDecode> jwtUtilsMockedStatic = mockStatic(JwtDecode.class)) {
+            //Mock authorization
+            Claims claims = mock(Claims.class);
+            when(JwtDecode.decodeJWT(jwt)).thenReturn(claims);
+            when(claims.getId()).thenReturn(user);
+
+            when(ticketsRepositoryMock.findById(ticket.getTicketId())).thenThrow(NoSuchElementException.class);
+            when(ticketMock.getQrCodePath()).thenReturn("src/test/resources/sample_qr.png");
+            when(ticketMock.getOwner()).thenReturn(user);
+            ticketMvc.perform(MockMvcRequestBuilders
+                    .get("/tickets/99999")
+                    .header(HttpHeaders.AUTHORIZATION, jwt))
+                    .andExpect(status().isNotFound());
+
+        }
+    }
+
+    @Test
+    @DisplayName("Get ticket Qr not generated IO error")
+    void getTicketQrIOerror() throws Exception {
+        String user = "mmuster";
+        String jwt = "BLOB";
+        try (MockedStatic<JwtDecode> jwtUtilsMockedStatic = mockStatic(JwtDecode.class)) {
+            //Mock authorization
+            Claims claims = mock(Claims.class);
+            when(JwtDecode.decodeJWT(jwt)).thenReturn(claims);
+            when(claims.getId()).thenReturn(user);
+
+            when(ticketsRepositoryMock.findById(ticket.getTicketId())).thenReturn(java.util.Optional.ofNullable(ticketMock));
+            when(ticketMock.getQrCodePath()).thenReturn("Wrong_path");
+            when(ticketMock.getOwner()).thenReturn(user);
+            ticketMvc.perform(MockMvcRequestBuilders
+                    .get("/tickets/" + ticket.getTicketId())
+                    .header(HttpHeaders.AUTHORIZATION, jwt))
+                    .andExpect(status().isBadRequest());
+
+        }
+    }
+
 
     // ----------------------------
     // Delete a ticket to a concert

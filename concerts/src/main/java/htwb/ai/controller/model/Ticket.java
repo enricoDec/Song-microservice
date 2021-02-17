@@ -1,5 +1,6 @@
 package htwb.ai.controller.model;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonManagedReference;
 
 import javax.persistence.*;
@@ -34,13 +35,24 @@ public class Ticket {
     @JoinColumn(name = "transaction_id", nullable = false)
     private TicketTransaction ticketTransaction;
 
+    @Column(name = "ticket_qr_path")
+    @JsonIgnore
+    private String qrCodePath;
+
     public Ticket() {
     }
 
-    public Ticket(@NotNull @Size(max = 50) String owner, Concert concert, TicketTransaction ticketTransaction) {
+    public Ticket(String owner, Concert concert, TicketTransaction ticketTransaction) {
         this.owner = owner;
         this.concert = concert;
         this.ticketTransaction = ticketTransaction;
+    }
+
+    public Ticket(String owner, Concert concert, TicketTransaction ticketTransaction, String qrCodePath) {
+        this.owner = owner;
+        this.concert = concert;
+        this.ticketTransaction = ticketTransaction;
+        this.qrCodePath = qrCodePath;
     }
 
     public Long getTicketId() {
@@ -75,6 +87,14 @@ public class Ticket {
         this.ticketTransaction = ticketTransaction;
     }
 
+    public String getQrCodePath() {
+        return qrCodePath;
+    }
+
+    public void setQrCodePath(String qrCodePath) {
+        this.qrCodePath = qrCodePath;
+    }
+
     @Override
     public String toString() {
         return "Ticket{" +
@@ -82,6 +102,7 @@ public class Ticket {
                 ", owner='" + owner + '\'' +
                 ", concert=" + concert +
                 ", ticketTransaction=" + ticketTransaction +
+                ", qrCodePath='" + qrCodePath + '\'' +
                 '}';
     }
 }

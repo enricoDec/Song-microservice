@@ -15,8 +15,8 @@ VALUES ('Rome', 'Justin Timberlake', 100);
 DROP TABLE IF EXISTS transactions CASCADE;
 CREATE TABLE transactions
 (
-    transaction_id serial not null,
-    payed boolean not null,
+    transaction_id serial  not null,
+    payed          boolean not null,
 
     PRIMARY KEY (transaction_id)
 );
@@ -31,6 +31,7 @@ CREATE TABLE tickets
     owner          varchar(50) not null,
     concert_id     int         not null,
     transaction_id int         not null,
+    ticket_qr_path varchar(80),
 
     PRIMARY KEY (ticket_id),
     FOREIGN KEY (concert_id)
@@ -43,5 +44,5 @@ CREATE TABLE tickets
         ON UPDATE CASCADE
 );
 
-INSERT INTO tickets(owner, concert_id, transaction_id)
-VALUES ('mmuster', 1, 1);
+INSERT INTO tickets(owner, concert_id, transaction_id, ticket_qr_path)
+VALUES ('mmuster', 1, 1, '');
