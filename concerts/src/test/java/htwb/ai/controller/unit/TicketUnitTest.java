@@ -629,4 +629,27 @@ public class TicketUnitTest {
             verify(ticketsRepositoryMock, times(0)).deleteById(ticket.getTicketId());
         }
     }
+
+    @Test
+    @DisplayName("Good Test verify qr deleted")
+    void deleteTicketGoodQr() throws Exception {
+        String user = ticket.getOwner();
+        String jwt = "BLOB";
+        try (MockedStatic<JwtDecode> jwtUtilsMockedStatic = mockStatic(JwtDecode.class)) {
+            //Mock authorization
+            Claims claims = mock(Claims.class);
+            when(JwtDecode.decodeJWT(jwt)).thenReturn(claims);
+            when(claims.getId()).thenReturn(user);
+
+
+            when(ticketsRepositoryMock.findById(ticket.getTicketId())).thenReturn(java.util.Optional.ofNullable(ticket));
+            ticketMvc.perform(MockMvcRequestBuilders
+                    .delete("/tickets/" + ticket.getTicketId())
+                    .accept(MediaType.APPLICATION_JSON)
+                    .header(HttpHeaders.AUTHORIZATION, jwt))
+                    .andExpect(status().isNoContent());
+
+            verify(qrUtilsMock, times(1)).deleteTicketQR(ticket.getQrCodePath());
+        }
+    }
 }

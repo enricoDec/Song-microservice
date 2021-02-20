@@ -55,6 +55,11 @@ public class QRUtils {
         }
     }
 
+    public void deleteTicketQR(String path) {
+        File file = new File(path);
+        file.delete();
+    }
+
     public void setSavePath(String savePath) {
         this.savePath = savePath;
     }

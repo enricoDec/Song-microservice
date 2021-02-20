@@ -43,6 +43,3 @@ CREATE TABLE tickets
         ON DELETE CASCADE
         ON UPDATE CASCADE
 );
-
-INSERT INTO tickets(owner, concert_id, transaction_id, ticket_qr_path)
-VALUES ('mmuster', 1, 1, '');

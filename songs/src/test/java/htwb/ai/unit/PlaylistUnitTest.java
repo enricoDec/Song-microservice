@@ -604,7 +604,7 @@ public class PlaylistUnitTest {
                             "    ]\n" +
                             "}")
                     .header(HttpHeaders.AUTHORIZATION, "BLOB"))
-                    .andExpect(status().isNotFound());
+                    .andExpect(status().isForbidden());
         }
     }
 

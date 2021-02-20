@@ -68,4 +68,18 @@ public class QRUtilsTest {
             Assertions.assertTrue(file.delete());
         }
     }
+
+    @Test
+    @DisplayName("Good Test delete Qr")
+    void goodQrTestDelete() {
+        String location;
+        try {
+            location = qrUtils.generateTicketQR(ticket);
+            qrUtils.deleteTicketQR(location);
+            String finalLocation = location;
+            Assertions.assertFalse(new File(finalLocation).exists());
+        } catch (JsonProcessingException | FileExistsException e) {
+            Assertions.fail(e.getMessage());
+        }
+    }
 }

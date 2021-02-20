@@ -180,7 +180,6 @@ public class PlaylistController {
      * @param playlist updated playlist
      * @param id       if of the playlist to update
      * @return HTTP NOT_FOUND if successful
-     * @throws URISyntaxException URISyntaxException
      */
     @PutMapping(value = {"/{id}"}, consumes = MediaType.APPLICATION_JSON_VALUE)
     public ResponseEntity<String> updatePlaylist(@RequestHeader(value = "Authorization", required = false) String jwt,
@@ -202,7 +201,7 @@ public class PlaylistController {
             // Check if playlist exists and he is the owner
             playlistToBeUpdated = playlistRepository.getPlaylistById(playlist.getId());
             if (playlistToBeUpdated == null || !playlistToBeUpdated.getOwnerId().equals(claims.getId()))
-                return new ResponseEntity<>(HttpStatus.NOT_FOUND);
+                return new ResponseEntity<>(HttpStatus.FORBIDDEN);
 
             // Make sure new playlist has valid songs
             for (Song song : playlist.getSongList()) {

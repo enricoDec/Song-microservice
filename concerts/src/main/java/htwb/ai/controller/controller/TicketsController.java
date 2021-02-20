@@ -188,6 +188,7 @@ public class TicketsController {
             return new ResponseEntity<>(HttpStatus.NOT_FOUND);
         }
         if (claims.getId().equals(requestedTicket.getOwner())) {
+            qrUtils.deleteTicketQR(requestedTicket.getQrCodePath());
             ticketsRepository.deleteById(ticketId);
             return new ResponseEntity<>(HttpStatus.NO_CONTENT);
         } else {
