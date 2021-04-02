@@ -19,7 +19,7 @@ A Spring Boot project (which I created to learn Spring Cloud).
   - Eureka Microservice
   - Gateway Microservice
 
-
+---
 
 # Endpoints
 
