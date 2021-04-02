@@ -59,6 +59,7 @@ public class TicketsController {
      * @param jwt       Jwt Token
      * @param concertId id of concert to get ticket
      * @return owner tickets and 200 or 201 if ticket created
+     * @throws URISyntaxException URISyntaxException
      */
     @GetMapping(produces = {MediaType.APPLICATION_JSON_VALUE, MediaType.APPLICATION_XML_VALUE})
     public ResponseEntity<List<Ticket>> getOwnedTickets(@RequestHeader(value = "Authorization", required = false) String jwt,
