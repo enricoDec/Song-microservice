@@ -1,1 +1,656 @@
-memberSearchIndex = [{"p":"htwb.ai.controller.controller","c":"PlaylistController","l":"addPlaylist(String, Playlist)","url":"addPlaylist(java.lang.String,htwb.ai.controller.model.Playlist)"},{"p":"integration","c":"PlaylistTest","l":"addPlaylistBadEmptySongList()"},{"p":"htwb.ai.controller.model","c":"Playlist","l":"addSong(Song)","url":"addSong(htwb.ai.controller.model.Song)"},{"p":"htwb.ai.controller.controller","c":"SongController","l":"addSong(String, Song)","url":"addSong(java.lang.String,htwb.ai.controller.model.Song)"},{"p":"htwb.ai.controller.controller","c":"SongController","l":"addSongFile(String, MultipartFile)","url":"addSongFile(java.lang.String,org.springframework.web.multipart.MultipartFile)"},{"p":"integration","c":"PlaylistTest","l":"addSongListBadSongInPlaylistDoesNotExistInDB()"},{"p":"integration","c":"PlaylistTest","l":"addSongListsBadPrivateValueMissing()"},{"p":"integration","c":"PlaylistTest","l":"addSongListsGood()"},{"p":"integration","c":"PlaylistTest","l":"addSongListsGoodCheckDBEntry()"},{"p":"htwb.ai.controller.controller","c":"AuthController","l":"auth(User)","url":"auth(htwb.ai.controller.model.User)"},{"p":"htwb.ai.controller.controller","c":"AuthController","l":"AuthController(UserRepository)","url":"%3Cinit%3E(htwb.ai.controller.repo.UserRepository)"},{"p":"htwb.ai.controller","c":"AuthControllerUnitTest","l":"AuthControllerUnitTest()","url":"%3Cinit%3E()"},{"p":"htwb.ai.controller.utils","c":"JwtCompile","l":"createJWT(String, String)","url":"createJWT(java.lang.String,java.lang.String)"},{"p":"htwb.ai.controller.utils","c":"JwtCompile","l":"decodeJWT(String)","url":"decodeJWT(java.lang.String)"},{"p":"htwb.ai.controller.utils","c":"JwtDecode","l":"decodeJWT(String)","url":"decodeJWT(java.lang.String)"},{"p":"htwb.ai.controller.controller","c":"PlaylistController","l":"deletePlaylistById(String, Integer)","url":"deletePlaylistById(java.lang.String,java.lang.Integer)"},{"p":"integration","c":"PlaylistTest","l":"deletePlaylistByIdAuthorizationBadEmptyToken()"},{"p":"integration","c":"PlaylistTest","l":"deletePlaylistByIdAuthorizationBadWrongToken()"},{"p":"htwb.ai.controller.controller","c":"SongController","l":"deleteSong(String, Integer)","url":"deleteSong(java.lang.String,java.lang.Integer)"},{"p":"integration","c":"PlaylistTest","l":"deleteSongListBadPlaylistOfOtherUser()"},{"p":"integration","c":"PlaylistTest","l":"deleteSongListBadSongListIdNotExisting()"},{"p":"integration","c":"PlaylistTest","l":"deleteSongListGood()"},{"p":"htwb.ai.controller.controller","c":"SongController","l":"editSong(String, Song, Integer)","url":"editSong(java.lang.String,htwb.ai.controller.model.Song,java.lang.Integer)"},{"p":"htwb.ai.controller.repo","c":"SongRepository","l":"findSongBySongId(Integer)","url":"findSongBySongId(java.lang.Integer)"},{"p":"htwb.ai.controller.repo","c":"UserRepository","l":"findUserByUserId(String)","url":"findUserByUserId(java.lang.String)"},{"p":"htwb.ai.controller","c":"Gateway","l":"Gateway()","url":"%3Cinit%3E()"},{"p":"htwb.ai.controller.controller","c":"PlaylistController","l":"getAllAuthorizedPlaylist(String, String)","url":"getAllAuthorizedPlaylist(java.lang.String,java.lang.String)"},{"p":"htwb.ai.controller.repo","c":"PlaylistRepository","l":"getAllByOwnerId(String)","url":"getAllByOwnerId(java.lang.String)"},{"p":"htwb.ai.controller.repo","c":"PlaylistRepository","l":"getAllPublicByOwnerId(String)","url":"getAllPublicByOwnerId(java.lang.String)"},{"p":"htwb.ai.controller.repo","c":"SongRepository","l":"getAllSongs()"},{"p":"htwb.ai.controller.controller","c":"SongController","l":"getAllSongs(String)","url":"getAllSongs(java.lang.String)"},{"p":"htwb.ai.controller.model","c":"Song","l":"getArtist()"},{"p":"htwb.ai.controller.model","c":"User","l":"getFirstName()"},{"p":"htwb.ai.controller.model","c":"Playlist","l":"getId()"},{"p":"htwb.ai.controller.model","c":"Song","l":"getId()"},{"p":"htwb.ai.controller.model","c":"Playlist","l":"getIsPrivate()"},{"p":"htwb.ai.controller.model","c":"Song","l":"getLabel()"},{"p":"htwb.ai.controller.model","c":"User","l":"getLastName()"},{"p":"htwb.ai.controller.model","c":"Playlist","l":"getName()"},{"p":"htwb.ai.controller.model","c":"Playlist","l":"getOwnerId()"},{"p":"htwb.ai.controller.model","c":"User","l":"getPassword()"},{"p":"htwb.ai.controller.repo","c":"PlaylistRepository","l":"getPlaylistById(Integer)","url":"getPlaylistById(java.lang.Integer)"},{"p":"htwb.ai.controller.controller","c":"PlaylistController","l":"getPlaylistById(String, Integer)","url":"getPlaylistById(java.lang.String,java.lang.Integer)"},{"p":"integration","c":"PlaylistTest","l":"getPlaylistByIdAuthorizationBadEmptyToken()"},{"p":"integration","c":"PlaylistTest","l":"getPlaylistByIdAuthorizationBadWrongToken()"},{"p":"integration","c":"PlaylistTest","l":"getPlaylistByUserIdAuthorizationBadEmptyToken()"},{"p":"integration","c":"PlaylistTest","l":"getPlaylistByUserIdAuthorizationBadWrongToken()"},{"p":"htwb.ai.controller.model","c":"Song","l":"getReleased()"},{"p":"htwb.ai.controller.controller","c":"SongController","l":"getSong(String, Integer)","url":"getSong(java.lang.String,java.lang.Integer)"},{"p":"integration","c":"SongTest","l":"getSongGood()"},{"p":"integration","c":"SongTest","l":"getSongGoodXML()"},{"p":"htwb.ai.controller.model","c":"Playlist","l":"getSongList()"},{"p":"integration","c":"PlaylistTest","l":"getSongListBadNoPlaylistCreatedForUser()"},{"p":"integration","c":"PlaylistTest","l":"getSongListBadPrivatePlaylistOfOtherUser()"},{"p":"integration","c":"PlaylistTest","l":"getSongListBadUserDoesNotExist()"},{"p":"integration","c":"PlaylistTest","l":"getSongListByIdBadIdNotExisting()"},{"p":"integration","c":"PlaylistTest","l":"getSongListByIdBadInvalidId()"},{"p":"integration","c":"PlaylistTest","l":"getSongListByIdBadInvalidIdNoNumber()"},{"p":"integration","c":"PlaylistTest","l":"getSongListByIdGoodJSON()"},{"p":"integration","c":"PlaylistTest","l":"getSongListByIdGoodXML()"},{"p":"integration","c":"PlaylistTest","l":"getSongListGoodJSON()"},{"p":"integration","c":"PlaylistTest","l":"getSongListGoodOnlyPublicPlaylistOfOtherUser()"},{"p":"integration","c":"PlaylistTest","l":"getSongListGoodPublicPlaylistOfOtherUser()"},{"p":"integration","c":"PlaylistTest","l":"getSongListGoodXML()"},{"p":"htwb.ai.controller.model","c":"Song","l":"getTitle()"},{"p":"htwb.ai.controller.model","c":"User","l":"getUserId()"},{"p":"htwb.ai.controller.utils","c":"JwtCompile","l":"JwtCompile()","url":"%3Cinit%3E()"},{"p":"integration","c":"JwtCompileTest","l":"JwtCompileTest()","url":"%3Cinit%3E()"},{"p":"htwb.ai.controller","c":"JwtCompileUnitTest","l":"JwtCompileUnitTest()","url":"%3Cinit%3E()"},{"p":"htwb.ai.controller.utils","c":"JwtDecode","l":"JwtDecode()","url":"%3Cinit%3E()"},{"p":"htwb.ai.controller","c":"JwtUtilsUnitTest","l":"JwtUtilsUnitTest()","url":"%3Cinit%3E()"},{"p":"htwb.ai.controller","c":"Gateway","l":"main(String[])","url":"main(java.lang.String[])"},{"p":"htwb.ai.controller","c":"ServiceRegistrationAndDiscoveryServiceApplication","l":"main(String[])","url":"main(java.lang.String[])"},{"p":"htwb.ai.controller","c":"SpringAuthorizationApplication","l":"main(String[])","url":"main(java.lang.String[])"},{"p":"htwb.ai.controller","c":"SpringSongsApplication","l":"main(String[])","url":"main(java.lang.String[])"},{"p":"htwb.ai.controller.model","c":"Playlist","l":"Playlist()","url":"%3Cinit%3E()"},{"p":"htwb.ai.controller.model","c":"Playlist","l":"Playlist(String, Boolean, String, List<Song>)","url":"%3Cinit%3E(java.lang.String,java.lang.Boolean,java.lang.String,java.util.List)"},{"p":"htwb.ai.controller.model","c":"Playlist","l":"Playlist(String, Boolean, String)","url":"%3Cinit%3E(java.lang.String,java.lang.Boolean,java.lang.String)"},{"p":"htwb.ai.controller.controller","c":"PlaylistController","l":"PlaylistController(PlaylistRepository, SongRepository)","url":"%3Cinit%3E(htwb.ai.controller.repo.PlaylistRepository,htwb.ai.controller.repo.SongRepository)"},{"p":"integration","c":"PlaylistTest","l":"PlaylistTest()","url":"%3Cinit%3E()"},{"p":"htwb.ai.controller","c":"PlaylistUnitTest","l":"PlaylistUnitTest()","url":"%3Cinit%3E()"},{"p":"integration","c":"PlaylistTest","l":"postPlaylistAuthorizationBadEmptyToken()"},{"p":"integration","c":"PlaylistTest","l":"postPlaylistAuthorizationBadWrongToken()"},{"p":"htwb.ai.controller","c":"ServiceRegistrationAndDiscoveryServiceApplication","l":"ServiceRegistrationAndDiscoveryServiceApplication()","url":"%3Cinit%3E()"},{"p":"htwb.ai.controller.model","c":"Song","l":"setArtist(String)","url":"setArtist(java.lang.String)"},{"p":"htwb.ai.controller.model","c":"User","l":"setFirstName(String)","url":"setFirstName(java.lang.String)"},{"p":"htwb.ai.controller.model","c":"Playlist","l":"setId(Integer)","url":"setId(java.lang.Integer)"},{"p":"htwb.ai.controller.model","c":"Song","l":"setId(Integer)","url":"setId(java.lang.Integer)"},{"p":"htwb.ai.controller.model","c":"Playlist","l":"setIsPrivate(Boolean)","url":"setIsPrivate(java.lang.Boolean)"},{"p":"htwb.ai.controller.model","c":"Song","l":"setLabel(String)","url":"setLabel(java.lang.String)"},{"p":"htwb.ai.controller.model","c":"User","l":"setLastName(String)","url":"setLastName(java.lang.String)"},{"p":"htwb.ai.controller.model","c":"Playlist","l":"setName(String)","url":"setName(java.lang.String)"},{"p":"htwb.ai.controller.model","c":"Playlist","l":"setOwnerId(String)","url":"setOwnerId(java.lang.String)"},{"p":"htwb.ai.controller.model","c":"User","l":"setPassword(String)","url":"setPassword(java.lang.String)"},{"p":"htwb.ai.controller.model","c":"Song","l":"setReleased(Integer)","url":"setReleased(java.lang.Integer)"},{"p":"htwb.ai.controller.model","c":"Playlist","l":"setSongList(List<Song>)","url":"setSongList(java.util.List)"},{"p":"htwb.ai.controller.model","c":"Song","l":"setTitle(String)","url":"setTitle(java.lang.String)"},{"p":"integration","c":"SongTest","l":"setup()"},{"p":"integration","c":"PlaylistTest","l":"setupMockMvc()"},{"p":"htwb.ai.controller.model","c":"User","l":"setUserId(String)","url":"setUserId(java.lang.String)"},{"p":"htwb.ai.controller.model","c":"Song","l":"Song()","url":"%3Cinit%3E()"},{"p":"htwb.ai.controller.model","c":"Song","l":"Song(Integer, String, String, String, Integer)","url":"%3Cinit%3E(java.lang.Integer,java.lang.String,java.lang.String,java.lang.String,java.lang.Integer)"},{"p":"htwb.ai.controller.model","c":"Song","l":"Song(String, String, String, Integer)","url":"%3Cinit%3E(java.lang.String,java.lang.String,java.lang.String,java.lang.Integer)"},{"p":"htwb.ai.controller.controller","c":"SongController","l":"SongController(SongRepository)","url":"%3Cinit%3E(htwb.ai.controller.repo.SongRepository)"},{"p":"integration","c":"SongTest","l":"SongTest()","url":"%3Cinit%3E()"},{"p":"htwb.ai.controller","c":"SpringAuthorizationApplication","l":"SpringAuthorizationApplication()","url":"%3Cinit%3E()"},{"p":"htwb.ai.controller","c":"SpringSongsApplication","l":"SpringSongsApplication()","url":"%3Cinit%3E()"},{"p":"integration","c":"PlaylistTest","l":"teardown()"},{"p":"htwb.ai.controller.model","c":"Playlist","l":"toString()"},{"p":"htwb.ai.controller.model","c":"Song","l":"toString()"},{"p":"htwb.ai.controller.model","c":"User","l":"toString()"},{"p":"htwb.ai.controller.controller","c":"PlaylistController","l":"updatePlaylist(String, Playlist, Integer)","url":"updatePlaylist(java.lang.String,htwb.ai.controller.model.Playlist,java.lang.Integer)"},{"p":"htwb.ai.controller.model","c":"User","l":"User()","url":"%3Cinit%3E()"},{"p":"htwb.ai.controller.model","c":"User","l":"User(String, String, String, String)","url":"%3Cinit%3E(java.lang.String,java.lang.String,java.lang.String,java.lang.String)"},{"p":"htwb.ai.controller.utils","c":"JwtCompile","l":"verifyJWT(String)","url":"verifyJWT(java.lang.String)"},{"p":"htwb.ai.controller.utils","c":"JwtDecode","l":"verifyJWT(String)","url":"verifyJWT(java.lang.String)"}]
+memberSearchIndex = [{
+    "p": "htwb.ai.controller.controller",
+    "c": "ConcertsController",
+    "l": "addConcert(String, ConcertData)",
+    "url": "addConcert(java.lang.String,htwb.ai.controller.model.ConcertData)"
+}, {
+    "p": "htwb.ai.controller.controller",
+    "c": "PlaylistController",
+    "l": "addPlaylist(String, Playlist)",
+    "url": "addPlaylist(java.lang.String,htwb.ai.controller.model.Playlist)"
+}, {
+    "p": "htwb.ai.controller.model",
+    "c": "Playlist",
+    "l": "addSong(Song)",
+    "url": "addSong(htwb.ai.controller.model.Song)"
+}, {
+    "p": "htwb.ai.controller.model",
+    "c": "Concert",
+    "l": "addSong(SongData)",
+    "url": "addSong(htwb.ai.controller.model.SongData)"
+}, {
+    "p": "htwb.ai.controller.controller",
+    "c": "SongController",
+    "l": "addSong(String, Song)",
+    "url": "addSong(java.lang.String,htwb.ai.controller.model.Song)"
+}, {
+    "p": "htwb.ai.controller.controller",
+    "c": "SongController",
+    "l": "addSongFile(String, MultipartFile)",
+    "url": "addSongFile(java.lang.String,org.springframework.web.multipart.MultipartFile)"
+}, {
+    "p": "htwb.ai.controller.controller",
+    "c": "AuthController",
+    "l": "auth(User)",
+    "url": "auth(htwb.ai.controller.model.User)"
+}, {
+    "p": "htwb.ai.controller.controller",
+    "c": "AuthController",
+    "l": "AuthController(UserRepository)",
+    "url": "%3Cinit%3E(htwb.ai.controller.repo.UserRepository)"
+}, {
+    "p": "htwb.ai.controller.unit",
+    "c": "AuthControllerUnitTest",
+    "l": "AuthControllerUnitTest()",
+    "url": "%3Cinit%3E()"
+}, {
+    "p": "htwb.ai.controller",
+    "c": "AuthorizationApplicationEureka",
+    "l": "AuthorizationApplicationEureka()",
+    "url": "%3Cinit%3E()"
+}, {
+    "p": "htwb.ai.controller.model",
+    "c": "Concert",
+    "l": "Concert()",
+    "url": "%3Cinit%3E()"
+}, {
+    "p": "htwb.ai.controller.model",
+    "c": "Concert",
+    "l": "Concert(String, String, Integer)",
+    "url": "%3Cinit%3E(java.lang.String,java.lang.String,java.lang.Integer)"
+}, {
+    "p": "htwb.ai.controller.model",
+    "c": "ConcertData",
+    "l": "ConcertData()",
+    "url": "%3Cinit%3E()"
+}, {
+    "p": "htwb.ai.controller",
+    "c": "ConcertsApplicationEureka",
+    "l": "ConcertsApplicationEureka()",
+    "url": "%3Cinit%3E()"
+}, {
+    "p": "htwb.ai.controller.controller",
+    "c": "ConcertsController",
+    "l": "ConcertsController(ConcertsRepository, RequestUtils)",
+    "url": "%3Cinit%3E(htwb.ai.controller.repo.ConcertsRepository,htwb.ai.controller.utils.RequestUtils)"
+}, {
+    "p": "htwb.ai.controller.unit",
+    "c": "ConcertUnitTest",
+    "l": "ConcertUnitTest()",
+    "url": "%3Cinit%3E()"
+}, {
+    "p": "htwb.ai.controller.utils",
+    "c": "JwtCompile",
+    "l": "createJWT(String, String)",
+    "url": "createJWT(java.lang.String,java.lang.String)"
+}, {
+    "p": "htwb.ai.controller.utils",
+    "c": "JwtDecode",
+    "l": "decodeJWT(String)",
+    "url": "decodeJWT(java.lang.String)"
+}, {
+    "p": "htwb.ai.controller.controller",
+    "c": "PlaylistController",
+    "l": "deletePlaylistById(String, Integer)",
+    "url": "deletePlaylistById(java.lang.String,java.lang.Integer)"
+}, {
+    "p": "htwb.ai.controller.controller",
+    "c": "SongController",
+    "l": "deleteSong(String, Integer)",
+    "url": "deleteSong(java.lang.String,java.lang.Integer)"
+}, {
+    "p": "htwb.ai.controller.controller",
+    "c": "TicketsController",
+    "l": "deleteTicket(String, Long)",
+    "url": "deleteTicket(java.lang.String,java.lang.Long)"
+}, {
+    "p": "htwb.ai.controller.utils",
+    "c": "QRUtils",
+    "l": "deleteTicketQR(String)",
+    "url": "deleteTicketQR(java.lang.String)"
+}, {
+    "p": "htwb.ai.controller.controller",
+    "c": "SongController",
+    "l": "editSong(String, Song, Integer)",
+    "url": "editSong(java.lang.String,htwb.ai.controller.model.Song,java.lang.Integer)"
+}, {
+    "p": "htwb.ai.controller",
+    "c": "EurekaServiceApplication",
+    "l": "EurekaServiceApplication()",
+    "url": "%3Cinit%3E()"
+}, {
+    "p": "htwb.ai.controller.repo",
+    "c": "SongRepository",
+    "l": "findSongByArtist(String)",
+    "url": "findSongByArtist(java.lang.String)"
+}, {
+    "p": "htwb.ai.controller.repo",
+    "c": "SongRepository",
+    "l": "findSongBySongId(Integer)",
+    "url": "findSongBySongId(java.lang.Integer)"
+}, {
+    "p": "htwb.ai.controller.repo",
+    "c": "UserRepository",
+    "l": "findUserByUserId(String)",
+    "url": "findUserByUserId(java.lang.String)"
+}, {
+    "p": "htwb.ai.controller",
+    "c": "Gateway",
+    "l": "Gateway()",
+    "url": "%3Cinit%3E()"
+}, {
+    "p": "htwb.ai.controller.utils",
+    "c": "QRUtils",
+    "l": "generateTicketQR(Ticket)",
+    "url": "generateTicketQR(htwb.ai.controller.model.Ticket)"
+}, {
+    "p": "htwb.ai.controller.controller",
+    "c": "PlaylistController",
+    "l": "getAllAuthorizedPlaylist(String, String)",
+    "url": "getAllAuthorizedPlaylist(java.lang.String,java.lang.String)"
+}, {
+    "p": "htwb.ai.controller.repo",
+    "c": "PlaylistRepository",
+    "l": "getAllByOwnerId(String)",
+    "url": "getAllByOwnerId(java.lang.String)"
+}, {
+    "p": "htwb.ai.controller.repo",
+    "c": "ConcertsRepository",
+    "l": "getAllConcerts()"
+}, {
+    "p": "htwb.ai.controller.repo",
+    "c": "PlaylistRepository",
+    "l": "getAllPublicByOwnerId(String)",
+    "url": "getAllPublicByOwnerId(java.lang.String)"
+}, {"p": "htwb.ai.controller.repo", "c": "SongRepository", "l": "getAllSongs()"}, {
+    "p": "htwb.ai.controller.model",
+    "c": "Concert",
+    "l": "getArtist()"
+}, {"p": "htwb.ai.controller.model", "c": "ConcertData", "l": "getArtist()"}, {
+    "p": "htwb.ai.controller.model",
+    "c": "Song",
+    "l": "getArtist()"
+}, {"p": "htwb.ai.controller.model", "c": "SongData", "l": "getArtist()"}, {
+    "p": "htwb.ai.controller.model",
+    "c": "Ticket",
+    "l": "getConcert()"
+}, {
+    "p": "htwb.ai.controller.controller",
+    "c": "ConcertsController",
+    "l": "getConcert(String, Long)",
+    "url": "getConcert(java.lang.String,java.lang.Long)"
+}, {"p": "htwb.ai.controller.model", "c": "Concert", "l": "getConcertId()"}, {
+    "p": "htwb.ai.controller.controller",
+    "c": "ConcertsController",
+    "l": "getConcerts(String)",
+    "url": "getConcerts(java.lang.String)"
+}, {"p": "htwb.ai.controller.model", "c": "User", "l": "getFirstName()"}, {
+    "p": "htwb.ai.controller.model",
+    "c": "Playlist",
+    "l": "getId()"
+}, {"p": "htwb.ai.controller.model", "c": "Song", "l": "getId()"}, {
+    "p": "htwb.ai.controller.model",
+    "c": "SongData",
+    "l": "getId()"
+}, {"p": "htwb.ai.controller.model", "c": "Playlist", "l": "getIsPrivate()"}, {
+    "p": "htwb.ai.controller.model",
+    "c": "Song",
+    "l": "getLabel()"
+}, {"p": "htwb.ai.controller.model", "c": "SongData", "l": "getLabel()"}, {
+    "p": "htwb.ai.controller.model",
+    "c": "User",
+    "l": "getLastName()"
+}, {"p": "htwb.ai.controller.model", "c": "Concert", "l": "getLocation()"}, {
+    "p": "htwb.ai.controller.model",
+    "c": "ConcertData",
+    "l": "getLocation()"
+}, {"p": "htwb.ai.controller.model", "c": "Concert", "l": "getMaxTickets()"}, {
+    "p": "htwb.ai.controller.model",
+    "c": "ConcertData",
+    "l": "getMaxTickets()"
+}, {"p": "htwb.ai.controller.model", "c": "Playlist", "l": "getName()"}, {
+    "p": "htwb.ai.controller.controller",
+    "c": "TicketsController",
+    "l": "getOwnedTickets(String, Long)",
+    "url": "getOwnedTickets(java.lang.String,java.lang.Long)"
+}, {"p": "htwb.ai.controller.model", "c": "Ticket", "l": "getOwner()"}, {
+    "p": "htwb.ai.controller.model",
+    "c": "Playlist",
+    "l": "getOwnerId()"
+}, {"p": "htwb.ai.controller.model", "c": "User", "l": "getPassword()"}, {
+    "p": "htwb.ai.controller.model",
+    "c": "TicketTransaction",
+    "l": "getPayed()"
+}, {
+    "p": "htwb.ai.controller.repo",
+    "c": "PlaylistRepository",
+    "l": "getPlaylistById(Integer)",
+    "url": "getPlaylistById(java.lang.Integer)"
+}, {
+    "p": "htwb.ai.controller.controller",
+    "c": "PlaylistController",
+    "l": "getPlaylistById(String, Integer)",
+    "url": "getPlaylistById(java.lang.String,java.lang.Integer)"
+}, {"p": "htwb.ai.controller.model", "c": "Ticket", "l": "getQrCodePath()"}, {
+    "p": "htwb.ai.controller.model",
+    "c": "Song",
+    "l": "getReleased()"
+}, {"p": "htwb.ai.controller.model", "c": "SongData", "l": "getReleased()"}, {
+    "p": "htwb.ai.controller.controller",
+    "c": "SongController",
+    "l": "getSong(String, Integer)",
+    "url": "getSong(java.lang.String,java.lang.Integer)"
+}, {"p": "htwb.ai.controller.model", "c": "Concert", "l": "getSongList()"}, {
+    "p": "htwb.ai.controller.model",
+    "c": "Playlist",
+    "l": "getSongList()"
+}, {
+    "p": "htwb.ai.controller.controller",
+    "c": "SongController",
+    "l": "getSongs(String, String)",
+    "url": "getSongs(java.lang.String,java.lang.String)"
+}, {
+    "p": "htwb.ai.controller.utils",
+    "c": "RequestUtils",
+    "l": "getSongsFromArtist(String, String)",
+    "url": "getSongsFromArtist(java.lang.String,java.lang.String)"
+}, {"p": "htwb.ai.controller.model", "c": "TicketTransaction", "l": "getTicket()"}, {
+    "p": "htwb.ai.controller.model",
+    "c": "Ticket",
+    "l": "getTicketId()"
+}, {
+    "p": "htwb.ai.controller.controller",
+    "c": "TicketsController",
+    "l": "getTicketQR(String, Long)",
+    "url": "getTicketQR(java.lang.String,java.lang.Long)"
+}, {"p": "htwb.ai.controller.model", "c": "Concert", "l": "getTickets()"}, {
+    "p": "htwb.ai.controller.repo",
+    "c": "TicketsRepository",
+    "l": "getTicketsByOwner(String)",
+    "url": "getTicketsByOwner(java.lang.String)"
+}, {"p": "htwb.ai.controller.model", "c": "Ticket", "l": "getTicketTransaction()"}, {
+    "p": "htwb.ai.controller.model",
+    "c": "Song",
+    "l": "getTitle()"
+}, {"p": "htwb.ai.controller.model", "c": "SongData", "l": "getTitle()"}, {
+    "p": "htwb.ai.controller.model",
+    "c": "TicketTransaction",
+    "l": "getTransactionId()"
+}, {
+    "p": "htwb.ai.controller.repo",
+    "c": "TicketTransactionsRepository",
+    "l": "getTransactionsById(String)",
+    "url": "getTransactionsById(java.lang.String)"
+}, {"p": "htwb.ai.controller.model", "c": "User", "l": "getUserId()"}, {
+    "p": "htwb.ai.controller.utils",
+    "c": "JwtDecode",
+    "l": "isJwtValid(String)",
+    "url": "isJwtValid(java.lang.String)"
+}, {
+    "p": "htwb.ai.controller.utils",
+    "c": "JwtCompile",
+    "l": "JwtCompile()",
+    "url": "%3Cinit%3E()"
+}, {
+    "p": "htwb.ai.controller.unit",
+    "c": "JwtCompileUnitTest",
+    "l": "JwtCompileUnitTest()",
+    "url": "%3Cinit%3E()"
+}, {"p": "htwb.ai.controller.utils", "c": "JwtDecode", "l": "JwtDecode()", "url": "%3Cinit%3E()"}, {
+    "p": "htwb.ai.unit",
+    "c": "JwtUtilsUnitTest",
+    "l": "JwtUtilsUnitTest()",
+    "url": "%3Cinit%3E()"
+}, {
+    "p": "htwb.ai.controller",
+    "c": "AuthorizationApplicationEureka",
+    "l": "main(String[])",
+    "url": "main(java.lang.String[])"
+}, {
+    "p": "htwb.ai.controller",
+    "c": "ConcertsApplicationEureka",
+    "l": "main(String[])",
+    "url": "main(java.lang.String[])"
+}, {
+    "p": "htwb.ai.controller",
+    "c": "EurekaServiceApplication",
+    "l": "main(String[])",
+    "url": "main(java.lang.String[])"
+}, {
+    "p": "htwb.ai.controller",
+    "c": "Gateway",
+    "l": "main(String[])",
+    "url": "main(java.lang.String[])"
+}, {
+    "p": "htwb.ai.controller",
+    "c": "PlaylistApplicationEureka",
+    "l": "main(String[])",
+    "url": "main(java.lang.String[])"
+}, {
+    "p": "htwb.ai.controller.model",
+    "c": "Playlist",
+    "l": "Playlist()",
+    "url": "%3Cinit%3E()"
+}, {
+    "p": "htwb.ai.controller.model",
+    "c": "Playlist",
+    "l": "Playlist(String, Boolean, String, List<Song>)",
+    "url": "%3Cinit%3E(java.lang.String,java.lang.Boolean,java.lang.String,java.util.List)"
+}, {
+    "p": "htwb.ai.controller.model",
+    "c": "Playlist",
+    "l": "Playlist(String, Boolean, String)",
+    "url": "%3Cinit%3E(java.lang.String,java.lang.Boolean,java.lang.String)"
+}, {
+    "p": "htwb.ai.controller",
+    "c": "PlaylistApplicationEureka",
+    "l": "PlaylistApplicationEureka()",
+    "url": "%3Cinit%3E()"
+}, {
+    "p": "htwb.ai.controller.controller",
+    "c": "PlaylistController",
+    "l": "PlaylistController(PlaylistRepository, SongRepository)",
+    "url": "%3Cinit%3E(htwb.ai.controller.repo.PlaylistRepository,htwb.ai.controller.repo.SongRepository)"
+}, {
+    "p": "htwb.ai.unit",
+    "c": "PlaylistUnitTest",
+    "l": "PlaylistUnitTest()",
+    "url": "%3Cinit%3E()"
+}, {
+    "p": "htwb.ai.controller.utils",
+    "c": "QRUtils",
+    "l": "QRUtils()",
+    "url": "%3Cinit%3E()"
+}, {
+    "p": "htwb.ai.controller.unit",
+    "c": "QRUtilsTest",
+    "l": "QRUtilsTest()",
+    "url": "%3Cinit%3E()"
+}, {
+    "p": "htwb.ai.controller.utils",
+    "c": "RequestUtils",
+    "l": "RequestUtils()",
+    "url": "%3Cinit%3E()"
+}, {
+    "p": "htwb.ai.controller.utils",
+    "c": "RequestUtils",
+    "l": "RequestUtils(RestTemplate)",
+    "url": "%3Cinit%3E(org.springframework.web.client.RestTemplate)"
+}, {
+    "p": "htwb.ai.controller.unit",
+    "c": "RequestUtilsTest",
+    "l": "RequestUtilsTest()",
+    "url": "%3Cinit%3E()"
+}, {
+    "p": "htwb.ai.controller.model",
+    "c": "Concert",
+    "l": "setArtist(String)",
+    "url": "setArtist(java.lang.String)"
+}, {
+    "p": "htwb.ai.controller.model",
+    "c": "ConcertData",
+    "l": "setArtist(String)",
+    "url": "setArtist(java.lang.String)"
+}, {
+    "p": "htwb.ai.controller.model",
+    "c": "Song",
+    "l": "setArtist(String)",
+    "url": "setArtist(java.lang.String)"
+}, {
+    "p": "htwb.ai.controller.model",
+    "c": "SongData",
+    "l": "setArtist(String)",
+    "url": "setArtist(java.lang.String)"
+}, {
+    "p": "htwb.ai.controller.model",
+    "c": "Ticket",
+    "l": "setConcert(Concert)",
+    "url": "setConcert(htwb.ai.controller.model.Concert)"
+}, {
+    "p": "htwb.ai.controller.model",
+    "c": "Concert",
+    "l": "setConcertId(Long)",
+    "url": "setConcertId(java.lang.Long)"
+}, {
+    "p": "htwb.ai.controller.model",
+    "c": "User",
+    "l": "setFirstName(String)",
+    "url": "setFirstName(java.lang.String)"
+}, {
+    "p": "htwb.ai.controller.model",
+    "c": "Playlist",
+    "l": "setId(Integer)",
+    "url": "setId(java.lang.Integer)"
+}, {
+    "p": "htwb.ai.controller.model",
+    "c": "Song",
+    "l": "setId(Integer)",
+    "url": "setId(java.lang.Integer)"
+}, {
+    "p": "htwb.ai.controller.model",
+    "c": "SongData",
+    "l": "setId(Integer)",
+    "url": "setId(java.lang.Integer)"
+}, {
+    "p": "htwb.ai.controller.model",
+    "c": "Playlist",
+    "l": "setIsPrivate(Boolean)",
+    "url": "setIsPrivate(java.lang.Boolean)"
+}, {
+    "p": "htwb.ai.controller.model",
+    "c": "Song",
+    "l": "setLabel(String)",
+    "url": "setLabel(java.lang.String)"
+}, {
+    "p": "htwb.ai.controller.model",
+    "c": "SongData",
+    "l": "setLabel(String)",
+    "url": "setLabel(java.lang.String)"
+}, {
+    "p": "htwb.ai.controller.model",
+    "c": "User",
+    "l": "setLastName(String)",
+    "url": "setLastName(java.lang.String)"
+}, {
+    "p": "htwb.ai.controller.model",
+    "c": "Concert",
+    "l": "setLocation(String)",
+    "url": "setLocation(java.lang.String)"
+}, {
+    "p": "htwb.ai.controller.model",
+    "c": "ConcertData",
+    "l": "setLocation(String)",
+    "url": "setLocation(java.lang.String)"
+}, {
+    "p": "htwb.ai.controller.model",
+    "c": "Concert",
+    "l": "setMaxTickets(Integer)",
+    "url": "setMaxTickets(java.lang.Integer)"
+}, {
+    "p": "htwb.ai.controller.model",
+    "c": "ConcertData",
+    "l": "setMaxTickets(Integer)",
+    "url": "setMaxTickets(java.lang.Integer)"
+}, {
+    "p": "htwb.ai.controller.model",
+    "c": "Playlist",
+    "l": "setName(String)",
+    "url": "setName(java.lang.String)"
+}, {
+    "p": "htwb.ai.controller.model",
+    "c": "Ticket",
+    "l": "setOwner(String)",
+    "url": "setOwner(java.lang.String)"
+}, {
+    "p": "htwb.ai.controller.model",
+    "c": "Playlist",
+    "l": "setOwnerId(String)",
+    "url": "setOwnerId(java.lang.String)"
+}, {
+    "p": "htwb.ai.controller.model",
+    "c": "User",
+    "l": "setPassword(String)",
+    "url": "setPassword(java.lang.String)"
+}, {
+    "p": "htwb.ai.controller.model",
+    "c": "TicketTransaction",
+    "l": "setPayed(Boolean)",
+    "url": "setPayed(java.lang.Boolean)"
+}, {
+    "p": "htwb.ai.controller.model",
+    "c": "Ticket",
+    "l": "setQrCodePath(String)",
+    "url": "setQrCodePath(java.lang.String)"
+}, {
+    "p": "htwb.ai.controller.model",
+    "c": "Song",
+    "l": "setReleased(Integer)",
+    "url": "setReleased(java.lang.Integer)"
+}, {
+    "p": "htwb.ai.controller.model",
+    "c": "SongData",
+    "l": "setReleased(Integer)",
+    "url": "setReleased(java.lang.Integer)"
+}, {
+    "p": "htwb.ai.controller.utils",
+    "c": "QRUtils",
+    "l": "setSavePath(String)",
+    "url": "setSavePath(java.lang.String)"
+}, {
+    "p": "htwb.ai.controller.model",
+    "c": "Playlist",
+    "l": "setSongList(List<Song>)",
+    "url": "setSongList(java.util.List)"
+}, {
+    "p": "htwb.ai.controller.model",
+    "c": "Concert",
+    "l": "setSongList(List<SongData>)",
+    "url": "setSongList(java.util.List)"
+}, {
+    "p": "htwb.ai.controller.model",
+    "c": "TicketTransaction",
+    "l": "setTicket(Ticket)",
+    "url": "setTicket(htwb.ai.controller.model.Ticket)"
+}, {
+    "p": "htwb.ai.controller.model",
+    "c": "Ticket",
+    "l": "setTicketId(Long)",
+    "url": "setTicketId(java.lang.Long)"
+}, {
+    "p": "htwb.ai.controller.model",
+    "c": "Concert",
+    "l": "setTickets(List<Ticket>)",
+    "url": "setTickets(java.util.List)"
+}, {
+    "p": "htwb.ai.controller.model",
+    "c": "Ticket",
+    "l": "setTicketTransaction(TicketTransaction)",
+    "url": "setTicketTransaction(htwb.ai.controller.model.TicketTransaction)"
+}, {
+    "p": "htwb.ai.controller.model",
+    "c": "Song",
+    "l": "setTitle(String)",
+    "url": "setTitle(java.lang.String)"
+}, {
+    "p": "htwb.ai.controller.model",
+    "c": "SongData",
+    "l": "setTitle(String)",
+    "url": "setTitle(java.lang.String)"
+}, {
+    "p": "htwb.ai.controller.model",
+    "c": "TicketTransaction",
+    "l": "setTransactionId(Long)",
+    "url": "setTransactionId(java.lang.Long)"
+}, {
+    "p": "htwb.ai.controller.model",
+    "c": "User",
+    "l": "setUserId(String)",
+    "url": "setUserId(java.lang.String)"
+}, {
+    "p": "htwb.ai.controller.model",
+    "c": "Song",
+    "l": "Song()",
+    "url": "%3Cinit%3E()"
+}, {
+    "p": "htwb.ai.controller.model",
+    "c": "Song",
+    "l": "Song(String, String, String, Integer)",
+    "url": "%3Cinit%3E(java.lang.String,java.lang.String,java.lang.String,java.lang.Integer)"
+}, {
+    "p": "htwb.ai.controller.controller",
+    "c": "SongController",
+    "l": "SongController(SongRepository)",
+    "url": "%3Cinit%3E(htwb.ai.controller.repo.SongRepository)"
+}, {
+    "p": "htwb.ai.controller.model",
+    "c": "SongData",
+    "l": "SongData()",
+    "url": "%3Cinit%3E()"
+}, {
+    "p": "htwb.ai.controller.model",
+    "c": "SongData",
+    "l": "SongData(Integer, String, String, String, Integer)",
+    "url": "%3Cinit%3E(java.lang.Integer,java.lang.String,java.lang.String,java.lang.String,java.lang.Integer)"
+}, {
+    "p": "htwb.ai.controller.model",
+    "c": "Ticket",
+    "l": "Ticket()",
+    "url": "%3Cinit%3E()"
+}, {
+    "p": "htwb.ai.controller.model",
+    "c": "Ticket",
+    "l": "Ticket(String, Concert, TicketTransaction, String)",
+    "url": "%3Cinit%3E(java.lang.String,htwb.ai.controller.model.Concert,htwb.ai.controller.model.TicketTransaction,java.lang.String)"
+}, {
+    "p": "htwb.ai.controller.model",
+    "c": "Ticket",
+    "l": "Ticket(String, Concert, TicketTransaction)",
+    "url": "%3Cinit%3E(java.lang.String,htwb.ai.controller.model.Concert,htwb.ai.controller.model.TicketTransaction)"
+}, {
+    "p": "htwb.ai.controller.controller",
+    "c": "TicketsController",
+    "l": "TicketsController(TicketsRepository, ConcertsRepository, QRUtils)",
+    "url": "%3Cinit%3E(htwb.ai.controller.repo.TicketsRepository,htwb.ai.controller.repo.ConcertsRepository,htwb.ai.controller.utils.QRUtils)"
+}, {
+    "p": "htwb.ai.controller.model",
+    "c": "TicketTransaction",
+    "l": "TicketTransaction()",
+    "url": "%3Cinit%3E()"
+}, {
+    "p": "htwb.ai.controller.model",
+    "c": "TicketTransaction",
+    "l": "TicketTransaction(Boolean)",
+    "url": "%3Cinit%3E(java.lang.Boolean)"
+}, {
+    "p": "htwb.ai.controller.unit",
+    "c": "TicketUnitTest",
+    "l": "TicketUnitTest()",
+    "url": "%3Cinit%3E()"
+}, {"p": "htwb.ai.controller.model", "c": "Concert", "l": "toString()"}, {
+    "p": "htwb.ai.controller.model",
+    "c": "Playlist",
+    "l": "toString()"
+}, {"p": "htwb.ai.controller.model", "c": "Song", "l": "toString()"}, {
+    "p": "htwb.ai.controller.model",
+    "c": "SongData",
+    "l": "toString()"
+}, {"p": "htwb.ai.controller.model", "c": "Ticket", "l": "toString()"}, {
+    "p": "htwb.ai.controller.model",
+    "c": "User",
+    "l": "toString()"
+}, {
+    "p": "htwb.ai.controller.controller",
+    "c": "PlaylistController",
+    "l": "updatePlaylist(String, Playlist, Integer)",
+    "url": "updatePlaylist(java.lang.String,htwb.ai.controller.model.Playlist,java.lang.Integer)"
+}, {
+    "p": "htwb.ai.controller.model",
+    "c": "User",
+    "l": "User()",
+    "url": "%3Cinit%3E()"
+}, {
+    "p": "htwb.ai.controller.model",
+    "c": "User",
+    "l": "User(String, String, String, String)",
+    "url": "%3Cinit%3E(java.lang.String,java.lang.String,java.lang.String,java.lang.String)"
+}]
