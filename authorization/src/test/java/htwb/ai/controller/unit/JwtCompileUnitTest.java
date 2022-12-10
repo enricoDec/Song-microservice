@@ -19,6 +19,7 @@ import uk.org.webcompere.systemstubs.jupiter.SystemStubsExtension;
 public class JwtCompileUnitTest {
     @SystemStub
     private final EnvironmentVariables environment = new EnvironmentVariables("SECRET_KEY_KBE", "test_secret_key");
+
     @Test
     void createJWTGood() {
         Assertions.assertTrue(JwtCompile.createJWT("Test", "MrTest").length() > 0);

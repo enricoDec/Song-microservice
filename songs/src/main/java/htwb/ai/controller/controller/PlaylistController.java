@@ -52,14 +52,15 @@ public class PlaylistController {
      * @return Playlist and http 200 if request successful
      */
     @GetMapping(produces = {MediaType.APPLICATION_JSON_VALUE, MediaType.APPLICATION_XML_VALUE})
-    public ResponseEntity<List<Playlist>> getAllAuthorizedPlaylist(@RequestHeader(value = "Authorization", required = false) String jwt,
+    public ResponseEntity<List<Playlist>> getAllAuthorizedPlaylist(@RequestHeader(value = "Authorization", required =
+            false) String jwt,
                                                                    @RequestParam(value = "userId") String user) {
         //JWT
         Claims claims;
         try {
             claims = JwtDecode.decodeJWT(jwt);
         } catch (ExpiredJwtException | UnsupportedJwtException |
-                MalformedJwtException | SignatureException | IllegalArgumentException e) {
+                 MalformedJwtException | SignatureException | IllegalArgumentException e) {
             return new ResponseEntity<>(HttpStatus.UNAUTHORIZED);
         }
         //If authenticated user request his own playlists
@@ -101,7 +102,7 @@ public class PlaylistController {
         try {
             claims = JwtDecode.decodeJWT(jwt);
         } catch (ExpiredJwtException | UnsupportedJwtException |
-                MalformedJwtException | SignatureException | IllegalArgumentException e) {
+                 MalformedJwtException | SignatureException | IllegalArgumentException e) {
             return new ResponseEntity<>(HttpStatus.UNAUTHORIZED);
         }
         //If authenticated user request his playlists
@@ -137,7 +138,8 @@ public class PlaylistController {
         Claims claims;
         try {
             claims = JwtDecode.decodeJWT(jwt);
-        } catch (ExpiredJwtException | UnsupportedJwtException | MalformedJwtException | SignatureException | IllegalArgumentException e) {
+        } catch (ExpiredJwtException | UnsupportedJwtException | MalformedJwtException | SignatureException |
+                 IllegalArgumentException e) {
             return new ResponseEntity<>(HttpStatus.UNAUTHORIZED);
         }
         int newId;
@@ -188,7 +190,8 @@ public class PlaylistController {
         Claims claims;
         try {
             claims = JwtDecode.decodeJWT(jwt);
-        } catch (ExpiredJwtException | UnsupportedJwtException | MalformedJwtException | SignatureException | IllegalArgumentException e) {
+        } catch (ExpiredJwtException | UnsupportedJwtException | MalformedJwtException | SignatureException |
+                 IllegalArgumentException e) {
             return new ResponseEntity<>(HttpStatus.UNAUTHORIZED);
         }
         //Validate "new" playlist
@@ -247,7 +250,7 @@ public class PlaylistController {
         try {
             claims = JwtDecode.decodeJWT(jwt);
         } catch (ExpiredJwtException | UnsupportedJwtException |
-                MalformedJwtException | SignatureException | IllegalArgumentException e) {
+                 MalformedJwtException | SignatureException | IllegalArgumentException e) {
             return new ResponseEntity<>(HttpStatus.UNAUTHORIZED);
         }
         //If authenticated user request to delete his playlists

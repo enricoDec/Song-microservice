@@ -17,25 +17,20 @@ import java.util.List;
 @Table(name = "songs")
 public class Song {
 
+    @ManyToMany(mappedBy = "songList")
+    List<Playlist> playlists = new ArrayList<>(0);
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Integer id;
-
     @NotEmpty
     @Size(max = 100)
     private String title;
-
     @Size(max = 100)
     private String artist;
-
     @Size(max = 100)
     private String label;
-
     @Min(0)
     private Integer released;
-
-    @ManyToMany(mappedBy = "songList")
-    List<Playlist> playlists = new ArrayList<>(0);
 
     public Song() {
     }
@@ -51,36 +46,36 @@ public class Song {
         return id;
     }
 
-    public String getTitle() {
-        return title;
-    }
-
-    public String getArtist() {
-        return artist;
-    }
-
-    public String getLabel() {
-        return label;
-    }
-
-    public Integer getReleased() {
-        return released;
-    }
-
     public void setId(Integer id) {
         this.id = id;
+    }
+
+    public String getTitle() {
+        return title;
     }
 
     public void setTitle(String title) {
         this.title = title;
     }
 
+    public String getArtist() {
+        return artist;
+    }
+
     public void setArtist(String artist) {
         this.artist = artist;
     }
 
+    public String getLabel() {
+        return label;
+    }
+
     public void setLabel(String label) {
         this.label = label;
+    }
+
+    public Integer getReleased() {
+        return released;
     }
 
     public void setReleased(Integer releaseYear) {

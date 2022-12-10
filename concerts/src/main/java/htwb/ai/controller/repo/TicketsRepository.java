@@ -1,7 +1,6 @@
 package htwb.ai.controller.repo;
 
 
-import htwb.ai.controller.model.Concert;
 import htwb.ai.controller.model.Ticket;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.CrudRepository;

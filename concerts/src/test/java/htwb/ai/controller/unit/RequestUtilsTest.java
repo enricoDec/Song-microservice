@@ -67,7 +67,8 @@ public class RequestUtilsTest {
 
         try {
             requestUtils.getSongsFromArtist("Enrico", "BLOB");
-            when(restTemplateMock.exchange("http://" + InetAddress.getLocalHost().getHostAddress() + ":8080/songsWS/rest/songs?artist=Enrico",
+            when(restTemplateMock.exchange("http://" + InetAddress.getLocalHost().getHostAddress() + ":8080/songsWS" +
+                            "/rest/songs?artist=Enrico",
                     HttpMethod.GET, entity, SongData[].class)).thenReturn(responseEntityMock);
             when(responseEntityMock.hasBody()).thenReturn(false);
             Assertions.fail();
@@ -87,7 +88,8 @@ public class RequestUtilsTest {
 
         try {
             requestUtils.getSongsFromArtist("Enrico", "BLOB");
-            when(restTemplateMock.exchange("http://" + InetAddress.getLocalHost().getHostAddress() + ":8080/songsWS/rest/songs?artist=Enrico",
+            when(restTemplateMock.exchange("http://" + InetAddress.getLocalHost().getHostAddress() + ":8080/songsWS" +
+                            "/rest/songs?artist=Enrico",
                     HttpMethod.GET, entity, SongData[].class)).thenReturn(responseEntityMock);
             when(responseEntityMock.hasBody()).thenReturn(false);
             when(responseEntityMock.getBody()).thenThrow(NoSuchElementException.class);

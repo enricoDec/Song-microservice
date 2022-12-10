@@ -102,14 +102,17 @@ public class PlaylistUnitTest {
 
             when(playlistRepository.getPlaylistById(defaultPublicPlaylist.getId())).thenReturn(defaultPublicPlaylist);
             ResultActions res = playlistMvc.perform(MockMvcRequestBuilders
-                    .get("/songLists/" + defaultPublicPlaylist.getId())
-                    .accept(MediaType.APPLICATION_JSON).header(HttpHeaders.AUTHORIZATION, "BLOB"))
+                            .get("/songLists/" + defaultPublicPlaylist.getId())
+                            .accept(MediaType.APPLICATION_JSON).header(HttpHeaders.AUTHORIZATION, "BLOB"))
                     .andExpect(status().isOk());
 
             Assertions.assertEquals(
-                    "{\"id\":" + defaultPublicPlaylist.getId() + ",\"name\":\"Playlist\",\"isPrivate\":false,\"ownerId\":\"mmuster\",\"songList\":" +
-                            "[{\"id\":" + defaultSong1.getId() + ",\"title\":\"My humps\",\"artist\":\"Black Eyed Peas\",\"label\":\"anyLabel\",\"released\":2020}," +
-                            "{\"id\":" + defaultSong2.getId() + ",\"title\":\"We Built This City\",\"artist\":\"Starship\",\"label\":\"Grunt/RCA\",\"released\":1985}]}",
+                    "{\"id\":" + defaultPublicPlaylist.getId() + ",\"name\":\"Playlist\",\"isPrivate\":false," +
+                            "\"ownerId\":\"mmuster\",\"songList\":" +
+                            "[{\"id\":" + defaultSong1.getId() + ",\"title\":\"My humps\",\"artist\":\"Black Eyed " +
+                            "Peas\",\"label\":\"anyLabel\",\"released\":2020}," +
+                            "{\"id\":" + defaultSong2.getId() + ",\"title\":\"We Built This City\"," +
+                            "\"artist\":\"Starship\",\"label\":\"Grunt/RCA\",\"released\":1985}]}",
                     res.andReturn().getResponse().getContentAsString());
         }
     }
@@ -124,8 +127,8 @@ public class PlaylistUnitTest {
 
             when(playlistRepository.getPlaylistById(notExisitingPlaylistId)).thenReturn(null);
             playlistMvc.perform(MockMvcRequestBuilders
-                    .get("/songLists/" + notExisitingPlaylistId)
-                    .accept(MediaType.APPLICATION_JSON).header(HttpHeaders.AUTHORIZATION, "BLOB"))
+                            .get("/songLists/" + notExisitingPlaylistId)
+                            .accept(MediaType.APPLICATION_JSON).header(HttpHeaders.AUTHORIZATION, "BLOB"))
                     .andExpect(status().isNotFound());
         }
     }
@@ -139,8 +142,8 @@ public class PlaylistUnitTest {
 
             when(playlistRepository.getPlaylistById(0)).thenReturn(null);
             playlistMvc.perform(MockMvcRequestBuilders
-                    .get("/songLists/" + "0")
-                    .accept(MediaType.APPLICATION_JSON).header(HttpHeaders.AUTHORIZATION, "BLOB"))
+                            .get("/songLists/" + "0")
+                            .accept(MediaType.APPLICATION_JSON).header(HttpHeaders.AUTHORIZATION, "BLOB"))
                     .andExpect(status().isBadRequest());
         }
     }
@@ -154,8 +157,8 @@ public class PlaylistUnitTest {
 
             when(playlistRepository.getPlaylistById(defaultPrivatePlaylist.getId())).thenReturn(defaultPrivatePlaylist);
             playlistMvc.perform(MockMvcRequestBuilders
-                    .get("/songLists/" + defaultPrivatePlaylist.getId())
-                    .accept(MediaType.APPLICATION_JSON).header(HttpHeaders.AUTHORIZATION, "BLOB"))
+                            .get("/songLists/" + defaultPrivatePlaylist.getId())
+                            .accept(MediaType.APPLICATION_JSON).header(HttpHeaders.AUTHORIZATION, "BLOB"))
                     .andExpect(status().isForbidden());
         }
     }
@@ -167,8 +170,8 @@ public class PlaylistUnitTest {
 
             when(playlistRepository.getPlaylistById(defaultPrivatePlaylist.getId())).thenReturn(defaultPrivatePlaylist);
             playlistMvc.perform(MockMvcRequestBuilders
-                    .get("/songLists/" + defaultPrivatePlaylist.getId())
-                    .accept(MediaType.APPLICATION_JSON).header(HttpHeaders.AUTHORIZATION, "BLOB"))
+                            .get("/songLists/" + defaultPrivatePlaylist.getId())
+                            .accept(MediaType.APPLICATION_JSON).header(HttpHeaders.AUTHORIZATION, "BLOB"))
                     .andExpect(status().isUnauthorized());
         }
     }
@@ -185,21 +188,28 @@ public class PlaylistUnitTest {
             when(JwtDecode.decodeJWT(anyString())).thenReturn(claim);
             when(claim.getId()).thenReturn("mmuster");
 
-            when(playlistRepository.getAllByOwnerId("mmuster")).thenReturn(Arrays.asList(defaultPublicPlaylist, defaultPrivatePlaylist));
+            when(playlistRepository.getAllByOwnerId("mmuster")).thenReturn(Arrays.asList(defaultPublicPlaylist,
+                    defaultPrivatePlaylist));
             ResultActions res = playlistMvc.perform(MockMvcRequestBuilders
-                    .get("/songLists?userId=mmuster")
-                    .contentType(MediaType.APPLICATION_JSON)
-                    .accept(MediaType.APPLICATION_JSON).header(HttpHeaders.AUTHORIZATION, "BLOB"))
+                            .get("/songLists?userId=mmuster")
+                            .contentType(MediaType.APPLICATION_JSON)
+                            .accept(MediaType.APPLICATION_JSON).header(HttpHeaders.AUTHORIZATION, "BLOB"))
                     .andExpect(status().isOk());
 
             Assertions.assertEquals(
-                    "[{\"id\":" + defaultPublicPlaylist.getId() + ",\"name\":\"Playlist\",\"isPrivate\":false,\"ownerId\":\"mmuster\",\"songList\":" +
-                            "[{\"id\":" + defaultSong1.getId() + ",\"title\":\"My humps\",\"artist\":\"Black Eyed Peas\",\"label\":\"anyLabel\",\"released\":2020}," +
-                            "{\"id\":" + defaultSong2.getId() + ",\"title\":\"We Built This City\",\"artist\":\"Starship\",\"label\":\"Grunt/RCA\",\"released\":1985}]}," +
+                    "[{\"id\":" + defaultPublicPlaylist.getId() + ",\"name\":\"Playlist\",\"isPrivate\":false," +
+                            "\"ownerId\":\"mmuster\",\"songList\":" +
+                            "[{\"id\":" + defaultSong1.getId() + ",\"title\":\"My humps\",\"artist\":\"Black Eyed " +
+                            "Peas\",\"label\":\"anyLabel\",\"released\":2020}," +
+                            "{\"id\":" + defaultSong2.getId() + ",\"title\":\"We Built This City\"," +
+                            "\"artist\":\"Starship\",\"label\":\"Grunt/RCA\",\"released\":1985}]}," +
 
-                            "{\"id\":" + defaultPrivatePlaylist.getId() + ",\"name\":\"Playlist\",\"isPrivate\":true,\"ownerId\":\"mmuster\",\"songList\":" +
-                            "[{\"id\":" + defaultSong1.getId() + ",\"title\":\"My humps\",\"artist\":\"Black Eyed Peas\",\"label\":\"anyLabel\",\"released\":2020}," +
-                            "{\"id\":" + defaultSong2.getId() + ",\"title\":\"We Built This City\",\"artist\":\"Starship\",\"label\":\"Grunt/RCA\",\"released\":1985}]}]",
+                            "{\"id\":" + defaultPrivatePlaylist.getId() + ",\"name\":\"Playlist\",\"isPrivate\":true," +
+                            "\"ownerId\":\"mmuster\",\"songList\":" +
+                            "[{\"id\":" + defaultSong1.getId() + ",\"title\":\"My humps\",\"artist\":\"Black Eyed " +
+                            "Peas\",\"label\":\"anyLabel\",\"released\":2020}," +
+                            "{\"id\":" + defaultSong2.getId() + ",\"title\":\"We Built This City\"," +
+                            "\"artist\":\"Starship\",\"label\":\"Grunt/RCA\",\"released\":1985}]}]",
                     res.andReturn().getResponse().getContentAsString());
         }
     }
@@ -214,9 +224,9 @@ public class PlaylistUnitTest {
 
             when(playlistRepository.getAllByOwnerId("mmuster")).thenReturn(Collections.emptyList());
             playlistMvc.perform(MockMvcRequestBuilders
-                    .get("/songLists?userId=mmuster")
-                    .contentType(MediaType.APPLICATION_JSON)
-                    .accept(MediaType.APPLICATION_JSON).header(HttpHeaders.AUTHORIZATION, "BLOB"))
+                            .get("/songLists?userId=mmuster")
+                            .contentType(MediaType.APPLICATION_JSON)
+                            .accept(MediaType.APPLICATION_JSON).header(HttpHeaders.AUTHORIZATION, "BLOB"))
                     .andExpect(status().isNotFound());
         }
     }
@@ -231,15 +241,18 @@ public class PlaylistUnitTest {
 
             when(playlistRepository.getAllPublicByOwnerId("mmuster")).thenReturn(Collections.singletonList(defaultPublicPlaylist));
             ResultActions res = playlistMvc.perform(MockMvcRequestBuilders
-                    .get("/songLists?userId=mmuster")
-                    .contentType(MediaType.APPLICATION_JSON)
-                    .accept(MediaType.APPLICATION_JSON).header(HttpHeaders.AUTHORIZATION, "BLOB"))
+                            .get("/songLists?userId=mmuster")
+                            .contentType(MediaType.APPLICATION_JSON)
+                            .accept(MediaType.APPLICATION_JSON).header(HttpHeaders.AUTHORIZATION, "BLOB"))
                     .andExpect(status().isOk());
 
             Assertions.assertEquals(
-                    "[{\"id\":" + defaultPublicPlaylist.getId() + ",\"name\":\"Playlist\",\"isPrivate\":false,\"ownerId\":\"mmuster\",\"songList\":" +
-                            "[{\"id\":" + defaultSong1.getId() + ",\"title\":\"My humps\",\"artist\":\"Black Eyed Peas\",\"label\":\"anyLabel\",\"released\":2020}," +
-                            "{\"id\":" + defaultSong2.getId() + ",\"title\":\"We Built This City\",\"artist\":\"Starship\",\"label\":\"Grunt/RCA\",\"released\":1985}]}]",
+                    "[{\"id\":" + defaultPublicPlaylist.getId() + ",\"name\":\"Playlist\",\"isPrivate\":false," +
+                            "\"ownerId\":\"mmuster\",\"songList\":" +
+                            "[{\"id\":" + defaultSong1.getId() + ",\"title\":\"My humps\",\"artist\":\"Black Eyed " +
+                            "Peas\",\"label\":\"anyLabel\",\"released\":2020}," +
+                            "{\"id\":" + defaultSong2.getId() + ",\"title\":\"We Built This City\"," +
+                            "\"artist\":\"Starship\",\"label\":\"Grunt/RCA\",\"released\":1985}]}]",
                     res.andReturn().getResponse().getContentAsString());
         }
     }
@@ -254,9 +267,9 @@ public class PlaylistUnitTest {
 
             when(playlistRepository.getAllPublicByOwnerId("mmuster")).thenReturn(new ArrayList<>(0));
             playlistMvc.perform(MockMvcRequestBuilders
-                    .get("/songLists?userId=mmuster")
-                    .contentType(MediaType.APPLICATION_JSON)
-                    .accept(MediaType.APPLICATION_JSON).header(HttpHeaders.AUTHORIZATION, "BLOB"))
+                            .get("/songLists?userId=mmuster")
+                            .contentType(MediaType.APPLICATION_JSON)
+                            .accept(MediaType.APPLICATION_JSON).header(HttpHeaders.AUTHORIZATION, "BLOB"))
                     .andExpect(status().isNotFound());
         }
     }
@@ -268,8 +281,8 @@ public class PlaylistUnitTest {
 
             when(playlistRepository.getPlaylistById(defaultPrivatePlaylist.getId())).thenReturn(defaultPrivatePlaylist);
             playlistMvc.perform(MockMvcRequestBuilders
-                    .get("/songLists?userId=mmuster")
-                    .accept(MediaType.APPLICATION_JSON).header(HttpHeaders.AUTHORIZATION, "BLOB"))
+                            .get("/songLists?userId=mmuster")
+                            .accept(MediaType.APPLICATION_JSON).header(HttpHeaders.AUTHORIZATION, "BLOB"))
                     .andExpect(status().isUnauthorized());
         }
     }
@@ -293,30 +306,30 @@ public class PlaylistUnitTest {
             when(playlistRepository.save(any()).getId()).thenReturn(1);
 
             playlistMvc.perform(MockMvcRequestBuilders
-                    .post("/songLists")
-                    .contentType(MediaType.APPLICATION_JSON)
-                    .content("{\n" +
-                            "    \"name\": \"Mmuster's Private Playlist\",\n" +
-                            "    \"isPrivate\": true,\n" +
-                            "    \"songList\": [\n" +
-                            "        {\n" +
-                            "            \"id\": " + defaultSong1.getId() + ",\n" +
-                            "            \"title\": \"" + defaultSong1.getTitle() + "\",\n" +
-                            "            \"artist\": \"" + defaultSong1.getArtist() + "\",\n" +
-                            "            \"label\": \"" + defaultSong1.getLabel() + "\",\n" +
-                            "            \"released\": " + defaultSong1.getReleased() + "\n" +
-                            "        },\n" +
-                            "        {\n" +
-                            "            \"id\": " + defaultSong2.getId() + ",\n" +
-                            "            \"title\": \"" + defaultSong2.getTitle() + "\",\n" +
-                            "            \"artist\": \"" + defaultSong2.getArtist() + "\",\n" +
-                            "            \"label\": \"" + defaultSong2.getLabel() + "\",\n" +
-                            "            \"released\": " + defaultSong2.getReleased() + "\n" +
-                            "        }\n" +
-                            "    ]\n" +
-                            "}")
-                    .accept(MediaType.APPLICATION_JSON)
-                    .header(HttpHeaders.AUTHORIZATION, "BLOB"))
+                            .post("/songLists")
+                            .contentType(MediaType.APPLICATION_JSON)
+                            .content("{\n" +
+                                    "    \"name\": \"Mmuster's Private Playlist\",\n" +
+                                    "    \"isPrivate\": true,\n" +
+                                    "    \"songList\": [\n" +
+                                    "        {\n" +
+                                    "            \"id\": " + defaultSong1.getId() + ",\n" +
+                                    "            \"title\": \"" + defaultSong1.getTitle() + "\",\n" +
+                                    "            \"artist\": \"" + defaultSong1.getArtist() + "\",\n" +
+                                    "            \"label\": \"" + defaultSong1.getLabel() + "\",\n" +
+                                    "            \"released\": " + defaultSong1.getReleased() + "\n" +
+                                    "        },\n" +
+                                    "        {\n" +
+                                    "            \"id\": " + defaultSong2.getId() + ",\n" +
+                                    "            \"title\": \"" + defaultSong2.getTitle() + "\",\n" +
+                                    "            \"artist\": \"" + defaultSong2.getArtist() + "\",\n" +
+                                    "            \"label\": \"" + defaultSong2.getLabel() + "\",\n" +
+                                    "            \"released\": " + defaultSong2.getReleased() + "\n" +
+                                    "        }\n" +
+                                    "    ]\n" +
+                                    "}")
+                            .accept(MediaType.APPLICATION_JSON)
+                            .header(HttpHeaders.AUTHORIZATION, "BLOB"))
                     .andExpect(status().isCreated());
         }
     }
@@ -328,30 +341,30 @@ public class PlaylistUnitTest {
             when(JwtDecode.decodeJWT("EXPIRED_TOKEN")).thenThrow(ExpiredJwtException.class);
 
             playlistMvc.perform(MockMvcRequestBuilders
-                    .post("/songLists")
-                    .contentType(MediaType.APPLICATION_JSON)
-                    .content("{\n" +
-                            "    \"name\": \"Mmuster's Private Playlist\",\n" +
-                            "    \"isPrivate\": true,\n" +
-                            "    \"songList\": [\n" +
-                            "        {\n" +
-                            "            \"id\": " + defaultSong1.getId() + ",\n" +
-                            "            \"title\": \"" + defaultSong1.getTitle() + "\",\n" +
-                            "            \"artist\": \"" + defaultSong1.getArtist() + "\",\n" +
-                            "            \"label\": \"" + defaultSong1.getLabel() + "\",\n" +
-                            "            \"released\": " + defaultSong1.getReleased() + "\n" +
-                            "        },\n" +
-                            "        {\n" +
-                            "            \"id\": " + defaultSong2.getId() + ",\n" +
-                            "            \"title\": \"" + defaultSong2.getTitle() + "\",\n" +
-                            "            \"artist\": \"" + defaultSong2.getArtist() + "\",\n" +
-                            "            \"label\": \"" + defaultSong2.getLabel() + "\",\n" +
-                            "            \"released\": " + defaultSong2.getReleased() + "\n" +
-                            "        }\n" +
-                            "    ]\n" +
-                            "}")
-                    .accept(MediaType.APPLICATION_JSON)
-                    .header(HttpHeaders.AUTHORIZATION, "EXPIRED_TOKEN"))
+                            .post("/songLists")
+                            .contentType(MediaType.APPLICATION_JSON)
+                            .content("{\n" +
+                                    "    \"name\": \"Mmuster's Private Playlist\",\n" +
+                                    "    \"isPrivate\": true,\n" +
+                                    "    \"songList\": [\n" +
+                                    "        {\n" +
+                                    "            \"id\": " + defaultSong1.getId() + ",\n" +
+                                    "            \"title\": \"" + defaultSong1.getTitle() + "\",\n" +
+                                    "            \"artist\": \"" + defaultSong1.getArtist() + "\",\n" +
+                                    "            \"label\": \"" + defaultSong1.getLabel() + "\",\n" +
+                                    "            \"released\": " + defaultSong1.getReleased() + "\n" +
+                                    "        },\n" +
+                                    "        {\n" +
+                                    "            \"id\": " + defaultSong2.getId() + ",\n" +
+                                    "            \"title\": \"" + defaultSong2.getTitle() + "\",\n" +
+                                    "            \"artist\": \"" + defaultSong2.getArtist() + "\",\n" +
+                                    "            \"label\": \"" + defaultSong2.getLabel() + "\",\n" +
+                                    "            \"released\": " + defaultSong2.getReleased() + "\n" +
+                                    "        }\n" +
+                                    "    ]\n" +
+                                    "}")
+                            .accept(MediaType.APPLICATION_JSON)
+                            .header(HttpHeaders.AUTHORIZATION, "EXPIRED_TOKEN"))
                     .andExpect(status().isUnauthorized());
         }
     }
@@ -365,29 +378,29 @@ public class PlaylistUnitTest {
             when(claim.getId()).thenReturn("mmuster");
 
             playlistMvc.perform(MockMvcRequestBuilders
-                    .post("/songLists")
-                    .contentType(MediaType.APPLICATION_JSON)
-                    .content("{\n" +
-                            "    \"isPrivate\": true,\n" +
-                            "    \"songList\": [\n" +
-                            "        {\n" +
-                            "            \"id\": " + defaultSong1.getId() + ",\n" +
-                            "            \"title\": \"" + defaultSong1.getTitle() + "\",\n" +
-                            "            \"artist\": \"" + defaultSong1.getArtist() + "\",\n" +
-                            "            \"label\": \"" + defaultSong1.getLabel() + "\",\n" +
-                            "            \"released\": " + defaultSong1.getReleased() + "\n" +
-                            "        },\n" +
-                            "        {\n" +
-                            "            \"id\": " + defaultSong2.getId() + ",\n" +
-                            "            \"title\": \"" + defaultSong2.getTitle() + "\",\n" +
-                            "            \"artist\": \"" + defaultSong2.getArtist() + "\",\n" +
-                            "            \"label\": \"" + defaultSong2.getLabel() + "\",\n" +
-                            "            \"released\": " + defaultSong2.getReleased() + "\n" +
-                            "        }\n" +
-                            "    ]\n" +
-                            "}")
-                    .accept(MediaType.APPLICATION_JSON)
-                    .header(HttpHeaders.AUTHORIZATION, "BLOB"))
+                            .post("/songLists")
+                            .contentType(MediaType.APPLICATION_JSON)
+                            .content("{\n" +
+                                    "    \"isPrivate\": true,\n" +
+                                    "    \"songList\": [\n" +
+                                    "        {\n" +
+                                    "            \"id\": " + defaultSong1.getId() + ",\n" +
+                                    "            \"title\": \"" + defaultSong1.getTitle() + "\",\n" +
+                                    "            \"artist\": \"" + defaultSong1.getArtist() + "\",\n" +
+                                    "            \"label\": \"" + defaultSong1.getLabel() + "\",\n" +
+                                    "            \"released\": " + defaultSong1.getReleased() + "\n" +
+                                    "        },\n" +
+                                    "        {\n" +
+                                    "            \"id\": " + defaultSong2.getId() + ",\n" +
+                                    "            \"title\": \"" + defaultSong2.getTitle() + "\",\n" +
+                                    "            \"artist\": \"" + defaultSong2.getArtist() + "\",\n" +
+                                    "            \"label\": \"" + defaultSong2.getLabel() + "\",\n" +
+                                    "            \"released\": " + defaultSong2.getReleased() + "\n" +
+                                    "        }\n" +
+                                    "    ]\n" +
+                                    "}")
+                            .accept(MediaType.APPLICATION_JSON)
+                            .header(HttpHeaders.AUTHORIZATION, "BLOB"))
                     .andExpect(status().isBadRequest());
         }
     }
@@ -407,30 +420,30 @@ public class PlaylistUnitTest {
             when(playlistRepository.save(any()).getId()).thenReturn(1);
 
             playlistMvc.perform(MockMvcRequestBuilders
-                    .post("/songLists")
-                    .contentType(MediaType.APPLICATION_JSON)
-                    .content("{\n" +
-                            "    \"name\": \"Mmuster's Private Playlist\",\n" +
-                            "    \"isPrivate\": true,\n" +
-                            "    \"songList\": [\n" +
-                            "        {\n" +
-                            "            \"id\": " + defaultSong1.getId() + ",\n" +
-                            "            \"title\": \"" + defaultSong1.getTitle() + "\",\n" +
-                            "            \"artist\": \"" + defaultSong1.getArtist() + "\",\n" +
-                            "            \"label\": \"" + defaultSong1.getLabel() + "\",\n" +
-                            "            \"released\": " + defaultSong1.getReleased() + "\n" +
-                            "        },\n" +
-                            "        {\n" +
-                            "            \"id\": " + defaultSong2.getId() + ",\n" +
-                            "            \"title\": \"" + defaultSong2.getTitle() + "\",\n" +
-                            "            \"artist\": \"" + "Wrong Artist" + "\",\n" +
-                            "            \"label\": \"" + defaultSong2.getLabel() + "\",\n" +
-                            "            \"released\": " + defaultSong2.getReleased() + "\n" +
-                            "        }\n" +
-                            "    ]\n" +
-                            "}")
-                    .accept(MediaType.APPLICATION_JSON)
-                    .header(HttpHeaders.AUTHORIZATION, "BLOB"))
+                            .post("/songLists")
+                            .contentType(MediaType.APPLICATION_JSON)
+                            .content("{\n" +
+                                    "    \"name\": \"Mmuster's Private Playlist\",\n" +
+                                    "    \"isPrivate\": true,\n" +
+                                    "    \"songList\": [\n" +
+                                    "        {\n" +
+                                    "            \"id\": " + defaultSong1.getId() + ",\n" +
+                                    "            \"title\": \"" + defaultSong1.getTitle() + "\",\n" +
+                                    "            \"artist\": \"" + defaultSong1.getArtist() + "\",\n" +
+                                    "            \"label\": \"" + defaultSong1.getLabel() + "\",\n" +
+                                    "            \"released\": " + defaultSong1.getReleased() + "\n" +
+                                    "        },\n" +
+                                    "        {\n" +
+                                    "            \"id\": " + defaultSong2.getId() + ",\n" +
+                                    "            \"title\": \"" + defaultSong2.getTitle() + "\",\n" +
+                                    "            \"artist\": \"" + "Wrong Artist" + "\",\n" +
+                                    "            \"label\": \"" + defaultSong2.getLabel() + "\",\n" +
+                                    "            \"released\": " + defaultSong2.getReleased() + "\n" +
+                                    "        }\n" +
+                                    "    ]\n" +
+                                    "}")
+                            .accept(MediaType.APPLICATION_JSON)
+                            .header(HttpHeaders.AUTHORIZATION, "BLOB"))
                     .andExpect(status().isBadRequest());
         }
     }
@@ -450,30 +463,30 @@ public class PlaylistUnitTest {
             when(playlistRepository.save(any()).getId()).thenReturn(1);
 
             playlistMvc.perform(MockMvcRequestBuilders
-                    .post("/songLists")
-                    .contentType(MediaType.APPLICATION_JSON)
-                    .content("{\n" +
-                            "    \"name\": \"Mmuster's Private Playlist\",\n" +
-                            "    \"isPrivate\": true,\n" +
-                            "    \"songList\": [\n" +
-                            "        {\n" +
-                            "            \"id\": " + 9999 + ",\n" +
-                            "            \"title\": \"" + defaultSong1.getTitle() + "\",\n" +
-                            "            \"artist\": \"" + defaultSong1.getArtist() + "\",\n" +
-                            "            \"label\": \"" + defaultSong1.getLabel() + "\",\n" +
-                            "            \"released\": " + defaultSong1.getReleased() + "\n" +
-                            "        },\n" +
-                            "        {\n" +
-                            "            \"id\": " + defaultSong2.getId() + ",\n" +
-                            "            \"title\": \"" + defaultSong2.getTitle() + "\",\n" +
-                            "            \"artist\": \"" + defaultSong2.getArtist() + "\",\n" +
-                            "            \"label\": \"" + defaultSong2.getLabel() + "\",\n" +
-                            "            \"released\": " + defaultSong2.getReleased() + "\n" +
-                            "        }\n" +
-                            "    ]\n" +
-                            "}")
-                    .accept(MediaType.APPLICATION_JSON)
-                    .header(HttpHeaders.AUTHORIZATION, "BLOB"))
+                            .post("/songLists")
+                            .contentType(MediaType.APPLICATION_JSON)
+                            .content("{\n" +
+                                    "    \"name\": \"Mmuster's Private Playlist\",\n" +
+                                    "    \"isPrivate\": true,\n" +
+                                    "    \"songList\": [\n" +
+                                    "        {\n" +
+                                    "            \"id\": " + 9999 + ",\n" +
+                                    "            \"title\": \"" + defaultSong1.getTitle() + "\",\n" +
+                                    "            \"artist\": \"" + defaultSong1.getArtist() + "\",\n" +
+                                    "            \"label\": \"" + defaultSong1.getLabel() + "\",\n" +
+                                    "            \"released\": " + defaultSong1.getReleased() + "\n" +
+                                    "        },\n" +
+                                    "        {\n" +
+                                    "            \"id\": " + defaultSong2.getId() + ",\n" +
+                                    "            \"title\": \"" + defaultSong2.getTitle() + "\",\n" +
+                                    "            \"artist\": \"" + defaultSong2.getArtist() + "\",\n" +
+                                    "            \"label\": \"" + defaultSong2.getLabel() + "\",\n" +
+                                    "            \"released\": " + defaultSong2.getReleased() + "\n" +
+                                    "        }\n" +
+                                    "    ]\n" +
+                                    "}")
+                            .accept(MediaType.APPLICATION_JSON)
+                            .header(HttpHeaders.AUTHORIZATION, "BLOB"))
                     .andExpect(status().isBadRequest());
         }
     }
@@ -496,23 +509,23 @@ public class PlaylistUnitTest {
             when(songRepository.findById(defaultSong2.getId())).thenReturn(java.util.Optional.ofNullable(defaultSong2));
 
             playlistMvc.perform(MockMvcRequestBuilders
-                    .put("/songLists/" + defaultPublicPlaylist.getId())
-                    .contentType(MediaType.APPLICATION_JSON)
-                    .content("{\n" +
-                            "    \"id\": " + defaultPublicPlaylist.getId() + ", " +
-                            "    \"name\": \"Mmuster's Public Playlist UPDATED\",\n" +
-                            "    \"isPrivate\": false,\n" +
-                            "    \"songList\": [\n" +
-                            "        {\n" +
-                            "            \"id\": " + defaultSong2.getId() + ",\n" +
-                            "            \"title\": \"" + defaultSong2.getTitle() + "\",\n" +
-                            "            \"artist\": \"" + defaultSong2.getArtist() + "\",\n" +
-                            "            \"label\": \"" + defaultSong2.getLabel() + "\",\n" +
-                            "            \"released\": " + defaultSong2.getReleased() + "\n" +
-                            "        }" +
-                            "    ]\n" +
-                            "}")
-                    .header(HttpHeaders.AUTHORIZATION, "BLOB"))
+                            .put("/songLists/" + defaultPublicPlaylist.getId())
+                            .contentType(MediaType.APPLICATION_JSON)
+                            .content("{\n" +
+                                    "    \"id\": " + defaultPublicPlaylist.getId() + ", " +
+                                    "    \"name\": \"Mmuster's Public Playlist UPDATED\",\n" +
+                                    "    \"isPrivate\": false,\n" +
+                                    "    \"songList\": [\n" +
+                                    "        {\n" +
+                                    "            \"id\": " + defaultSong2.getId() + ",\n" +
+                                    "            \"title\": \"" + defaultSong2.getTitle() + "\",\n" +
+                                    "            \"artist\": \"" + defaultSong2.getArtist() + "\",\n" +
+                                    "            \"label\": \"" + defaultSong2.getLabel() + "\",\n" +
+                                    "            \"released\": " + defaultSong2.getReleased() + "\n" +
+                                    "        }" +
+                                    "    ]\n" +
+                                    "}")
+                            .header(HttpHeaders.AUTHORIZATION, "BLOB"))
                     .andExpect(status().isNoContent());
         }
     }
@@ -524,23 +537,23 @@ public class PlaylistUnitTest {
             when(JwtDecode.decodeJWT("BLOB")).thenThrow(ExpiredJwtException.class);
 
             playlistMvc.perform(MockMvcRequestBuilders
-                    .put("/songLists/" + defaultPublicPlaylist.getId())
-                    .contentType(MediaType.APPLICATION_JSON)
-                    .content("{\n" +
-                            "    \"id\": " + defaultPublicPlaylist.getId() + ", " +
-                            "    \"name\": \"Mmuster's Public Playlist UPDATED\",\n" +
-                            "    \"isPrivate\": false,\n" +
-                            "    \"songList\": [\n" +
-                            "        {\n" +
-                            "            \"id\": " + defaultSong2.getId() + ",\n" +
-                            "            \"title\": \"" + defaultSong2.getTitle() + "\",\n" +
-                            "            \"artist\": \"" + defaultSong2.getArtist() + "\",\n" +
-                            "            \"label\": \"" + defaultSong2.getLabel() + "\",\n" +
-                            "            \"released\": " + defaultSong2.getReleased() + "\n" +
-                            "        }" +
-                            "    ]\n" +
-                            "}")
-                    .header(HttpHeaders.AUTHORIZATION, "BLOB"))
+                            .put("/songLists/" + defaultPublicPlaylist.getId())
+                            .contentType(MediaType.APPLICATION_JSON)
+                            .content("{\n" +
+                                    "    \"id\": " + defaultPublicPlaylist.getId() + ", " +
+                                    "    \"name\": \"Mmuster's Public Playlist UPDATED\",\n" +
+                                    "    \"isPrivate\": false,\n" +
+                                    "    \"songList\": [\n" +
+                                    "        {\n" +
+                                    "            \"id\": " + defaultSong2.getId() + ",\n" +
+                                    "            \"title\": \"" + defaultSong2.getTitle() + "\",\n" +
+                                    "            \"artist\": \"" + defaultSong2.getArtist() + "\",\n" +
+                                    "            \"label\": \"" + defaultSong2.getLabel() + "\",\n" +
+                                    "            \"released\": " + defaultSong2.getReleased() + "\n" +
+                                    "        }" +
+                                    "    ]\n" +
+                                    "}")
+                            .header(HttpHeaders.AUTHORIZATION, "BLOB"))
                     .andExpect(status().isUnauthorized());
         }
     }
@@ -554,23 +567,23 @@ public class PlaylistUnitTest {
             when(claim.getId()).thenReturn("mmuster");
 
             playlistMvc.perform(MockMvcRequestBuilders
-                    .put("/songLists/" + 2)
-                    .contentType(MediaType.APPLICATION_JSON)
-                    .content("{\n" +
-                            "    \"id\": " + defaultPublicPlaylist.getId() + ", " +
-                            "    \"name\": \"Mmuster's Public Playlist UPDATED\",\n" +
-                            "    \"isPrivate\": false,\n" +
-                            "    \"songList\": [\n" +
-                            "        {\n" +
-                            "            \"id\": " + defaultSong2.getId() + ",\n" +
-                            "            \"title\": \"" + defaultSong2.getTitle() + "\",\n" +
-                            "            \"artist\": \"" + defaultSong2.getArtist() + "\",\n" +
-                            "            \"label\": \"" + defaultSong2.getLabel() + "\",\n" +
-                            "            \"released\": " + defaultSong2.getReleased() + "\n" +
-                            "        }" +
-                            "    ]\n" +
-                            "}")
-                    .header(HttpHeaders.AUTHORIZATION, "BLOB"))
+                            .put("/songLists/" + 2)
+                            .contentType(MediaType.APPLICATION_JSON)
+                            .content("{\n" +
+                                    "    \"id\": " + defaultPublicPlaylist.getId() + ", " +
+                                    "    \"name\": \"Mmuster's Public Playlist UPDATED\",\n" +
+                                    "    \"isPrivate\": false,\n" +
+                                    "    \"songList\": [\n" +
+                                    "        {\n" +
+                                    "            \"id\": " + defaultSong2.getId() + ",\n" +
+                                    "            \"title\": \"" + defaultSong2.getTitle() + "\",\n" +
+                                    "            \"artist\": \"" + defaultSong2.getArtist() + "\",\n" +
+                                    "            \"label\": \"" + defaultSong2.getLabel() + "\",\n" +
+                                    "            \"released\": " + defaultSong2.getReleased() + "\n" +
+                                    "        }" +
+                                    "    ]\n" +
+                                    "}")
+                            .header(HttpHeaders.AUTHORIZATION, "BLOB"))
                     .andExpect(status().isBadRequest());
         }
     }
@@ -587,23 +600,23 @@ public class PlaylistUnitTest {
             when(playlistRepository.getPlaylistById(defaultPublicPlaylist.getId())).thenReturn(defaultPublicPlaylist);
 
             playlistMvc.perform(MockMvcRequestBuilders
-                    .put("/songLists/" + defaultPublicPlaylist.getId())
-                    .contentType(MediaType.APPLICATION_JSON)
-                    .content("{\n" +
-                            "    \"id\": " + defaultPublicPlaylist.getId() + ", " +
-                            "    \"name\": \"Mmuster's Public Playlist UPDATED\",\n" +
-                            "    \"isPrivate\": false,\n" +
-                            "    \"songList\": [\n" +
-                            "        {\n" +
-                            "            \"id\": " + defaultSong2.getId() + ",\n" +
-                            "            \"title\": \"" + defaultSong2.getTitle() + "\",\n" +
-                            "            \"artist\": \"" + defaultSong2.getArtist() + "\",\n" +
-                            "            \"label\": \"" + defaultSong2.getLabel() + "\",\n" +
-                            "            \"released\": " + defaultSong2.getReleased() + "\n" +
-                            "        }" +
-                            "    ]\n" +
-                            "}")
-                    .header(HttpHeaders.AUTHORIZATION, "BLOB"))
+                            .put("/songLists/" + defaultPublicPlaylist.getId())
+                            .contentType(MediaType.APPLICATION_JSON)
+                            .content("{\n" +
+                                    "    \"id\": " + defaultPublicPlaylist.getId() + ", " +
+                                    "    \"name\": \"Mmuster's Public Playlist UPDATED\",\n" +
+                                    "    \"isPrivate\": false,\n" +
+                                    "    \"songList\": [\n" +
+                                    "        {\n" +
+                                    "            \"id\": " + defaultSong2.getId() + ",\n" +
+                                    "            \"title\": \"" + defaultSong2.getTitle() + "\",\n" +
+                                    "            \"artist\": \"" + defaultSong2.getArtist() + "\",\n" +
+                                    "            \"label\": \"" + defaultSong2.getLabel() + "\",\n" +
+                                    "            \"released\": " + defaultSong2.getReleased() + "\n" +
+                                    "        }" +
+                                    "    ]\n" +
+                                    "}")
+                            .header(HttpHeaders.AUTHORIZATION, "BLOB"))
                     .andExpect(status().isForbidden());
         }
     }
@@ -622,23 +635,23 @@ public class PlaylistUnitTest {
             when(songRepository.findById(defaultSong1.getId())).thenReturn(java.util.Optional.ofNullable(defaultSong1));
 
             playlistMvc.perform(MockMvcRequestBuilders
-                    .put("/songLists/" + defaultPublicPlaylist.getId())
-                    .contentType(MediaType.APPLICATION_JSON)
-                    .content("{\n" +
-                            "    \"id\": " + defaultPublicPlaylist.getId() + ", " +
-                            "    \"name\": \"Mmuster's Public Playlist UPDATED\",\n" +
-                            "    \"isPrivate\": false,\n" +
-                            "    \"songList\": [\n" +
-                            "        {\n" +
-                            "            \"id\": " + defaultSong1.getId() + ",\n" +
-                            "            \"title\": \"" + "WRONG TITLE" + "\",\n" +
-                            "            \"artist\": \"" + defaultSong1.getArtist() + "\",\n" +
-                            "            \"label\": \"" + defaultSong1.getLabel() + "\",\n" +
-                            "            \"released\": " + defaultSong1.getReleased() + "\n" +
-                            "        }" +
-                            "    ]\n" +
-                            "}")
-                    .header(HttpHeaders.AUTHORIZATION, "BLOB"))
+                            .put("/songLists/" + defaultPublicPlaylist.getId())
+                            .contentType(MediaType.APPLICATION_JSON)
+                            .content("{\n" +
+                                    "    \"id\": " + defaultPublicPlaylist.getId() + ", " +
+                                    "    \"name\": \"Mmuster's Public Playlist UPDATED\",\n" +
+                                    "    \"isPrivate\": false,\n" +
+                                    "    \"songList\": [\n" +
+                                    "        {\n" +
+                                    "            \"id\": " + defaultSong1.getId() + ",\n" +
+                                    "            \"title\": \"" + "WRONG TITLE" + "\",\n" +
+                                    "            \"artist\": \"" + defaultSong1.getArtist() + "\",\n" +
+                                    "            \"label\": \"" + defaultSong1.getLabel() + "\",\n" +
+                                    "            \"released\": " + defaultSong1.getReleased() + "\n" +
+                                    "        }" +
+                                    "    ]\n" +
+                                    "}")
+                            .header(HttpHeaders.AUTHORIZATION, "BLOB"))
                     .andExpect(status().isBadRequest());
         }
     }
@@ -655,23 +668,23 @@ public class PlaylistUnitTest {
             when(playlistRepository.getPlaylistById(defaultPublicPlaylist.getId())).thenReturn(defaultPublicPlaylist);
 
             playlistMvc.perform(MockMvcRequestBuilders
-                    .put("/songLists/" + defaultPublicPlaylist.getId())
-                    .contentType(MediaType.APPLICATION_JSON)
-                    .content("{\n" +
-                            "    \"id\": " + defaultPublicPlaylist.getId() + ", " +
-                            "    \"name\": \"Mmuster's Public Playlist UPDATED\",\n" +
-                            "    \"isPrivate\": false,\n" +
-                            "    \"songList\": [\n" +
-                            "        {\n" +
-                            "            \"id\": " + 99999 + ",\n" +
-                            "            \"title\": \"" + defaultSong1.getTitle() + "\",\n" +
-                            "            \"artist\": \"" + defaultSong1.getArtist() + "\",\n" +
-                            "            \"label\": \"" + defaultSong1.getLabel() + "\",\n" +
-                            "            \"released\": " + defaultSong1.getReleased() + "\n" +
-                            "        }" +
-                            "    ]\n" +
-                            "}")
-                    .header(HttpHeaders.AUTHORIZATION, "BLOB"))
+                            .put("/songLists/" + defaultPublicPlaylist.getId())
+                            .contentType(MediaType.APPLICATION_JSON)
+                            .content("{\n" +
+                                    "    \"id\": " + defaultPublicPlaylist.getId() + ", " +
+                                    "    \"name\": \"Mmuster's Public Playlist UPDATED\",\n" +
+                                    "    \"isPrivate\": false,\n" +
+                                    "    \"songList\": [\n" +
+                                    "        {\n" +
+                                    "            \"id\": " + 99999 + ",\n" +
+                                    "            \"title\": \"" + defaultSong1.getTitle() + "\",\n" +
+                                    "            \"artist\": \"" + defaultSong1.getArtist() + "\",\n" +
+                                    "            \"label\": \"" + defaultSong1.getLabel() + "\",\n" +
+                                    "            \"released\": " + defaultSong1.getReleased() + "\n" +
+                                    "        }" +
+                                    "    ]\n" +
+                                    "}")
+                            .header(HttpHeaders.AUTHORIZATION, "BLOB"))
                     .andExpect(status().isNotFound());
         }
     }
@@ -691,9 +704,9 @@ public class PlaylistUnitTest {
 
             when(playlistRepository.getPlaylistById(defaultPrivatePlaylist.getId())).thenReturn(defaultPrivatePlaylist);
             playlistMvc.perform(MockMvcRequestBuilders
-                    .delete("/songLists/" + defaultPrivatePlaylist.getId())
-                    .accept(MediaType.APPLICATION_JSON)
-                    .header(HttpHeaders.AUTHORIZATION, "BLOB"))
+                            .delete("/songLists/" + defaultPrivatePlaylist.getId())
+                            .accept(MediaType.APPLICATION_JSON)
+                            .header(HttpHeaders.AUTHORIZATION, "BLOB"))
                     .andExpect(status().isNoContent());
 
             verify(playlistRepository, atLeastOnce()).deleteById(defaultPrivatePlaylist.getId());
@@ -708,9 +721,9 @@ public class PlaylistUnitTest {
             when(JwtDecode.decodeJWT("BAD_TOKEN")).thenThrow(UnsupportedJwtException.class);
 
             playlistMvc.perform(MockMvcRequestBuilders
-                    .delete("/songLists/" + defaultPrivatePlaylist.getId())
-                    .accept(MediaType.APPLICATION_JSON)
-                    .header(HttpHeaders.AUTHORIZATION, "BAD_TOKEN"))
+                            .delete("/songLists/" + defaultPrivatePlaylist.getId())
+                            .accept(MediaType.APPLICATION_JSON)
+                            .header(HttpHeaders.AUTHORIZATION, "BAD_TOKEN"))
                     .andExpect(status().isUnauthorized());
         }
     }
@@ -723,9 +736,9 @@ public class PlaylistUnitTest {
             when(JwtDecode.decodeJWT(anyString())).thenReturn(claim);
 
             playlistMvc.perform(MockMvcRequestBuilders
-                    .delete("/songLists/" + 99999)
-                    .accept(MediaType.APPLICATION_JSON)
-                    .header(HttpHeaders.AUTHORIZATION, "BLOB"))
+                            .delete("/songLists/" + 99999)
+                            .accept(MediaType.APPLICATION_JSON)
+                            .header(HttpHeaders.AUTHORIZATION, "BLOB"))
                     .andExpect(status().isNotFound());
 
             verify(playlistRepository, atMost(0)).deleteById(99999);
@@ -740,8 +753,8 @@ public class PlaylistUnitTest {
             when(JwtDecode.decodeJWT(anyString())).thenReturn(claim);
 
             playlistMvc.perform(MockMvcRequestBuilders
-                    .delete("/songLists/" + 0)
-                    .accept(MediaType.APPLICATION_JSON).header(HttpHeaders.AUTHORIZATION, "BLOB"))
+                            .delete("/songLists/" + 0)
+                            .accept(MediaType.APPLICATION_JSON).header(HttpHeaders.AUTHORIZATION, "BLOB"))
                     .andExpect(status().isBadRequest());
         }
     }
@@ -756,9 +769,9 @@ public class PlaylistUnitTest {
 
             when(playlistRepository.getPlaylistById(defaultPrivatePlaylist.getId())).thenReturn(defaultPrivatePlaylist);
             playlistMvc.perform(MockMvcRequestBuilders
-                    .delete("/songLists/" + defaultPrivatePlaylist.getId())
-                    .accept(MediaType.APPLICATION_JSON)
-                    .header(HttpHeaders.AUTHORIZATION, "BLOB"))
+                            .delete("/songLists/" + defaultPrivatePlaylist.getId())
+                            .accept(MediaType.APPLICATION_JSON)
+                            .header(HttpHeaders.AUTHORIZATION, "BLOB"))
                     .andExpect(status().isForbidden());
 
             verify(playlistRepository, atMost(0)).deleteById(defaultPrivatePlaylist.getId());
@@ -775,9 +788,9 @@ public class PlaylistUnitTest {
 
             when(playlistRepository.getPlaylistById(defaultPublicPlaylist.getId())).thenReturn(defaultPublicPlaylist);
             playlistMvc.perform(MockMvcRequestBuilders
-                    .delete("/songLists/" + defaultPublicPlaylist.getId())
-                    .accept(MediaType.APPLICATION_JSON)
-                    .header(HttpHeaders.AUTHORIZATION, "BLOB"))
+                            .delete("/songLists/" + defaultPublicPlaylist.getId())
+                            .accept(MediaType.APPLICATION_JSON)
+                            .header(HttpHeaders.AUTHORIZATION, "BLOB"))
                     .andExpect(status().isNoContent());
             verify(playlistRepository, atLeastOnce()).deleteById(defaultPublicPlaylist.getId());
         }

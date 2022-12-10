@@ -92,7 +92,9 @@ public class TicketUnitTest {
     @Test
     @DisplayName("Get all owned tickets as JSON")
     void getOwnedTicketGoodJson() throws Exception {
-        String expectedJson = "[{\"ticketId\":1,\"owner\":\"mmuster\",\"concert\":{\"concertId\":1,\"location\":\"Rome\",\"artist\":\"Black Eyed Peas\",\"maxTickets\":1,\"songList\":[]},\"ticketTransaction\":{\"transactionId\":1,\"payed\":false}}]";
+        String expectedJson = "[{\"ticketId\":1,\"owner\":\"mmuster\",\"concert\":{\"concertId\":1," +
+                "\"location\":\"Rome\",\"artist\":\"Black Eyed Peas\",\"maxTickets\":1,\"songList\":[]}," +
+                "\"ticketTransaction\":{\"transactionId\":1,\"payed\":false}}]";
         String user = "mmuser";
         String jwt = "BLOB";
         try (MockedStatic<JwtDecode> jwtUtilsMockedStatic = mockStatic(JwtDecode.class)) {
@@ -104,9 +106,9 @@ public class TicketUnitTest {
 
             when(ticketsRepositoryMock.getTicketsByOwner(user)).thenReturn(Collections.singletonList(ticket));
             ResultActions res = ticketMvc.perform(MockMvcRequestBuilders
-                    .get("/tickets/")
-                    .accept(MediaType.APPLICATION_JSON)
-                    .header(HttpHeaders.AUTHORIZATION, jwt))
+                            .get("/tickets/")
+                            .accept(MediaType.APPLICATION_JSON)
+                            .header(HttpHeaders.AUTHORIZATION, jwt))
                     .andExpect(status().isOk());
 
             Assertions.assertEquals(expectedJson, res.andReturn().getResponse().getContentAsString());
@@ -116,7 +118,10 @@ public class TicketUnitTest {
     @Test
     @DisplayName("Get all owned tickets as Xml")
     void getOwnedTicketGoodXml() throws Exception {
-        String expectedJson = "<List><item><ticketId>1</ticketId><owner>mmuster</owner><concert><concertId>1</concertId><location>Rome</location><artist>Black Eyed Peas</artist><maxTickets>1</maxTickets><songList/></concert><ticketTransaction><transactionId>1</transactionId><payed>false</payed></ticketTransaction></item></List>";
+        String expectedJson = "<List><item><ticketId>1</ticketId><owner>mmuster</owner><concert><concertId>1" +
+                "</concertId><location>Rome</location><artist>Black Eyed " +
+                "Peas</artist><maxTickets>1</maxTickets><songList/></concert><ticketTransaction><transactionId>1" +
+                "</transactionId><payed>false</payed></ticketTransaction></item></List>";
         String user = "mmuser";
         String jwt = "BLOB";
         try (MockedStatic<JwtDecode> jwtUtilsMockedStatic = mockStatic(JwtDecode.class)) {
@@ -128,9 +133,9 @@ public class TicketUnitTest {
 
             when(ticketsRepositoryMock.getTicketsByOwner(user)).thenReturn(Collections.singletonList(ticket));
             ResultActions res = ticketMvc.perform(MockMvcRequestBuilders
-                    .get("/tickets/")
-                    .accept(MediaType.APPLICATION_XML)
-                    .header(HttpHeaders.AUTHORIZATION, jwt))
+                            .get("/tickets/")
+                            .accept(MediaType.APPLICATION_XML)
+                            .header(HttpHeaders.AUTHORIZATION, jwt))
                     .andExpect(status().isOk());
 
             Assertions.assertEquals(expectedJson, res.andReturn().getResponse().getContentAsString());
@@ -150,9 +155,9 @@ public class TicketUnitTest {
 
             when(ticketsRepositoryMock.getTicketsByOwner(user)).thenReturn(Collections.emptyList());
             ticketMvc.perform(MockMvcRequestBuilders
-                    .get("/tickets/")
-                    .accept(MediaType.APPLICATION_JSON)
-                    .header(HttpHeaders.AUTHORIZATION, jwt))
+                            .get("/tickets/")
+                            .accept(MediaType.APPLICATION_JSON)
+                            .header(HttpHeaders.AUTHORIZATION, jwt))
                     .andExpect(status().isNotFound());
         }
     }
@@ -170,9 +175,9 @@ public class TicketUnitTest {
 
             when(ticketsRepositoryMock.getTicketsByOwner(user)).thenReturn(null);
             ticketMvc.perform(MockMvcRequestBuilders
-                    .get("/tickets/")
-                    .accept(MediaType.APPLICATION_JSON)
-                    .header(HttpHeaders.AUTHORIZATION, jwt))
+                            .get("/tickets/")
+                            .accept(MediaType.APPLICATION_JSON)
+                            .header(HttpHeaders.AUTHORIZATION, jwt))
                     .andExpect(status().isNotFound());
         }
     }
@@ -186,9 +191,9 @@ public class TicketUnitTest {
             when(JwtDecode.decodeJWT(jwt)).thenThrow(MalformedJwtException.class);
 
             ticketMvc.perform(MockMvcRequestBuilders
-                    .get("/tickets/")
-                    .accept(MediaType.APPLICATION_JSON)
-                    .header(HttpHeaders.AUTHORIZATION, jwt))
+                            .get("/tickets/")
+                            .accept(MediaType.APPLICATION_JSON)
+                            .header(HttpHeaders.AUTHORIZATION, jwt))
                     .andExpect(status().isUnauthorized());
         }
     }
@@ -214,9 +219,9 @@ public class TicketUnitTest {
             when(ticketsRepositoryMock.save(any())).thenReturn(ticketMock);
             when(ticketsRepositoryMock.save(any()).getTicketId()).thenReturn(ticket.getTicketId());
             ResultActions res = ticketMvc.perform(MockMvcRequestBuilders
-                    .get("/tickets?buyConcert=" + concert.getConcertId())
-                    .accept(MediaType.APPLICATION_JSON)
-                    .header(HttpHeaders.AUTHORIZATION, jwt))
+                            .get("/tickets?buyConcert=" + concert.getConcertId())
+                            .accept(MediaType.APPLICATION_JSON)
+                            .header(HttpHeaders.AUTHORIZATION, jwt))
                     .andExpect(status().isCreated());
 
             verify(ticketsRepositoryMock, atLeastOnce()).save(any());
@@ -241,9 +246,9 @@ public class TicketUnitTest {
             when(ticketsRepositoryMock.save(any())).thenReturn(ticketMock);
             when(ticketsRepositoryMock.save(any()).getTicketId()).thenReturn(ticket.getTicketId());
             ticketMvc.perform(MockMvcRequestBuilders
-                    .get("/tickets?buyConcert=" + concert.getConcertId())
-                    .accept(MediaType.APPLICATION_JSON)
-                    .header(HttpHeaders.AUTHORIZATION, jwt))
+                            .get("/tickets?buyConcert=" + concert.getConcertId())
+                            .accept(MediaType.APPLICATION_JSON)
+                            .header(HttpHeaders.AUTHORIZATION, jwt))
                     .andExpect(status().isCreated());
 
             verify(qrUtilsMock, atLeastOnce()).generateTicketQR(any());
@@ -267,9 +272,9 @@ public class TicketUnitTest {
             when(ticketsRepositoryMock.save(any()).getTicketId()).thenReturn(ticket.getTicketId());
             when(qrUtilsMock.generateTicketQR(any())).thenThrow(FileExistsException.class);
             ticketMvc.perform(MockMvcRequestBuilders
-                    .get("/tickets?buyConcert=" + concert.getConcertId())
-                    .accept(MediaType.APPLICATION_JSON)
-                    .header(HttpHeaders.AUTHORIZATION, jwt))
+                            .get("/tickets?buyConcert=" + concert.getConcertId())
+                            .accept(MediaType.APPLICATION_JSON)
+                            .header(HttpHeaders.AUTHORIZATION, jwt))
                     .andExpect(status().isBadRequest());
         }
     }
@@ -283,9 +288,9 @@ public class TicketUnitTest {
             when(JwtDecode.decodeJWT(jwt)).thenThrow(MalformedJwtException.class);
 
             ticketMvc.perform(MockMvcRequestBuilders
-                    .get("/tickets?buyConcert=" + concert.getConcertId())
-                    .accept(MediaType.APPLICATION_JSON)
-                    .header(HttpHeaders.AUTHORIZATION, jwt))
+                            .get("/tickets?buyConcert=" + concert.getConcertId())
+                            .accept(MediaType.APPLICATION_JSON)
+                            .header(HttpHeaders.AUTHORIZATION, jwt))
                     .andExpect(status().isUnauthorized());
         }
     }
@@ -303,9 +308,9 @@ public class TicketUnitTest {
 
             when(concertsRepositoryMock.findById(concert.getConcertId())).thenThrow(NoSuchElementException.class);
             ticketMvc.perform(MockMvcRequestBuilders
-                    .get("/tickets?buyConcert=9999")
-                    .accept(MediaType.APPLICATION_JSON)
-                    .header(HttpHeaders.AUTHORIZATION, jwt))
+                            .get("/tickets?buyConcert=9999")
+                            .accept(MediaType.APPLICATION_JSON)
+                            .header(HttpHeaders.AUTHORIZATION, jwt))
                     .andExpect(status().isNotFound());
 
             verify(ticketsRepositoryMock, never()).save(any());
@@ -324,9 +329,9 @@ public class TicketUnitTest {
             when(claims.getId()).thenReturn(user);
 
             ticketMvc.perform(MockMvcRequestBuilders
-                    .get("/tickets?buyConcert=-100")
-                    .accept(MediaType.APPLICATION_JSON)
-                    .header(HttpHeaders.AUTHORIZATION, jwt))
+                            .get("/tickets?buyConcert=-100")
+                            .accept(MediaType.APPLICATION_JSON)
+                            .header(HttpHeaders.AUTHORIZATION, jwt))
                     .andExpect(status().isBadRequest());
 
             verify(ticketsRepositoryMock, never()).save(any());
@@ -345,9 +350,9 @@ public class TicketUnitTest {
             when(claims.getId()).thenReturn(user);
 
             ticketMvc.perform(MockMvcRequestBuilders
-                    .get("/tickets?buyConcert=wasd")
-                    .accept(MediaType.APPLICATION_JSON)
-                    .header(HttpHeaders.AUTHORIZATION, jwt))
+                            .get("/tickets?buyConcert=wasd")
+                            .accept(MediaType.APPLICATION_JSON)
+                            .header(HttpHeaders.AUTHORIZATION, jwt))
                     .andExpect(status().isBadRequest());
 
             verify(ticketsRepositoryMock, never()).save(any());
@@ -370,18 +375,18 @@ public class TicketUnitTest {
             when(ticketsRepositoryMock.save(any())).thenReturn(ticketMock);
             when(ticketsRepositoryMock.save(any()).getTicketId()).thenReturn(ticket.getTicketId());
             ticketMvc.perform(MockMvcRequestBuilders
-                    .get("/tickets?buyConcert=" + concert.getConcertId())
-                    .accept(MediaType.APPLICATION_JSON)
-                    .header(HttpHeaders.AUTHORIZATION, jwt))
+                            .get("/tickets?buyConcert=" + concert.getConcertId())
+                            .accept(MediaType.APPLICATION_JSON)
+                            .header(HttpHeaders.AUTHORIZATION, jwt))
                     .andExpect(status().isCreated());
 
             verify(ticketsRepositoryMock, atLeastOnce()).save(any());
             concert.setTickets(Collections.singletonList(new Ticket(user, concert, new TicketTransaction(false))));
 
             ticketMvc.perform(MockMvcRequestBuilders
-                    .get("/tickets?buyConcert=" + concert.getConcertId())
-                    .accept(MediaType.APPLICATION_JSON)
-                    .header(HttpHeaders.AUTHORIZATION, jwt))
+                            .get("/tickets?buyConcert=" + concert.getConcertId())
+                            .accept(MediaType.APPLICATION_JSON)
+                            .header(HttpHeaders.AUTHORIZATION, jwt))
                     .andExpect(status().isBadRequest());
 
         }
@@ -405,11 +410,12 @@ public class TicketUnitTest {
 
             when(ticketsRepositoryMock.findById(ticket.getTicketId())).thenReturn(java.util.Optional.ofNullable(ticketMock));
             // ABSOLUTE PATH BECAUSE INTELLIJ BUG USING PATH IN CONTEXT OF TEST EXECUTION
-            when(ticketMock.getQrCodePath()).thenReturn("/Users/enrico/Desktop/KBE-Beleg/concerts/src/test/resources/sample_qr.png");
+            when(ticketMock.getQrCodePath()).thenReturn("/Users/enrico/Desktop/KBE-Beleg/concerts/src/test/resources" +
+                    "/sample_qr.png");
             when(ticketMock.getOwner()).thenReturn(user);
             ResultActions res = ticketMvc.perform(MockMvcRequestBuilders
-                    .get("/tickets/" + ticket.getTicketId())
-                    .header(HttpHeaders.AUTHORIZATION, jwt))
+                            .get("/tickets/" + ticket.getTicketId())
+                            .header(HttpHeaders.AUTHORIZATION, jwt))
                     .andExpect(status().isOk());
 
             Assertions.assertTrue(res.andReturn().getResponse().getContentAsString().length() > 0);
@@ -425,8 +431,8 @@ public class TicketUnitTest {
             when(JwtDecode.decodeJWT(jwt)).thenThrow(MalformedJwtException.class);
 
             ticketMvc.perform(MockMvcRequestBuilders
-                    .get("/tickets/" + ticket.getTicketId())
-                    .header(HttpHeaders.AUTHORIZATION, jwt))
+                            .get("/tickets/" + ticket.getTicketId())
+                            .header(HttpHeaders.AUTHORIZATION, jwt))
                     .andExpect(status().isUnauthorized());
 
         }
@@ -447,8 +453,8 @@ public class TicketUnitTest {
             when(ticketMock.getQrCodePath()).thenReturn("src/test/resources/sample_qr.png");
             when(ticketMock.getOwner()).thenReturn("OTHER_USER");
             ticketMvc.perform(MockMvcRequestBuilders
-                    .get("/tickets/" + ticket.getTicketId())
-                    .header(HttpHeaders.AUTHORIZATION, jwt))
+                            .get("/tickets/" + ticket.getTicketId())
+                            .header(HttpHeaders.AUTHORIZATION, jwt))
                     .andExpect(status().isForbidden());
 
         }
@@ -466,8 +472,8 @@ public class TicketUnitTest {
             when(claims.getId()).thenReturn(user);
 
             ticketMvc.perform(MockMvcRequestBuilders
-                    .get("/tickets/-909")
-                    .header(HttpHeaders.AUTHORIZATION, jwt))
+                            .get("/tickets/-909")
+                            .header(HttpHeaders.AUTHORIZATION, jwt))
                     .andExpect(status().isBadRequest());
 
         }
@@ -488,8 +494,8 @@ public class TicketUnitTest {
             when(ticketMock.getQrCodePath()).thenReturn("src/test/resources/sample_qr.png");
             when(ticketMock.getOwner()).thenReturn(user);
             ticketMvc.perform(MockMvcRequestBuilders
-                    .get("/tickets/99999")
-                    .header(HttpHeaders.AUTHORIZATION, jwt))
+                            .get("/tickets/99999")
+                            .header(HttpHeaders.AUTHORIZATION, jwt))
                     .andExpect(status().isNotFound());
 
         }
@@ -510,8 +516,8 @@ public class TicketUnitTest {
             when(ticketMock.getQrCodePath()).thenReturn("Wrong_path");
             when(ticketMock.getOwner()).thenReturn(user);
             ticketMvc.perform(MockMvcRequestBuilders
-                    .get("/tickets/" + ticket.getTicketId())
-                    .header(HttpHeaders.AUTHORIZATION, jwt))
+                            .get("/tickets/" + ticket.getTicketId())
+                            .header(HttpHeaders.AUTHORIZATION, jwt))
                     .andExpect(status().isBadRequest());
 
         }
@@ -536,9 +542,9 @@ public class TicketUnitTest {
 
             when(ticketsRepositoryMock.findById(ticket.getTicketId())).thenReturn(java.util.Optional.ofNullable(ticket));
             ticketMvc.perform(MockMvcRequestBuilders
-                    .delete("/tickets/" + ticket.getTicketId())
-                    .accept(MediaType.APPLICATION_JSON)
-                    .header(HttpHeaders.AUTHORIZATION, jwt))
+                            .delete("/tickets/" + ticket.getTicketId())
+                            .accept(MediaType.APPLICATION_JSON)
+                            .header(HttpHeaders.AUTHORIZATION, jwt))
                     .andExpect(status().isNoContent());
 
             verify(ticketsRepositoryMock, times(1)).deleteById(ticket.getTicketId());
@@ -556,9 +562,9 @@ public class TicketUnitTest {
 
             when(ticketsRepositoryMock.findById(ticket.getTicketId())).thenReturn(java.util.Optional.ofNullable(ticket));
             ticketMvc.perform(MockMvcRequestBuilders
-                    .delete("/tickets/" + ticket.getTicketId())
-                    .accept(MediaType.APPLICATION_JSON)
-                    .header(HttpHeaders.AUTHORIZATION, jwt))
+                            .delete("/tickets/" + ticket.getTicketId())
+                            .accept(MediaType.APPLICATION_JSON)
+                            .header(HttpHeaders.AUTHORIZATION, jwt))
                     .andExpect(status().isUnauthorized());
             verify(ticketsRepositoryMock, times(0)).deleteById(ticket.getTicketId());
         }
@@ -577,9 +583,9 @@ public class TicketUnitTest {
 
             when(ticketsRepositoryMock.findById(ticket.getTicketId())).thenReturn(java.util.Optional.ofNullable(ticket));
             ticketMvc.perform(MockMvcRequestBuilders
-                    .delete("/tickets/-1")
-                    .accept(MediaType.APPLICATION_JSON)
-                    .header(HttpHeaders.AUTHORIZATION, jwt))
+                            .delete("/tickets/-1")
+                            .accept(MediaType.APPLICATION_JSON)
+                            .header(HttpHeaders.AUTHORIZATION, jwt))
                     .andExpect(status().isBadRequest());
 
             verify(ticketsRepositoryMock, times(0)).deleteById(ticket.getTicketId());
@@ -599,9 +605,9 @@ public class TicketUnitTest {
 
             when(ticketsRepositoryMock.findById(ticket.getTicketId())).thenReturn(java.util.Optional.ofNullable(ticket));
             ticketMvc.perform(MockMvcRequestBuilders
-                    .delete("/tickets/9999")
-                    .accept(MediaType.APPLICATION_JSON)
-                    .header(HttpHeaders.AUTHORIZATION, jwt))
+                            .delete("/tickets/9999")
+                            .accept(MediaType.APPLICATION_JSON)
+                            .header(HttpHeaders.AUTHORIZATION, jwt))
                     .andExpect(status().isNotFound());
 
             verify(ticketsRepositoryMock, times(0)).deleteById(ticket.getTicketId());
@@ -621,9 +627,9 @@ public class TicketUnitTest {
 
             when(ticketsRepositoryMock.findById(ticket.getTicketId())).thenReturn(java.util.Optional.ofNullable(ticket));
             ticketMvc.perform(MockMvcRequestBuilders
-                    .delete("/tickets/" + ticket.getTicketId())
-                    .accept(MediaType.APPLICATION_JSON)
-                    .header(HttpHeaders.AUTHORIZATION, jwt))
+                            .delete("/tickets/" + ticket.getTicketId())
+                            .accept(MediaType.APPLICATION_JSON)
+                            .header(HttpHeaders.AUTHORIZATION, jwt))
                     .andExpect(status().isForbidden());
 
             verify(ticketsRepositoryMock, times(0)).deleteById(ticket.getTicketId());
@@ -644,9 +650,9 @@ public class TicketUnitTest {
 
             when(ticketsRepositoryMock.findById(ticket.getTicketId())).thenReturn(java.util.Optional.ofNullable(ticket));
             ticketMvc.perform(MockMvcRequestBuilders
-                    .delete("/tickets/" + ticket.getTicketId())
-                    .accept(MediaType.APPLICATION_JSON)
-                    .header(HttpHeaders.AUTHORIZATION, jwt))
+                            .delete("/tickets/" + ticket.getTicketId())
+                            .accept(MediaType.APPLICATION_JSON)
+                            .header(HttpHeaders.AUTHORIZATION, jwt))
                     .andExpect(status().isNoContent());
 
             verify(qrUtilsMock, times(1)).deleteTicketQR(ticket.getQrCodePath());

@@ -4,7 +4,6 @@ import io.jsonwebtoken.*;
 
 import javax.crypto.spec.SecretKeySpec;
 import java.security.Key;
-import java.util.Date;
 
 
 public class JwtDecode {
@@ -16,6 +15,7 @@ public class JwtDecode {
     /**
      * Check if JWT is valid
      * If JWT valid returns true, else false
+     *
      * @param jwt JWT to check
      * @return true if JWT valid, else false
      */
@@ -23,7 +23,7 @@ public class JwtDecode {
         try {
             decodeJWT(jwt);
         } catch (ExpiredJwtException | UnsupportedJwtException |
-                MalformedJwtException | SignatureException | IllegalArgumentException e) {
+                 MalformedJwtException | SignatureException | IllegalArgumentException e) {
             return false;
         }
         return true;

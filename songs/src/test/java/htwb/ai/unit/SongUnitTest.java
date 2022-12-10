@@ -32,12 +32,12 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 
 @ExtendWith(SystemStubsExtension.class)
 class SongUnitTest {
+    @SystemStub
+    private final EnvironmentVariables environment = new EnvironmentVariables("SECRET_KEY_KBE", "test_secret_key");
     private MockMvc mockMvc;
     private SongRepository songRepository;
     private Song fullSong;
     private Song mockSong;
-    @SystemStub
-    private final EnvironmentVariables environment = new EnvironmentVariables("SECRET_KEY_KBE", "test_secret_key");
 
     @BeforeEach
     public void setup() {
@@ -60,7 +60,7 @@ class SongUnitTest {
 
             when(songRepository.findSongBySongId(1)).thenReturn(fullSong);
             mockMvc.perform(get("/songs/1")
-                    .accept(MediaType.APPLICATION_JSON).header(HttpHeaders.AUTHORIZATION, "BLOB"))
+                            .accept(MediaType.APPLICATION_JSON).header(HttpHeaders.AUTHORIZATION, "BLOB"))
                     .andExpect(status().isOk())
                     .andExpect(content().contentType(MediaType.APPLICATION_JSON))
                     // verify JSON content
@@ -79,8 +79,8 @@ class SongUnitTest {
 
             when(songRepository.findSongBySongId(1)).thenReturn(fullSong);
             mockMvc.perform(get("/songs/1")
-                    .accept(MediaType.APPLICATION_XML_VALUE)
-                    .header(HttpHeaders.AUTHORIZATION, "BLOB"))
+                            .accept(MediaType.APPLICATION_XML_VALUE)
+                            .header(HttpHeaders.AUTHORIZATION, "BLOB"))
                     .andExpect(status().isOk())
                     .andExpect(content().contentType(MediaType.APPLICATION_XML_VALUE))
                     // verify xml content
@@ -98,7 +98,7 @@ class SongUnitTest {
             when(JwtDecode.isJwtValid(anyString())).thenReturn(false);
 
             mockMvc.perform(get("/songs/1")
-                    .accept(MediaType.APPLICATION_JSON).header(HttpHeaders.AUTHORIZATION, "BLOB"))
+                            .accept(MediaType.APPLICATION_JSON).header(HttpHeaders.AUTHORIZATION, "BLOB"))
                     .andExpect(status().isUnauthorized());
         }
     }
@@ -110,7 +110,7 @@ class SongUnitTest {
 
             when(songRepository.findSongBySongId(2)).thenReturn(null);
             mockMvc.perform(get("/songs/2")
-                    .accept(MediaType.APPLICATION_XML_VALUE).header(HttpHeaders.AUTHORIZATION, "BLOB"))
+                            .accept(MediaType.APPLICATION_XML_VALUE).header(HttpHeaders.AUTHORIZATION, "BLOB"))
                     .andExpect(status().isNotFound());
         }
     }
@@ -122,7 +122,7 @@ class SongUnitTest {
 
             when(songRepository.findSongBySongId(2)).thenReturn(null);
             mockMvc.perform(get("/songs/2")
-                    .accept(MediaType.APPLICATION_JSON).header(HttpHeaders.AUTHORIZATION, "BLOB"))
+                            .accept(MediaType.APPLICATION_JSON).header(HttpHeaders.AUTHORIZATION, "BLOB"))
                     .andExpect(status().isNotFound());
         }
     }
@@ -134,7 +134,7 @@ class SongUnitTest {
 
             when(songRepository.findSongBySongId(0)).thenReturn(null); // id is out of defined range
             mockMvc.perform(get("/songs/0")
-                    .accept(MediaType.APPLICATION_JSON).header(HttpHeaders.AUTHORIZATION, "BLOB"))
+                            .accept(MediaType.APPLICATION_JSON).header(HttpHeaders.AUTHORIZATION, "BLOB"))
                     .andExpect(status().isBadRequest());
         }
     }
@@ -146,7 +146,7 @@ class SongUnitTest {
 
             when(songRepository.findSongBySongId(0)).thenReturn(null);
             mockMvc.perform(get("/songs/0")
-                    .accept(MediaType.APPLICATION_XML).header(HttpHeaders.AUTHORIZATION, "BLOB"))
+                            .accept(MediaType.APPLICATION_XML).header(HttpHeaders.AUTHORIZATION, "BLOB"))
                     .andExpect(status().isBadRequest());
         }
     }
@@ -158,7 +158,8 @@ class SongUnitTest {
 
             when(songRepository.findSongBySongId(1)).thenReturn(fullSong);
             mockMvc.perform(get("/songs/1")
-                    .accept(MediaType.ALL).header(HttpHeaders.AUTHORIZATION, "BLOB")) // if accept header client is '*/*'
+                            .accept(MediaType.ALL).header(HttpHeaders.AUTHORIZATION, "BLOB")) // if accept header
+                    // client is '*/*'
                     .andExpect(status().isOk());
         }
     }
@@ -170,7 +171,7 @@ class SongUnitTest {
 
             when(songRepository.findSongBySongId(1)).thenReturn(fullSong);
             mockMvc.perform(get("/songs/1")
-                    .accept(MediaType.TEXT_HTML).header(HttpHeaders.AUTHORIZATION, "BLOB"))
+                            .accept(MediaType.TEXT_HTML).header(HttpHeaders.AUTHORIZATION, "BLOB"))
                     .andExpect(status().isNotAcceptable());
         }
     }
@@ -181,7 +182,7 @@ class SongUnitTest {
             when(JwtDecode.isJwtValid(anyString())).thenReturn(true);
 
             mockMvc.perform(get("/songs/abc")
-                    .accept(MediaType.APPLICATION_XML).header(HttpHeaders.AUTHORIZATION, "BLOB"))
+                            .accept(MediaType.APPLICATION_XML).header(HttpHeaders.AUTHORIZATION, "BLOB"))
                     .andExpect(status().isBadRequest());
         }
     }
@@ -192,7 +193,7 @@ class SongUnitTest {
             when(JwtDecode.isJwtValid(anyString())).thenReturn(true);
 
             mockMvc.perform(get("/songs/abc")
-                    .accept(MediaType.APPLICATION_JSON).header(HttpHeaders.AUTHORIZATION, "BLOB"))
+                            .accept(MediaType.APPLICATION_JSON).header(HttpHeaders.AUTHORIZATION, "BLOB"))
                     .andExpect(status().isBadRequest());
         }
     }
@@ -205,7 +206,7 @@ class SongUnitTest {
 
             when(songRepository.getAllSongs()).thenReturn(Collections.singletonList(fullSong));
             mockMvc.perform(get("/songs")
-                    .accept(MediaType.APPLICATION_JSON).header(HttpHeaders.AUTHORIZATION, "BLOB"))
+                            .accept(MediaType.APPLICATION_JSON).header(HttpHeaders.AUTHORIZATION, "BLOB"))
                     .andExpect(status().isOk())
                     .andExpect(content().contentType(MediaType.APPLICATION_JSON))
                     .andExpect(jsonPath("$[0].id").value(1))
@@ -224,7 +225,7 @@ class SongUnitTest {
 
             when(songRepository.getAllSongs()).thenReturn(Collections.singletonList(fullSong));
             mockMvc.perform(get("/songs")
-                    .accept(MediaType.APPLICATION_XML).header(HttpHeaders.AUTHORIZATION, "BLOB"))
+                            .accept(MediaType.APPLICATION_XML).header(HttpHeaders.AUTHORIZATION, "BLOB"))
                     .andExpect(status().isOk())
                     .andExpect(content().contentType("application/xml"))
                     .andExpect(xpath("List/item/id").string("1"))
@@ -243,7 +244,7 @@ class SongUnitTest {
 
             when(songRepository.findSongByArtist(fullSong.getArtist())).thenReturn(Collections.singletonList(fullSong));
             mockMvc.perform(get("/songs?artist=" + fullSong.getArtist())
-                    .accept(MediaType.APPLICATION_JSON).header(HttpHeaders.AUTHORIZATION, "BLOB"))
+                            .accept(MediaType.APPLICATION_JSON).header(HttpHeaders.AUTHORIZATION, "BLOB"))
                     .andExpect(status().isOk())
                     .andExpect(content().contentType(MediaType.APPLICATION_JSON))
                     .andExpect(jsonPath("$[0].id").value(1))
@@ -262,7 +263,7 @@ class SongUnitTest {
 
             when(songRepository.findSongByArtist("Enrico")).thenReturn(Collections.emptyList());
             mockMvc.perform(get("/songs?artist=Enrico")
-                    .accept(MediaType.APPLICATION_JSON).header(HttpHeaders.AUTHORIZATION, "BLOB"))
+                            .accept(MediaType.APPLICATION_JSON).header(HttpHeaders.AUTHORIZATION, "BLOB"))
                     .andExpect(status().isNotFound());
         }
     }
@@ -273,7 +274,7 @@ class SongUnitTest {
             when(JwtDecode.isJwtValid(anyString())).thenReturn(false);
 
             mockMvc.perform(get("/songs")
-                    .accept(MediaType.APPLICATION_JSON).header(HttpHeaders.AUTHORIZATION, "BLOB"))
+                            .accept(MediaType.APPLICATION_JSON).header(HttpHeaders.AUTHORIZATION, "BLOB"))
                     .andExpect(status().isUnauthorized());
         }
     }
@@ -285,7 +286,7 @@ class SongUnitTest {
 
             when(songRepository.getAllSongs()).thenReturn(Collections.singletonList(fullSong));
             mockMvc.perform(get("/songs")
-                    .accept(MediaType.ALL).header(HttpHeaders.AUTHORIZATION, "BLOB"))
+                            .accept(MediaType.ALL).header(HttpHeaders.AUTHORIZATION, "BLOB"))
                     .andExpect(status().isOk());
         }
     }
@@ -297,7 +298,7 @@ class SongUnitTest {
 
             when(songRepository.getAllSongs()).thenReturn(Collections.emptyList());
             mockMvc.perform(get("/songs")
-                    .accept(MediaType.APPLICATION_JSON).header(HttpHeaders.AUTHORIZATION, "BLOB"))
+                            .accept(MediaType.APPLICATION_JSON).header(HttpHeaders.AUTHORIZATION, "BLOB"))
                     .andExpect(status().isNotFound());
         }
     }
@@ -309,7 +310,7 @@ class SongUnitTest {
 
             when(songRepository.getAllSongs()).thenReturn(Collections.emptyList());
             mockMvc.perform(get("/songs")
-                    .accept(MediaType.APPLICATION_XML).header(HttpHeaders.AUTHORIZATION, "BLOB"))
+                            .accept(MediaType.APPLICATION_XML).header(HttpHeaders.AUTHORIZATION, "BLOB"))
                     .andExpect(status().isNotFound());
         }
     }
@@ -321,7 +322,7 @@ class SongUnitTest {
 
             when(songRepository.getAllSongs()).thenReturn(Collections.emptyList());
             mockMvc.perform(get("/songs")
-                    .accept(MediaType.TEXT_HTML).header(HttpHeaders.AUTHORIZATION, "BLOB"))
+                            .accept(MediaType.TEXT_HTML).header(HttpHeaders.AUTHORIZATION, "BLOB"))
                     .andExpect(status().isNotAcceptable());
         }
     }
@@ -333,13 +334,13 @@ class SongUnitTest {
 
             ArgumentCaptor<Song> argument = ArgumentCaptor.forClass(Song.class);
             mockMvc.perform(post("/songs")
-                    .header(HttpHeaders.AUTHORIZATION, "BLOB")
-                    .contentType(MediaType.APPLICATION_JSON).content("{\n" +
-                            "\t\t\"title\": \"Ghostbusters (I'm not a fraid)\",\n" +
-                            "\t\t\"artist\": \"Fall Out Boy, Missy Elliott\",\n" +
-                            "\t\t\"label\": \"Virgin\",\n" +
-                            "\t\t\"released\": 2016\n" +
-                            "\t}"))
+                            .header(HttpHeaders.AUTHORIZATION, "BLOB")
+                            .contentType(MediaType.APPLICATION_JSON).content("{\n" +
+                                    "\t\t\"title\": \"Ghostbusters (I'm not a fraid)\",\n" +
+                                    "\t\t\"artist\": \"Fall Out Boy, Missy Elliott\",\n" +
+                                    "\t\t\"label\": \"Virgin\",\n" +
+                                    "\t\t\"released\": 2016\n" +
+                                    "\t}"))
                     .andExpect(status().isCreated());
             verify(songRepository).save(argument.capture());
 
@@ -357,13 +358,13 @@ class SongUnitTest {
 
             when(songRepository.save(any())).thenThrow(PersistenceException.class);
             mockMvc.perform(post("/songs")
-                    .header(HttpHeaders.AUTHORIZATION, "BLOB")
-                    .contentType(MediaType.APPLICATION_JSON).content("{\n" +
-                            "\t\t\"title\": \"Ghostbusters (I'm not a fraid)\",\n" +
-                            "\t\t\"artist\": \"Fall Out Boy, Missy Elliott\",\n" +
-                            "\t\t\"label\": \"Virgin\",\n" +
-                            "\t\t\"released\": 2016\n" +
-                            "\t}"))
+                            .header(HttpHeaders.AUTHORIZATION, "BLOB")
+                            .contentType(MediaType.APPLICATION_JSON).content("{\n" +
+                                    "\t\t\"title\": \"Ghostbusters (I'm not a fraid)\",\n" +
+                                    "\t\t\"artist\": \"Fall Out Boy, Missy Elliott\",\n" +
+                                    "\t\t\"label\": \"Virgin\",\n" +
+                                    "\t\t\"released\": 2016\n" +
+                                    "\t}"))
                     .andExpect(status().isBadRequest());
         }
     }
@@ -375,13 +376,13 @@ class SongUnitTest {
             when(mockSong.getId()).thenReturn(1);
 
             mockMvc.perform(post("/songs")
-                    .header(HttpHeaders.AUTHORIZATION, "BLOB")
-                    .contentType(MediaType.APPLICATION_JSON).content("{\n" +
-                            "\t\t\"title\": \"Ghostbusters (I'm not a fraid)\",\n" +
-                            "\t\t\"artist\": \"Fall Out Boy, Missy Elliott\",\n" +
-                            "\t\t\"label\": \"Virgin\",\n" +
-                            "\t\t\"released\": 2016\n" +
-                            "\t}"))
+                            .header(HttpHeaders.AUTHORIZATION, "BLOB")
+                            .contentType(MediaType.APPLICATION_JSON).content("{\n" +
+                                    "\t\t\"title\": \"Ghostbusters (I'm not a fraid)\",\n" +
+                                    "\t\t\"artist\": \"Fall Out Boy, Missy Elliott\",\n" +
+                                    "\t\t\"label\": \"Virgin\",\n" +
+                                    "\t\t\"released\": 2016\n" +
+                                    "\t}"))
                     .andExpect(status().isCreated())
                     .andExpect(header().string("Location", "/rest/songs/1"));
         }
@@ -393,13 +394,13 @@ class SongUnitTest {
             when(JwtDecode.isJwtValid(anyString())).thenReturn(false);
 
             mockMvc.perform(post("/songs")
-                    .header(HttpHeaders.AUTHORIZATION, "BLOB")
-                    .contentType(MediaType.APPLICATION_JSON).content("{\n" +
-                            "\t\t\"title\": \"Ghostbusters (I'm not a fraid)\",\n" +
-                            "\t\t\"artist\": \"Fall Out Boy, Missy Elliott\",\n" +
-                            "\t\t\"label\": \"Virgin\",\n" +
-                            "\t\t\"released\": 2016\n" +
-                            "\t}"))
+                            .header(HttpHeaders.AUTHORIZATION, "BLOB")
+                            .contentType(MediaType.APPLICATION_JSON).content("{\n" +
+                                    "\t\t\"title\": \"Ghostbusters (I'm not a fraid)\",\n" +
+                                    "\t\t\"artist\": \"Fall Out Boy, Missy Elliott\",\n" +
+                                    "\t\t\"label\": \"Virgin\",\n" +
+                                    "\t\t\"released\": 2016\n" +
+                                    "\t}"))
                     .andExpect(status().isUnauthorized());
         }
     }
@@ -413,9 +414,9 @@ class SongUnitTest {
             ArgumentCaptor<Song> argument = ArgumentCaptor.forClass(Song.class);
 
             mockMvc.perform(post("/songs")
-                    .header(HttpHeaders.AUTHORIZATION, "BLOB")
-                    .contentType(MediaType.APPLICATION_JSON).content("{\n" +
-                            "\t\t\"title\": \"Ghostbusters (I'm not a fraid)\"}"))
+                            .header(HttpHeaders.AUTHORIZATION, "BLOB")
+                            .contentType(MediaType.APPLICATION_JSON).content("{\n" +
+                                    "\t\t\"title\": \"Ghostbusters (I'm not a fraid)\"}"))
                     .andExpect(status().isCreated())
                     .andExpect(header().string("Location", "/rest/songs/1"));
 
@@ -436,9 +437,9 @@ class SongUnitTest {
             ArgumentCaptor<Song> argument = ArgumentCaptor.forClass(Song.class);
 
             mockMvc.perform(post("/songs")
-                    .header(HttpHeaders.AUTHORIZATION, "BLOB")
-                    .contentType(MediaType.APPLICATION_JSON).content("{\n" +
-                            "\t\t\"title\": \"Ghostbusters (I'm not a fraid)\", \"key\": \"value\"}"))
+                            .header(HttpHeaders.AUTHORIZATION, "BLOB")
+                            .contentType(MediaType.APPLICATION_JSON).content("{\n" +
+                                    "\t\t\"title\": \"Ghostbusters (I'm not a fraid)\", \"key\": \"value\"}"))
                     .andExpect(status().isCreated())
                     .andExpect(header().string("Location", "/rest/songs/1"));
 
@@ -456,9 +457,9 @@ class SongUnitTest {
             when(JwtDecode.isJwtValid(anyString())).thenReturn(true);
 
             mockMvc.perform(post("/songs")
-                    .header(HttpHeaders.AUTHORIZATION, "BLOB")
-                    .contentType(MediaType.APPLICATION_JSON).content("{\n" +
-                            "\t\t\"key\": \"value\"}"))
+                            .header(HttpHeaders.AUTHORIZATION, "BLOB")
+                            .contentType(MediaType.APPLICATION_JSON).content("{\n" +
+                                    "\t\t\"key\": \"value\"}"))
                     .andExpect(status().isBadRequest());
         }
     }
@@ -469,9 +470,9 @@ class SongUnitTest {
             when(JwtDecode.isJwtValid(anyString())).thenReturn(true);
 
             mockMvc.perform(post("/songs")
-                    .header(HttpHeaders.AUTHORIZATION, "BLOB")
-                    .contentType(MediaType.APPLICATION_JSON).content("{\n" +
-                            "\t\t\"title\": \"Ghostbusters (I'm not a fraid)\""))
+                            .header(HttpHeaders.AUTHORIZATION, "BLOB")
+                            .contentType(MediaType.APPLICATION_JSON).content("{\n" +
+                                    "\t\t\"title\": \"Ghostbusters (I'm not a fraid)\""))
                     .andExpect(status().isBadRequest());
         }
     }
@@ -482,8 +483,8 @@ class SongUnitTest {
             when(JwtDecode.isJwtValid(anyString())).thenReturn(true);
 
             mockMvc.perform(post("/songs")
-                    .header(HttpHeaders.AUTHORIZATION, "BLOB")
-                    .contentType(MediaType.TEXT_HTML).content("test message"))
+                            .header(HttpHeaders.AUTHORIZATION, "BLOB")
+                            .contentType(MediaType.TEXT_HTML).content("test message"))
                     .andExpect(status().isUnsupportedMediaType());
         }
     }
@@ -494,14 +495,14 @@ class SongUnitTest {
             when(JwtDecode.isJwtValid(anyString())).thenReturn(true);
 
             mockMvc.perform(post("/songs")
-                    .header(HttpHeaders.AUTHORIZATION, "BLOB")
-                    .contentType(MediaType.APPLICATION_JSON).content("{\n" +
-                            "    \"id\": 9999,\n" +
-                            "    \"title\": \"Can’t Stop the Feeling\",\n" +
-                            "    \"artist\": \"Justin Timberlake\", \n" +
-                            "    \"label\": \"Trolls\",\n" +
-                            "    \"released\": 2016\n" +
-                            "}"))
+                            .header(HttpHeaders.AUTHORIZATION, "BLOB")
+                            .contentType(MediaType.APPLICATION_JSON).content("{\n" +
+                                    "    \"id\": 9999,\n" +
+                                    "    \"title\": \"Can’t Stop the Feeling\",\n" +
+                                    "    \"artist\": \"Justin Timberlake\", \n" +
+                                    "    \"label\": \"Trolls\",\n" +
+                                    "    \"released\": 2016\n" +
+                                    "}"))
                     .andExpect(status().isBadRequest());
         }
     }
@@ -511,15 +512,16 @@ class SongUnitTest {
         try (MockedStatic<JwtDecode> jwtUtilsMockedStatic = mockStatic(JwtDecode.class)) {
             when(JwtDecode.isJwtValid("BLOB")).thenReturn(true);
 
-            byte[] json = IOUtils.toByteArray(Objects.requireNonNull(getClass().getClassLoader().getResourceAsStream("song.json")));
+            byte[] json = IOUtils.toByteArray(Objects.requireNonNull(getClass().getClassLoader().getResourceAsStream(
+                    "song.json")));
 
             MockMultipartFile file = new MockMultipartFile("file", "song.json",
                     MediaType.MULTIPART_FORM_DATA_VALUE, json);
 
             ArgumentCaptor<Song> argument = ArgumentCaptor.forClass(Song.class);
             mockMvc.perform(multipart("/songs")
-                    .file(file)
-                    .header(HttpHeaders.AUTHORIZATION, "BLOB"))
+                            .file(file)
+                            .header(HttpHeaders.AUTHORIZATION, "BLOB"))
                     .andExpect(status().isCreated());
             verify(songRepository).save(argument.capture());
 
@@ -539,10 +541,11 @@ class SongUnitTest {
             when(songRepository.findSongBySongId(1)).thenReturn(mockSong);
 
             mockMvc.perform(
-                    put("/songs/1")
-                            .header(HttpHeaders.AUTHORIZATION, "BLOB")
-                            .contentType(MediaType.APPLICATION_JSON)
-                            .content("{\"id\": 1, \"title\": \"SONG_TITLE_EDIT\", \"artist\": \"COOL Artitst_EDIT\", \"label\": \"SONY_EDIT\", \"released\": 2021}"))
+                            put("/songs/1")
+                                    .header(HttpHeaders.AUTHORIZATION, "BLOB")
+                                    .contentType(MediaType.APPLICATION_JSON)
+                                    .content("{\"id\": 1, \"title\": \"SONG_TITLE_EDIT\", \"artist\": \"COOL " +
+                                            "Artitst_EDIT\", \"label\": \"SONY_EDIT\", \"released\": 2021}"))
                     .andExpect(status().isNoContent());
             verify(songRepository, atLeastOnce()).save(any());
         }
@@ -556,9 +559,10 @@ class SongUnitTest {
             when(songRepository.existsById(2)).thenReturn(true);
             when(songRepository.findSongBySongId(2)).thenThrow(NullPointerException.class);
             mockMvc.perform(put("/songs/2")
-                    .header(HttpHeaders.AUTHORIZATION, "BLOB")
-                    .contentType(MediaType.APPLICATION_JSON)
-                    .content("{\"id\": 2, \"title\": \"SONG_TITLE_EDIT\", \"artist\": \"COOL Artitst_EDIT\", \"label\": \"SONY_EDIT\", \"released\": 2021}"))
+                            .header(HttpHeaders.AUTHORIZATION, "BLOB")
+                            .contentType(MediaType.APPLICATION_JSON)
+                            .content("{\"id\": 2, \"title\": \"SONG_TITLE_EDIT\", \"artist\": \"COOL Artitst_EDIT\", " +
+                                    "\"label\": \"SONY_EDIT\", \"released\": 2021}"))
                     .andExpect(status().isNotFound());
         }
     }
@@ -569,9 +573,10 @@ class SongUnitTest {
             when(JwtDecode.isJwtValid(anyString())).thenReturn(false);
 
             mockMvc.perform(put("/songs/1")
-                    .header(HttpHeaders.AUTHORIZATION, "BLOB")
-                    .contentType(MediaType.APPLICATION_JSON)
-                    .content("{\"id\": 1, \"title\": \"SONG_TITLE_EDIT\", \"artist\": \"COOL Artitst_EDIT\", \"label\": \"SONY_EDIT\", \"released\": 2021}"))
+                            .header(HttpHeaders.AUTHORIZATION, "BLOB")
+                            .contentType(MediaType.APPLICATION_JSON)
+                            .content("{\"id\": 1, \"title\": \"SONG_TITLE_EDIT\", \"artist\": \"COOL Artitst_EDIT\", " +
+                                    "\"label\": \"SONY_EDIT\", \"released\": 2021}"))
                     .andExpect(status().isUnauthorized());
         }
     }
@@ -583,9 +588,10 @@ class SongUnitTest {
             when(songRepository.existsById(2)).thenReturn(false);
 
             mockMvc.perform(put("/songs/2")
-                    .header(HttpHeaders.AUTHORIZATION, "BLOB")
-                    .contentType(MediaType.APPLICATION_JSON)
-                    .content("{\"id\": 2, \"title\": \"SONG_TITLE_EDIT\", \"artist\": \"COOL Artitst_EDIT\", \"label\": \"SONY_EDIT\", \"released\": 2021}"))
+                            .header(HttpHeaders.AUTHORIZATION, "BLOB")
+                            .contentType(MediaType.APPLICATION_JSON)
+                            .content("{\"id\": 2, \"title\": \"SONG_TITLE_EDIT\", \"artist\": \"COOL Artitst_EDIT\", " +
+                                    "\"label\": \"SONY_EDIT\", \"released\": 2021}"))
                     .andExpect(status().isNotFound());
             verify(songRepository, times(0)).save(any());
         }
@@ -600,9 +606,10 @@ class SongUnitTest {
             when(songRepository.findSongBySongId(1)).thenReturn(mockSong);
 
             mockMvc.perform(put("/songs/1")
-                    .header(HttpHeaders.AUTHORIZATION, "BLOB")
-                    .contentType(MediaType.APPLICATION_JSON)
-                    .content("{\"id\": 2, \"title\": \"SONG_TITLE_EDIT\", \"artist\": \"COOL Artitst_EDIT\", \"label\": \"SONY_EDIT\", \"released\": 2021}"))
+                            .header(HttpHeaders.AUTHORIZATION, "BLOB")
+                            .contentType(MediaType.APPLICATION_JSON)
+                            .content("{\"id\": 2, \"title\": \"SONG_TITLE_EDIT\", \"artist\": \"COOL Artitst_EDIT\", " +
+                                    "\"label\": \"SONY_EDIT\", \"released\": 2021}"))
                     .andExpect(status().isBadRequest());
             verify(songRepository, times(0)).save(any());
         }
@@ -617,9 +624,10 @@ class SongUnitTest {
             when(songRepository.findSongBySongId(1)).thenReturn(mockSong);
 
             mockMvc.perform(put("/songs/0")
-                    .header(HttpHeaders.AUTHORIZATION, "BLOB")
-                    .contentType(MediaType.APPLICATION_JSON)
-                    .content("{\"id\": 0, \"title\": \"SONG_TITLE_EDIT\", \"artist\": \"COOL Artitst_EDIT\", \"label\": \"SONY_EDIT\", \"released\": 2021}"))
+                            .header(HttpHeaders.AUTHORIZATION, "BLOB")
+                            .contentType(MediaType.APPLICATION_JSON)
+                            .content("{\"id\": 0, \"title\": \"SONG_TITLE_EDIT\", \"artist\": \"COOL Artitst_EDIT\", " +
+                                    "\"label\": \"SONY_EDIT\", \"released\": 2021}"))
                     .andExpect(status().isNotFound());
             verify(songRepository, times(0)).save(any());
         }
@@ -631,9 +639,9 @@ class SongUnitTest {
             when(JwtDecode.isJwtValid(anyString())).thenReturn(true);
 
             mockMvc.perform(put("/songs/0")
-                    .header(HttpHeaders.AUTHORIZATION, "BLOB")
-                    .contentType(MediaType.APPLICATION_JSON)
-                    .content(""))
+                            .header(HttpHeaders.AUTHORIZATION, "BLOB")
+                            .contentType(MediaType.APPLICATION_JSON)
+                            .content(""))
                     .andExpect(status().isBadRequest());
             verify(songRepository, times(0)).save(any());
         }
@@ -645,7 +653,7 @@ class SongUnitTest {
             when(JwtDecode.isJwtValid(anyString())).thenReturn(true);
 
             mockMvc.perform(delete("/songs/1")
-                    .header(HttpHeaders.AUTHORIZATION, "BLOB"))
+                            .header(HttpHeaders.AUTHORIZATION, "BLOB"))
                     .andExpect(status().isNoContent());
         }
     }
@@ -656,7 +664,7 @@ class SongUnitTest {
             when(JwtDecode.isJwtValid(anyString())).thenReturn(false);
 
             mockMvc.perform(delete("/songs/1")
-                    .header(HttpHeaders.AUTHORIZATION, "BLOB"))
+                            .header(HttpHeaders.AUTHORIZATION, "BLOB"))
                     .andExpect(status().isUnauthorized());
         }
     }
@@ -667,7 +675,7 @@ class SongUnitTest {
             when(JwtDecode.isJwtValid(anyString())).thenReturn(true);
 
             mockMvc.perform(delete("/songs/1")
-                    .header(HttpHeaders.AUTHORIZATION, "BLOB"))
+                            .header(HttpHeaders.AUTHORIZATION, "BLOB"))
                     .andExpect(status().isNoContent());
             verify(songRepository, times(1)).deleteById(1);
         }
@@ -679,7 +687,7 @@ class SongUnitTest {
             when(JwtDecode.isJwtValid(anyString())).thenReturn(true);
 
             mockMvc.perform(delete("/songs/0")
-                    .header(HttpHeaders.AUTHORIZATION, "BLOB"))
+                            .header(HttpHeaders.AUTHORIZATION, "BLOB"))
                     .andExpect(status().isBadRequest());
         }
     }
@@ -689,7 +697,7 @@ class SongUnitTest {
         try (MockedStatic<JwtDecode> jwtUtilsMockedStatic = mockStatic(JwtDecode.class)) {
             when(JwtDecode.isJwtValid(anyString())).thenReturn(true);
             mockMvc.perform(delete("/songs/abc")
-                    .header(HttpHeaders.AUTHORIZATION, "BLOB"))
+                            .header(HttpHeaders.AUTHORIZATION, "BLOB"))
                     .andExpect(status().isBadRequest());
         }
     }
@@ -702,8 +710,8 @@ class SongUnitTest {
 
             doThrow(EmptyResultDataAccessException.class).when(songRepository).deleteById(1);
             mockMvc.perform(
-                    delete("/songs/1")
-                            .header(HttpHeaders.AUTHORIZATION, "BLOB"))
+                            delete("/songs/1")
+                                    .header(HttpHeaders.AUTHORIZATION, "BLOB"))
                     .andExpect(status().isNotFound());
         }
     }

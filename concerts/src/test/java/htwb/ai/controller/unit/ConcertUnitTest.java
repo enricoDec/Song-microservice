@@ -81,7 +81,10 @@ public class ConcertUnitTest {
     @Test
     @DisplayName("Good Test Get all Concerts as JSON")
     void getConcertsGoodTestJson() throws Exception {
-        String expectedJson = "[{\"concertId\":1,\"location\":\"Rome\",\"artist\":\"Black Eyed Peas\",\"maxTickets\":10,\"songList\":[{\"id\":1,\"title\":\"My humps\",\"artist\":\"Black Eyed Peas\",\"label\":\"anyLabel\",\"released\":2020}]},{\"concertId\":2,\"location\":\"Berlin\",\"artist\":\"Unknown Artist\",\"maxTickets\":1,\"songList\":[]}]";
+        String expectedJson = "[{\"concertId\":1,\"location\":\"Rome\",\"artist\":\"Black Eyed Peas\"," +
+                "\"maxTickets\":10,\"songList\":[{\"id\":1,\"title\":\"My humps\",\"artist\":\"Black Eyed Peas\"," +
+                "\"label\":\"anyLabel\",\"released\":2020}]},{\"concertId\":2,\"location\":\"Berlin\"," +
+                "\"artist\":\"Unknown Artist\",\"maxTickets\":1,\"songList\":[]}]";
         String jwt = "BLOB";
         try (MockedStatic<JwtDecode> jwtUtilsMockedStatic = mockStatic(JwtDecode.class)) {
             //Mock authorization
@@ -93,9 +96,9 @@ public class ConcertUnitTest {
             when(requestUtilsMock.getSongsFromArtist(concert.getArtist(), jwt)).thenReturn(Collections.singletonList(song));
             when(requestUtilsMock.getSongsFromArtist(concertNoSongs.getArtist(), jwt)).thenReturn(Collections.emptyList());
             ResultActions res = concertMvc.perform(MockMvcRequestBuilders
-                    .get("/concerts/")
-                    .accept(MediaType.APPLICATION_JSON)
-                    .header(HttpHeaders.AUTHORIZATION, jwt))
+                            .get("/concerts/")
+                            .accept(MediaType.APPLICATION_JSON)
+                            .header(HttpHeaders.AUTHORIZATION, jwt))
                     .andExpect(status().isOk());
 
             Assertions.assertEquals(expectedJson, res.andReturn().getResponse().getContentAsString());
@@ -105,7 +108,11 @@ public class ConcertUnitTest {
     @Test
     @DisplayName("Good Test Get all Concerts as Xml")
     void getConcertsGoodTestXml() throws Exception {
-        String expectedXml = "<List><item><concertId>1</concertId><location>Rome</location><artist>Black Eyed Peas</artist><maxTickets>10</maxTickets><songList><songList><id>1</id><title>My humps</title><artist>Black Eyed Peas</artist><label>anyLabel</label><released>2020</released></songList></songList></item><item><concertId>2</concertId><location>Berlin</location><artist>Unknown Artist</artist><maxTickets>1</maxTickets><songList/></item></List>";
+        String expectedXml = "<List><item><concertId>1</concertId><location>Rome</location><artist>Black Eyed " +
+                "Peas</artist><maxTickets>10</maxTickets><songList><songList><id>1</id><title>My " +
+                "humps</title><artist>Black Eyed Peas</artist><label>anyLabel</label><released>2020</released" +
+                "></songList></songList></item><item><concertId>2</concertId><location>Berlin</location><artist" +
+                ">Unknown Artist</artist><maxTickets>1</maxTickets><songList/></item></List>";
         String jwt = "BLOB";
         try (MockedStatic<JwtDecode> jwtUtilsMockedStatic = mockStatic(JwtDecode.class)) {
             //Mock authorization
@@ -117,9 +124,9 @@ public class ConcertUnitTest {
             when(requestUtilsMock.getSongsFromArtist(concert.getArtist(), jwt)).thenReturn(Collections.singletonList(song));
             when(requestUtilsMock.getSongsFromArtist(concertNoSongs.getArtist(), jwt)).thenReturn(Collections.emptyList());
             ResultActions res = concertMvc.perform(MockMvcRequestBuilders
-                    .get("/concerts/")
-                    .accept(MediaType.APPLICATION_XML)
-                    .header(HttpHeaders.AUTHORIZATION, jwt))
+                            .get("/concerts/")
+                            .accept(MediaType.APPLICATION_XML)
+                            .header(HttpHeaders.AUTHORIZATION, jwt))
                     .andExpect(status().isOk());
 
             Assertions.assertEquals(expectedXml, res.andReturn().getResponse().getContentAsString());
@@ -135,9 +142,9 @@ public class ConcertUnitTest {
             when(JwtDecode.isJwtValid(jwt)).thenReturn(false);
 
             concertMvc.perform(MockMvcRequestBuilders
-                    .get("/concerts/")
-                    .accept(MediaType.APPLICATION_JSON)
-                    .header(HttpHeaders.AUTHORIZATION, jwt))
+                            .get("/concerts/")
+                            .accept(MediaType.APPLICATION_JSON)
+                            .header(HttpHeaders.AUTHORIZATION, jwt))
                     .andExpect(status().isUnauthorized());
         }
     }
@@ -153,9 +160,9 @@ public class ConcertUnitTest {
             //Mock Concert Repo to return two mock concerts
             when(concertsRepositoryMock.getAllConcerts()).thenReturn(Collections.emptyList());
             concertMvc.perform(MockMvcRequestBuilders
-                    .get("/concerts/")
-                    .accept(MediaType.APPLICATION_JSON)
-                    .header(HttpHeaders.AUTHORIZATION, jwt))
+                            .get("/concerts/")
+                            .accept(MediaType.APPLICATION_JSON)
+                            .header(HttpHeaders.AUTHORIZATION, jwt))
                     .andExpect(status().isNotFound());
 
         }
@@ -164,7 +171,9 @@ public class ConcertUnitTest {
     @Test
     @DisplayName("No Songs for concert")
     void getConcertsNoSongForConcert() throws Exception {
-        String expectedJson = "[{\"concertId\":1,\"location\":\"Rome\",\"artist\":\"Black Eyed Peas\",\"maxTickets\":10,\"songList\":[]},{\"concertId\":2,\"location\":\"Berlin\",\"artist\":\"Unknown Artist\",\"maxTickets\":1,\"songList\":[]}]";
+        String expectedJson = "[{\"concertId\":1,\"location\":\"Rome\",\"artist\":\"Black Eyed Peas\"," +
+                "\"maxTickets\":10,\"songList\":[]},{\"concertId\":2,\"location\":\"Berlin\",\"artist\":\"Unknown " +
+                "Artist\",\"maxTickets\":1,\"songList\":[]}]";
         String jwt = "BLOB";
         try (MockedStatic<JwtDecode> jwtUtilsMockedStatic = mockStatic(JwtDecode.class)) {
             //Mock authorization
@@ -175,9 +184,9 @@ public class ConcertUnitTest {
             //Mock Song Endpoint request
             when(requestUtilsMock.getSongsFromArtist(concert.getArtist(), jwt)).thenThrow(NoSuchElementException.class);
             ResultActions res = concertMvc.perform(MockMvcRequestBuilders
-                    .get("/concerts/")
-                    .accept(MediaType.APPLICATION_JSON)
-                    .header(HttpHeaders.AUTHORIZATION, jwt))
+                            .get("/concerts/")
+                            .accept(MediaType.APPLICATION_JSON)
+                            .header(HttpHeaders.AUTHORIZATION, jwt))
                     .andExpect(status().isOk());
 
             Assertions.assertEquals(expectedJson, res.andReturn().getResponse().getContentAsString());
@@ -191,7 +200,9 @@ public class ConcertUnitTest {
     @Test
     @DisplayName("Good Test Get concert by id as JSON")
     void getConcertGoodTestJson() throws Exception {
-        String expectedJson = "{\"concertId\":1,\"location\":\"Rome\",\"artist\":\"Black Eyed Peas\",\"maxTickets\":10,\"songList\":[{\"id\":1,\"title\":\"My humps\",\"artist\":\"Black Eyed Peas\",\"label\":\"anyLabel\",\"released\":2020}]}";
+        String expectedJson = "{\"concertId\":1,\"location\":\"Rome\",\"artist\":\"Black Eyed Peas\"," +
+                "\"maxTickets\":10,\"songList\":[{\"id\":1,\"title\":\"My humps\",\"artist\":\"Black Eyed Peas\"," +
+                "\"label\":\"anyLabel\",\"released\":2020}]}";
         String jwt = "BLOB";
         try (MockedStatic<JwtDecode> jwtUtilsMockedStatic = mockStatic(JwtDecode.class)) {
             //Mock authorization
@@ -202,9 +213,9 @@ public class ConcertUnitTest {
             //Mock Song Endpoint request
             when(requestUtilsMock.getSongsFromArtist(concert.getArtist(), jwt)).thenReturn(Collections.singletonList(song));
             ResultActions res = concertMvc.perform(MockMvcRequestBuilders
-                    .get("/concerts/" + concert.getConcertId())
-                    .accept(MediaType.APPLICATION_JSON)
-                    .header(HttpHeaders.AUTHORIZATION, jwt))
+                            .get("/concerts/" + concert.getConcertId())
+                            .accept(MediaType.APPLICATION_JSON)
+                            .header(HttpHeaders.AUTHORIZATION, jwt))
                     .andExpect(status().isOk());
 
             Assertions.assertEquals(expectedJson, res.andReturn().getResponse().getContentAsString());
@@ -214,7 +225,10 @@ public class ConcertUnitTest {
     @Test
     @DisplayName("Good Test Get concert by id as XML")
     void getConcertGoodTestXml() throws Exception {
-        String expectedJson = "<Concert><concertId>1</concertId><location>Rome</location><artist>Black Eyed Peas</artist><maxTickets>10</maxTickets><songList><songList><id>1</id><title>My humps</title><artist>Black Eyed Peas</artist><label>anyLabel</label><released>2020</released></songList></songList></Concert>";
+        String expectedJson = "<Concert><concertId>1</concertId><location>Rome</location><artist>Black Eyed " +
+                "Peas</artist><maxTickets>10</maxTickets><songList><songList><id>1</id><title>My " +
+                "humps</title><artist>Black Eyed Peas</artist><label>anyLabel</label><released>2020</released" +
+                "></songList></songList></Concert>";
         String jwt = "BLOB";
         try (MockedStatic<JwtDecode> jwtUtilsMockedStatic = mockStatic(JwtDecode.class)) {
             //Mock authorization
@@ -225,9 +239,9 @@ public class ConcertUnitTest {
             //Mock Song Endpoint request
             when(requestUtilsMock.getSongsFromArtist(concert.getArtist(), jwt)).thenReturn(Collections.singletonList(song));
             ResultActions res = concertMvc.perform(MockMvcRequestBuilders
-                    .get("/concerts/" + concert.getConcertId())
-                    .accept(MediaType.APPLICATION_XML)
-                    .header(HttpHeaders.AUTHORIZATION, jwt))
+                            .get("/concerts/" + concert.getConcertId())
+                            .accept(MediaType.APPLICATION_XML)
+                            .header(HttpHeaders.AUTHORIZATION, jwt))
                     .andExpect(status().isOk());
 
             Assertions.assertEquals(expectedJson, res.andReturn().getResponse().getContentAsString());
@@ -243,9 +257,9 @@ public class ConcertUnitTest {
             when(JwtDecode.isJwtValid(jwt)).thenReturn(false);
 
             concertMvc.perform(MockMvcRequestBuilders
-                    .get("/concerts/" + concert.getConcertId())
-                    .accept(MediaType.APPLICATION_JSON)
-                    .header(HttpHeaders.AUTHORIZATION, jwt))
+                            .get("/concerts/" + concert.getConcertId())
+                            .accept(MediaType.APPLICATION_JSON)
+                            .header(HttpHeaders.AUTHORIZATION, jwt))
                     .andExpect(status().isUnauthorized());
         }
     }
@@ -259,9 +273,9 @@ public class ConcertUnitTest {
             when(JwtDecode.isJwtValid(jwt)).thenReturn(true);
 
             concertMvc.perform(MockMvcRequestBuilders
-                    .get("/concerts/-1")
-                    .accept(MediaType.APPLICATION_JSON)
-                    .header(HttpHeaders.AUTHORIZATION, jwt))
+                            .get("/concerts/-1")
+                            .accept(MediaType.APPLICATION_JSON)
+                            .header(HttpHeaders.AUTHORIZATION, jwt))
                     .andExpect(status().isBadRequest());
         }
     }
@@ -278,9 +292,9 @@ public class ConcertUnitTest {
             //Mock Concert Repo to return two mock concerts
             when(concertsRepositoryMock.findById(notExistingConcert)).thenThrow(NoSuchElementException.class);
             concertMvc.perform(MockMvcRequestBuilders
-                    .get("/concerts/" + notExistingConcert)
-                    .accept(MediaType.APPLICATION_JSON)
-                    .header(HttpHeaders.AUTHORIZATION, jwt))
+                            .get("/concerts/" + notExistingConcert)
+                            .accept(MediaType.APPLICATION_JSON)
+                            .header(HttpHeaders.AUTHORIZATION, jwt))
                     .andExpect(status().isNotFound());
         }
     }
@@ -288,7 +302,8 @@ public class ConcertUnitTest {
     @Test
     @DisplayName("Get concert by id no song for concert")
     void getConcertNoSongForConcert() throws Exception {
-        String expectedJson = "{\"concertId\":1,\"location\":\"Rome\",\"artist\":\"Black Eyed Peas\",\"maxTickets\":10,\"songList\":[]}";
+        String expectedJson = "{\"concertId\":1,\"location\":\"Rome\",\"artist\":\"Black Eyed Peas\"," +
+                "\"maxTickets\":10,\"songList\":[]}";
         String jwt = "BLOB";
         try (MockedStatic<JwtDecode> jwtUtilsMockedStatic = mockStatic(JwtDecode.class)) {
             //Mock authorization
@@ -299,9 +314,9 @@ public class ConcertUnitTest {
             //Mock Song Endpoint request
             when(requestUtilsMock.getSongsFromArtist(concert.getArtist(), jwt)).thenThrow(NoSuchElementException.class);
             ResultActions res = concertMvc.perform(MockMvcRequestBuilders
-                    .get("/concerts/" + concert.getConcertId())
-                    .accept(MediaType.APPLICATION_JSON)
-                    .header(HttpHeaders.AUTHORIZATION, jwt))
+                            .get("/concerts/" + concert.getConcertId())
+                            .accept(MediaType.APPLICATION_JSON)
+                            .header(HttpHeaders.AUTHORIZATION, jwt))
                     .andExpect(status().isOk());
 
             Assertions.assertEquals(expectedJson, res.andReturn().getResponse().getContentAsString());
@@ -327,10 +342,10 @@ public class ConcertUnitTest {
 
             when(concertsRepositoryMock.save(any())).thenReturn(concert);
             ResultActions res = concertMvc.perform(MockMvcRequestBuilders
-                    .post("/concerts/")
-                    .contentType(MediaType.APPLICATION_JSON)
-                    .content(concertJson)
-                    .header(HttpHeaders.AUTHORIZATION, jwt))
+                            .post("/concerts/")
+                            .contentType(MediaType.APPLICATION_JSON)
+                            .content(concertJson)
+                            .header(HttpHeaders.AUTHORIZATION, jwt))
                     .andExpect(status().isCreated());
 
             Assertions.assertEquals("/rest/concerts/" + concert.getConcertId(),
@@ -353,10 +368,10 @@ public class ConcertUnitTest {
 
             when(concertsRepositoryMock.save(any())).thenReturn(concert);
             concertMvc.perform(MockMvcRequestBuilders
-                    .post("/concerts/")
-                    .contentType(MediaType.APPLICATION_JSON)
-                    .content(concertJson)
-                    .header(HttpHeaders.AUTHORIZATION, jwt))
+                            .post("/concerts/")
+                            .contentType(MediaType.APPLICATION_JSON)
+                            .content(concertJson)
+                            .header(HttpHeaders.AUTHORIZATION, jwt))
                     .andExpect(status().isUnauthorized());
         }
     }
@@ -375,10 +390,10 @@ public class ConcertUnitTest {
             when(JwtDecode.isJwtValid(jwt)).thenReturn(true);
 
             concertMvc.perform(MockMvcRequestBuilders
-                    .post("/concerts/")
-                    .contentType(MediaType.APPLICATION_JSON)
-                    .content(concertJson)
-                    .header(HttpHeaders.AUTHORIZATION, jwt))
+                            .post("/concerts/")
+                            .contentType(MediaType.APPLICATION_JSON)
+                            .content(concertJson)
+                            .header(HttpHeaders.AUTHORIZATION, jwt))
                     .andExpect(status().isBadRequest());
         }
     }
@@ -397,10 +412,10 @@ public class ConcertUnitTest {
             when(JwtDecode.isJwtValid(jwt)).thenReturn(true);
 
             concertMvc.perform(MockMvcRequestBuilders
-                    .post("/concerts/")
-                    .contentType(MediaType.APPLICATION_JSON)
-                    .content(concertJson)
-                    .header(HttpHeaders.AUTHORIZATION, jwt))
+                            .post("/concerts/")
+                            .contentType(MediaType.APPLICATION_JSON)
+                            .content(concertJson)
+                            .header(HttpHeaders.AUTHORIZATION, jwt))
                     .andExpect(status().isBadRequest());
         }
     }
@@ -419,10 +434,10 @@ public class ConcertUnitTest {
             when(JwtDecode.isJwtValid(jwt)).thenReturn(true);
 
             concertMvc.perform(MockMvcRequestBuilders
-                    .post("/concerts/")
-                    .contentType(MediaType.APPLICATION_JSON)
-                    .content(concertJson)
-                    .header(HttpHeaders.AUTHORIZATION, jwt))
+                            .post("/concerts/")
+                            .contentType(MediaType.APPLICATION_JSON)
+                            .content(concertJson)
+                            .header(HttpHeaders.AUTHORIZATION, jwt))
                     .andExpect(status().isBadRequest());
         }
     }
@@ -441,10 +456,10 @@ public class ConcertUnitTest {
             when(JwtDecode.isJwtValid(jwt)).thenReturn(true);
 
             concertMvc.perform(MockMvcRequestBuilders
-                    .post("/concerts/")
-                    .contentType(MediaType.APPLICATION_JSON)
-                    .content(concertJson)
-                    .header(HttpHeaders.AUTHORIZATION, jwt))
+                            .post("/concerts/")
+                            .contentType(MediaType.APPLICATION_JSON)
+                            .content(concertJson)
+                            .header(HttpHeaders.AUTHORIZATION, jwt))
                     .andExpect(status().isBadRequest());
         }
     }
@@ -459,10 +474,10 @@ public class ConcertUnitTest {
             when(JwtDecode.isJwtValid(jwt)).thenReturn(true);
 
             concertMvc.perform(MockMvcRequestBuilders
-                    .post("/concerts/")
-                    .contentType(MediaType.APPLICATION_JSON)
-                    .content(concertJson)
-                    .header(HttpHeaders.AUTHORIZATION, jwt))
+                            .post("/concerts/")
+                            .contentType(MediaType.APPLICATION_JSON)
+                            .content(concertJson)
+                            .header(HttpHeaders.AUTHORIZATION, jwt))
                     .andExpect(status().isBadRequest());
         }
     }
@@ -482,10 +497,10 @@ public class ConcertUnitTest {
 
             when(concertsRepositoryMock.save(any())).thenThrow(PersistenceException.class);
             concertMvc.perform(MockMvcRequestBuilders
-                    .post("/concerts/")
-                    .contentType(MediaType.APPLICATION_JSON)
-                    .content(concertJson)
-                    .header(HttpHeaders.AUTHORIZATION, jwt))
+                            .post("/concerts/")
+                            .contentType(MediaType.APPLICATION_JSON)
+                            .content(concertJson)
+                            .header(HttpHeaders.AUTHORIZATION, jwt))
                     .andExpect(status().isBadRequest());
         }
     }

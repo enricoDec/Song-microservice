@@ -68,7 +68,7 @@ public class TicketsController {
         try {
             claims = JwtDecode.decodeJWT(jwt);
         } catch (ExpiredJwtException | UnsupportedJwtException |
-                MalformedJwtException | SignatureException | IllegalArgumentException e) {
+                 MalformedJwtException | SignatureException | IllegalArgumentException e) {
             return new ResponseEntity<>(HttpStatus.UNAUTHORIZED);
         }
 
@@ -128,7 +128,7 @@ public class TicketsController {
         try {
             claims = JwtDecode.decodeJWT(jwt);
         } catch (ExpiredJwtException | UnsupportedJwtException |
-                MalformedJwtException | SignatureException | IllegalArgumentException e) {
+                 MalformedJwtException | SignatureException | IllegalArgumentException e) {
             return new ResponseEntity<>(HttpStatus.UNAUTHORIZED);
         }
         if (ticketId < 0)
@@ -178,7 +178,7 @@ public class TicketsController {
         try {
             claims = JwtDecode.decodeJWT(jwt);
         } catch (ExpiredJwtException | UnsupportedJwtException |
-                MalformedJwtException | SignatureException | IllegalArgumentException e) {
+                 MalformedJwtException | SignatureException | IllegalArgumentException e) {
             return new ResponseEntity<>(HttpStatus.UNAUTHORIZED);
         }
         //If authenticated user request to delete his ticket

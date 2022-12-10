@@ -17,12 +17,11 @@ import uk.org.webcompere.systemstubs.jupiter.SystemStub;
 import uk.org.webcompere.systemstubs.jupiter.SystemStubsExtension;
 
 import javax.persistence.NoResultException;
-
 import java.util.Objects;
 
 import static org.mockito.Mockito.*;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
-import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
+import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
 /**
  * @author : Enrico Gamil Toros
@@ -54,7 +53,7 @@ public class AuthControllerUnitTest {
     void goodCaseTest() throws Exception {
         when(userRepository.findUserByUserId(validUser.getUserId())).thenReturn(validUser);
         mockMvc.perform(post("/auth").contentType(MediaType.APPLICATION_JSON).content(
-                "{\"userId\": \"mmuster\" , \"password\": \"pass1234\"}"))
+                        "{\"userId\": \"mmuster\" , \"password\": \"pass1234\"}"))
                 .andExpect(status().isOk());
 
         // to validate credentials the method 'getUserByUserId' in UserDAO should be called
@@ -83,7 +82,7 @@ public class AuthControllerUnitTest {
     void unauthorizedUserTest() throws Exception {
         when(userRepository.findUserByUserId(validUser.getUserId())).thenThrow(NoResultException.class);
         mockMvc.perform(post("/auth").contentType(MediaType.APPLICATION_JSON).content(
-                "{\"userId\": \"mmuster\" , \"password\": \"pass1234\"}"))
+                        "{\"userId\": \"mmuster\" , \"password\": \"pass1234\"}"))
                 .andExpect(status().isUnauthorized());
     }
 
@@ -94,7 +93,7 @@ public class AuthControllerUnitTest {
     void wrongPasswordTest() throws Exception {
         when(userRepository.findUserByUserId(validUser.getUserId())).thenReturn(validUser);
         mockMvc.perform(post("/auth").contentType(MediaType.APPLICATION_JSON).content(
-                "{\"userId\": \"mmuster\" , \"password\": \"wrongPassword\"}"))
+                        "{\"userId\": \"mmuster\" , \"password\": \"wrongPassword\"}"))
                 .andExpect(status().isUnauthorized());
     }
 
@@ -105,7 +104,7 @@ public class AuthControllerUnitTest {
     void additionalKeysInJsonTest() throws Exception {
         when(userRepository.findUserByUserId(validUser.getUserId())).thenReturn(validUser);
         mockMvc.perform(post("/auth").contentType(MediaType.APPLICATION_JSON).content(
-                "{\"userId\": \"mmuster\" , \"password\": \"pass1234\", \"totallyLegitKey\": \"blob\"}"))
+                        "{\"userId\": \"mmuster\" , \"password\": \"pass1234\", \"totallyLegitKey\": \"blob\"}"))
                 .andExpect(status().isOk());
     }
 
@@ -116,7 +115,8 @@ public class AuthControllerUnitTest {
     void wrongJSONTest() throws Exception {
         when(userRepository.findUserByUserId(validUser.getUserId())).thenReturn(validUser);
         mockMvc.perform(post("/auth").contentType(MediaType.APPLICATION_JSON).content(
-                "{\"title\": \"SONG_TITLE\", \"artist\": \"COOL Artitst\", \"label\": \"SONY\", \"released\": 2020}"))
+                        "{\"title\": \"SONG_TITLE\", \"artist\": \"COOL Artitst\", \"label\": \"SONY\", \"released\":" +
+                                " 2020}"))
                 .andExpect(status().isBadRequest());
     }
 
@@ -127,7 +127,7 @@ public class AuthControllerUnitTest {
     void noPasswordTest() throws Exception {
         when(userRepository.findUserByUserId(validUser.getUserId())).thenReturn(validUser);
         mockMvc.perform(post("/auth").contentType(MediaType.APPLICATION_JSON).content(
-                "{\"userId\": \"mmuster\"}"))
+                        "{\"userId\": \"mmuster\"}"))
                 .andExpect(status().isBadRequest());
     }
 
@@ -138,7 +138,7 @@ public class AuthControllerUnitTest {
     void noUserTest() throws Exception {
         when(userRepository.findUserByUserId(validUser.getUserId())).thenReturn(validUser);
         mockMvc.perform(post("/auth").contentType(MediaType.APPLICATION_JSON).content(
-                "{\"password\": \"pass1234\"}"))
+                        "{\"password\": \"pass1234\"}"))
                 .andExpect(status().isBadRequest());
     }
 
@@ -149,7 +149,7 @@ public class AuthControllerUnitTest {
     void wrongUserTest() throws Exception {
         when(userRepository.findUserByUserId(anyString())).thenThrow(NoResultException.class);
         mockMvc.perform(post("/auth").contentType(MediaType.APPLICATION_JSON).content(
-                "{\"userId\": \"IM_A_USER\" , \"password\": \"pass1234\"}"))
+                        "{\"userId\": \"IM_A_USER\" , \"password\": \"pass1234\"}"))
                 .andExpect(status().isUnauthorized());
     }
 
@@ -160,7 +160,7 @@ public class AuthControllerUnitTest {
     void userFoundButNull() throws Exception {
         when(userRepository.findUserByUserId(anyString())).thenReturn(null);
         mockMvc.perform(post("/auth").contentType(MediaType.APPLICATION_JSON).content(
-                "{\"userId\": \"IM_A_USER\" , \"password\": \"pass1234\"}"))
+                        "{\"userId\": \"IM_A_USER\" , \"password\": \"pass1234\"}"))
                 .andExpect(status().isUnauthorized());
     }
 
@@ -171,7 +171,7 @@ public class AuthControllerUnitTest {
     void paramTest() throws Exception {
         when(userRepository.findUserByUserId(validUser.getUserId())).thenReturn(validUser);
         mockMvc.perform(post("/authssss").contentType(MediaType.APPLICATION_JSON).content(
-                "{\"userId\": \"mmuster\" , \"password\": \"pass1234\"}"))
+                        "{\"userId\": \"mmuster\" , \"password\": \"pass1234\"}"))
                 .andExpect(status().isNotFound());
     }
 
@@ -182,7 +182,7 @@ public class AuthControllerUnitTest {
     void emptyJsonTest() throws Exception {
         when(userRepository.findUserByUserId(validUser.getUserId())).thenReturn(validUser);
         mockMvc.perform(post("/auth").contentType(MediaType.APPLICATION_JSON).content(
-                "{}"))
+                        "{}"))
                 .andExpect(status().isBadRequest());
     }
 
@@ -193,16 +193,16 @@ public class AuthControllerUnitTest {
     void notSupportedContentType() throws Exception {
         when(userRepository.findUserByUserId(validUser.getUserId())).thenReturn(validUser);
         mockMvc.perform(post("/auth").contentType(MediaType.APPLICATION_XML).content(
-                "<root>\n" +
-                        "   <password>pass1234</password>\n" +
-                        "   <userId>mmuster</userId>\n" +
-                        "</root>\n"))
+                        "<root>\n" +
+                                "   <password>pass1234</password>\n" +
+                                "   <userId>mmuster</userId>\n" +
+                                "</root>\n"))
                 .andExpect(status().isUnsupportedMediaType());
     }
 
     // Yes really
     @Test
-    void trivialMethodsForCoverage(){
+    void trivialMethodsForCoverage() {
         validUser.setFirstName(validUser.getFirstName());
         validUser.setLastName("Test");
     }

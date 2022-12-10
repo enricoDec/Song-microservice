@@ -35,13 +35,14 @@ public class RequestUtils {
      * This will make a request to song service.
      *
      * @param artist Artist to be searched
-     * @param jwt Jwt token to be used in authorization header
+     * @param jwt    Jwt token to be used in authorization header
      * @return Songs made from given artist, will throw exception if none found
      * @throws UnknownHostException     if host not resolved
      * @throws HttpClientErrorException if reply has no body
      * @throws NoSuchElementException   if no song for artist found
      */
-    public List<SongData> getSongsFromArtist(String artist, String jwt) throws UnknownHostException, HttpClientErrorException, NoSuchElementException {
+    public List<SongData> getSongsFromArtist(String artist, String jwt) throws UnknownHostException,
+            HttpClientErrorException, NoSuchElementException {
         restTemplate = new RestTemplate();
         HttpHeaders headers = new HttpHeaders();
         headers.set(HttpHeaders.AUTHORIZATION, jwt);

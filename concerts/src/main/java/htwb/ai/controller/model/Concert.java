@@ -47,7 +47,8 @@ public class Concert {
     public Concert() {
     }
 
-    public Concert(@NotNull @Size(max = 50) String location, @NotNull @Size(max = 50) String artist, @NotNull Integer maxTickets) {
+    public Concert(@NotNull @Size(max = 50) String location, @NotNull @Size(max = 50) String artist,
+                   @NotNull Integer maxTickets) {
         this.location = location;
         this.artist = artist;
         this.maxTickets = maxTickets;

@@ -63,7 +63,7 @@ public class SongController {
     /**
      * GET http://localhost:8080/rest/songs/
      * Get all songs
-     *
+     * <p>
      * GET http://localhost:8080/rest/songs?artist={artist}
      * Get all songs from artist
      *
@@ -73,7 +73,7 @@ public class SongController {
      */
     @GetMapping(produces = {MediaType.APPLICATION_JSON_VALUE, MediaType.APPLICATION_XML_VALUE})
     public ResponseEntity<List<Song>> getSongs(@RequestHeader(value = "Authorization", required = false) String jwt,
-                                                         @RequestParam(value = "artist", required = false) String artist) {
+                                               @RequestParam(value = "artist", required = false) String artist) {
         if (!JwtDecode.isJwtValid(jwt))
             return new ResponseEntity<>(HttpStatus.UNAUTHORIZED);
         List<Song> songList;

@@ -5,6 +5,7 @@ package htwb.ai.controller;
  * @version : 1.0
  * @since : 06.02.21
  **/
+
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.cloud.netflix.eureka.server.EnableEurekaServer;

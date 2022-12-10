@@ -2,10 +2,10 @@ DROP TABLE IF EXISTS songs CASCADE;
 
 CREATE TABLE songs
 (
-    id    serial not null,
-    title  varchar(100) not null,
-    artist varchar(100),
-    label  varchar(100),
+    id       serial       not null,
+    title    varchar(100) not null,
+    artist   varchar(100),
+    label    varchar(100),
     released int,
 
     PRIMARY KEY (id)
