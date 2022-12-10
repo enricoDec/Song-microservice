@@ -1,6 +1,7 @@
 # Song Microservice
-A Spring Boot project (which I created to learn Spring Cloud).
-
+A Spring Boot project (which I created to learn Spring Cloud).   
+It implements different RESTful endpoints which are explained [here](#Endpoints).    
+[Javadoc](https://enricodec.github.io/Song-microservice/)
 
 # Deployment
 - clone repository
@@ -19,7 +20,7 @@ A Spring Boot project (which I created to learn Spring Cloud).
   - Eureka Microservice
   - Gateway Microservice
 
-
+---
 
 # Endpoints
 
@@ -699,4 +700,4 @@ URL: http://localhost:8080/songsWS/rest/songs/3
 
 
 ---
-[Back to top](#kbe)
+[Back to top](#song-microservice)
